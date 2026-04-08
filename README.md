@@ -36,14 +36,24 @@ cd veda-test-c
 3. `index.html` 파일을 열고 우하단 **`Go Live`** 버튼 클릭
 4. 브라우저가 자동으로 열립니다 (`http://127.0.0.1:5500`)
 
-#### Python이 설치된 경우
+#### Python을 사용하는 경우
+
+> Python이 없다면 먼저 설치하세요 → **[Python 공식 다운로드](https://www.python.org/downloads/)**  
+> 설치 시 **`Add Python to PATH`** 체크박스를 반드시 선택하세요!
+
+설치 후 터미널(명령 프롬프트)을 열고 폴더로 이동한 뒤 실행합니다.
 
 ```bash
 # 압축 해제한 폴더 안에서 실행
 python -m http.server 8000
 ```
 
-브라우저에서 `http://localhost:8000` 접속
+브라우저에서 `http://localhost:8000` 접속  
+종료하려면 터미널에서 `Ctrl + C`
+
+> **터미널을 처음 쓴다면:**  
+> Windows — 탐색기에서 폴더 열고 주소창에 `cmd` 입력 후 Enter  
+> Mac — 폴더에서 우클릭 → `폴더에서 새 터미널 열기`
 
 #### Node.js가 설치된 경우
 
