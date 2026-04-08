@@ -188,6 +188,56 @@ body {
   font-size: 13px;
   margin-bottom: 16px;
 }
+/* ── Folder selector card ── */
+.folder-card { padding: 16px 24px; }
+.folder-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.folder-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.folder-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #5F6368;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.folder-name {
+  font-size: 13px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.folder-name.set     { color: #137333; }
+.folder-name.not-set { color: #9AA0A6; }
+
+.btn-sm {
+  padding: 6px 14px;
+  font-size: 12px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Save status (result page) ── */
+.save-status {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+}
+.save-ok   { background: #E6F4EA; color: #137333; }
+.save-warn { background: #FEF7E0; color: #B05A00; }
+
 .action-row {
   display: flex;
   flex-direction: column;
@@ -341,6 +391,154 @@ body {
   line-height: 1.6;
 }
 .subjective-area:focus { border-bottom-color: #673AB7; }
+
+/* ── Question text + inline edit ── */
+.q-text-wrap {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.q-text-wrap .q-text {
+  flex: 1;
+  margin-bottom: 0;
+}
+.btn-edit-q {
+  flex-shrink: 0;
+  font-size: 11px;
+  padding: 3px 8px;
+  color: #BDBDBD;
+  border-radius: 4px;
+  margin-top: 3px;
+  transition: color 0.15s, background 0.15s;
+}
+.btn-edit-q:hover { color: #673AB7; background: #EDE7F6; }
+
+.q-edit-wrap {
+  margin-bottom: 16px;
+  background: #FAFAFE;
+  border: 1.5px solid #C5CAE9;
+  border-radius: 6px;
+  padding: 12px;
+}
+.q-edit-area {
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #C5CAE9;
+  outline: none;
+  font-size: 14px;
+  font-family: inherit;
+  color: #202124;
+  line-height: 1.6;
+  resize: vertical;
+  min-height: 80px;
+  background: transparent;
+  transition: border-color 0.2s;
+}
+.q-edit-area:focus { border-bottom-color: #673AB7; }
+.q-edit-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  justify-content: flex-end;
+}
+
+/* ── Note (comment) section inside answer reveal ── */
+.note-section {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px dashed #D7CBF5;
+}
+.note-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.note-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #673AB7;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.note-count {
+  font-size: 11px;
+  background: #EDE7F6;
+  color: #673AB7;
+  padding: 1px 7px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+/* Note list */
+.note-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+
+.note-empty {
+  font-size: 12px;
+  color: #BDBDBD;
+  padding: 6px 0;
+}
+
+.note-item {
+  background: #F8F5FF;
+  border: 1px solid #E8DEF8;
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+.note-item-text {
+  font-size: 13px;
+  color: #202124;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin-bottom: 6px;
+}
+.note-item-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.note-item-date {
+  font-size: 11px;
+  color: #9AA0A6;
+}
+.note-delete-btn {
+  font-size: 11px;
+  color: #D93025;
+  padding: 2px 6px;
+}
+.note-delete-btn:hover { background: #FCE8E6; color: #C5221F; }
+
+/* Note compose */
+.note-compose {
+  background: #fff;
+  border: 1.5px solid #E8EAED;
+  border-radius: 6px;
+  padding: 10px 12px;
+  transition: border-color 0.2s;
+}
+.note-compose:focus-within { border-color: #673AB7; box-shadow: 0 0 0 2px #EDE7F6; }
+.note-area {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 13px;
+  font-family: inherit;
+  color: #202124;
+  background: transparent;
+  resize: none;
+  min-height: 56px;
+  line-height: 1.6;
+}
+.note-area::placeholder { color: #BDBDBD; }
+.note-compose-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #F1F3F4;
+}
 
 /* ── Answer reveal ── */
 .answer-toggle-row {

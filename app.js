@@ -161,6 +161,98 @@ function getAllStoredResults() {
 }
 
 // ============================================================
+// File System Access API — results/ 폴더 자동 저장
+// ============================================================
+
+const IDB_NAME  = 'cppExamDB';
+const IDB_STORE = 'settings';
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(IDB_NAME, 1);
+    req.onupgradeneeded = e => e.target.result.createObjectStore(IDB_STORE);
+    req.onsuccess = e => resolve(e.target.result);
+    req.onerror   = e => reject(e.target.error);
+  });
+}
+
+async function saveDirHandle(handle) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(IDB_STORE, 'readwrite');
+    tx.objectStore(IDB_STORE).put(handle, 'resultsDir');
+    tx.oncomplete = () => resolve();
+    tx.onerror    = e => reject(e.target.error);
+  });
+}
+
+async function loadDirHandle() {
+  try {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+      const tx  = db.transaction(IDB_STORE, 'readonly');
+      const req = tx.objectStore(IDB_STORE).get('resultsDir');
+      req.onsuccess = e => resolve(e.target.result || null);
+      req.onerror   = e => reject(e.target.error);
+    });
+  } catch { return null; }
+}
+
+// 폴더 핸들 반환. 권한 없으면 재요청. prompt=true면 폴더 선택 팝업 표시.
+async function getResultsDir(prompt = true) {
+  if (!window.showDirectoryPicker) return null;  // 미지원 브라우저
+
+  let handle = await loadDirHandle();
+  if (handle) {
+    const perm = await handle.queryPermission({ mode: 'readwrite' });
+    if (perm === 'granted') return handle;
+    const req = await handle.requestPermission({ mode: 'readwrite' });
+    if (req === 'granted') return handle;
+  }
+  if (!prompt) return null;
+
+  try {
+    handle = await window.showDirectoryPicker({ mode: 'readwrite' });
+    await saveDirHandle(handle);
+    return handle;
+  } catch { return null; }  // 사용자가 취소
+}
+
+// 폴더 이름 반환 (UI 표시용). 권한 없으면 null.
+async function getResultsFolderName() {
+  const handle = await getResultsDir(false);
+  return handle ? handle.name : null;
+}
+
+// results/ 폴더에 파일 쓰기
+async function writeResultFile(filename, text) {
+  const dir = await getResultsDir(true);
+  if (!dir) return false;
+  try {
+    const fileHandle = await dir.getFileHandle(filename, { create: true });
+    const writable   = await fileHandle.createWritable();
+    await writable.write(text);
+    await writable.close();
+    return true;
+  } catch (e) {
+    console.error('파일 저장 실패:', e);
+    return false;
+  }
+}
+
+// ============================================================
+// 사용자 메모 & 문제 수정 (localStorage)
+// ============================================================
+
+function loadNotes(qId) {
+  try { return JSON.parse(localStorage.getItem(`notes_${qId}`)) || []; }
+  catch { return []; }
+}
+function saveNotes(qId, notes) { localStorage.setItem(`notes_${qId}`, JSON.stringify(notes)); }
+function loadQEdit(qId)        { return localStorage.getItem(`qEdit_${qId}`) || null; }
+function saveQEdit(qId, text)  { localStorage.setItem(`qEdit_${qId}`, text); }
+
+// ============================================================
 // 챕터별 요약
 // ============================================================
 
@@ -255,9 +347,31 @@ function useRound() {
 // ============================================================
 
 function initIndexPage() {
-  const startBtn = document.getElementById('btn-start');
-  const viewBtn  = document.getElementById('btn-view-results');
-  const errorEl  = document.getElementById('error-msg');
+  const startBtn    = document.getElementById('btn-start');
+  const viewBtn     = document.getElementById('btn-view-results');
+  const errorEl     = document.getElementById('error-msg');
+  const folderNameEl = document.getElementById('folder-name');
+  const setFolderBtn = document.getElementById('btn-set-folder');
+
+  async function refreshFolderDisplay() {
+    if (!folderNameEl) return;
+    const name = await getResultsFolderName();
+    if (name) {
+      folderNameEl.textContent = name;
+      folderNameEl.className   = 'folder-name set';
+    } else {
+      folderNameEl.textContent = '미설정';
+      folderNameEl.className   = 'folder-name not-set';
+    }
+  }
+  refreshFolderDisplay();
+
+  if (setFolderBtn) {
+    setFolderBtn.addEventListener('click', async () => {
+      const handle = await getResultsDir(true);
+      if (handle) refreshFolderDisplay();
+    });
+  }
 
   startBtn.addEventListener('click', async () => {
     startBtn.disabled = true;
@@ -333,6 +447,8 @@ function initExamPage() {
     const isSubj = isSubjective(q);
     const ov     = examData.overrides[idx];
 
+    const displayQuestion = loadQEdit(q.id) || q.question;
+
     // 진행 바
     document.getElementById('progress-fill').style.width  = `${((idx + 1) / total) * 100}%`;
     document.getElementById('progress-text').textContent  = `${idx + 1} / ${total}`;
@@ -382,7 +498,19 @@ function initExamPage() {
           <span class="type-badge type-${q.type}">${TYPE_LABELS[q.type]}</span>
           ${reqNote}
         </div>
-        <div class="q-text">${escapeHtml(q.question)}</div>
+
+        <div class="q-text-wrap">
+          <div class="q-text" id="q-text-display">${escapeHtml(displayQuestion)}</div>
+          <button class="btn-text btn-edit-q" id="btn-edit-q" title="문제 텍스트 수정">✏ 수정</button>
+        </div>
+        <div class="q-edit-wrap" id="q-edit-wrap" style="display:none">
+          <textarea class="q-edit-area" id="q-edit-area">${escapeHtml(displayQuestion)}</textarea>
+          <div class="q-edit-actions">
+            <button class="btn-primary btn-sm" id="btn-edit-save">저장</button>
+            <button class="btn-secondary btn-sm" id="btn-edit-cancel">취소</button>
+          </div>
+        </div>
+
         ${codeHtml}
         <div id="answer-input-wrap">${inputHtml}</div>
 
@@ -393,6 +521,19 @@ function initExamPage() {
           <div class="answer-label">모범 답안</div>
           <div class="answer-value">${answerDisplay(q)}</div>
           ${q.explanation ? `<div class="explanation">${escapeHtml(q.explanation)}</div>` : ''}
+          <div class="note-section">
+            <div class="note-section-header">
+              <span class="note-label">내 메모</span>
+              <span class="note-count" id="note-count"></span>
+            </div>
+            <div class="note-list" id="note-list"></div>
+            <div class="note-compose">
+              <textarea class="note-area" id="note-input" placeholder="메모를 입력하세요... (Ctrl+Enter로 저장)"></textarea>
+              <div class="note-compose-footer">
+                <button class="btn-primary btn-sm" id="btn-note-save">저장</button>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="override-row">
@@ -430,6 +571,86 @@ function initExamPage() {
     document.getElementById('btn-toggle').addEventListener('click', function () {
       const visible = answerSec.classList.toggle('visible');
       this.textContent = visible ? '▼ 정답 숨기기' : '▶ 정답 보기';
+    });
+
+    // 이벤트: 메모 (댓글형)
+    function renderNoteList() {
+      const notes   = loadNotes(q.id);
+      const countEl = document.getElementById('note-count');
+      const listEl  = document.getElementById('note-list');
+      if (!listEl) return;
+
+      if (countEl) countEl.textContent = notes.length > 0 ? `${notes.length}개` : '';
+
+      if (notes.length === 0) {
+        listEl.innerHTML = '<p class="note-empty">아직 메모가 없습니다.</p>';
+        return;
+      }
+
+      listEl.innerHTML = notes.map(n => `
+        <div class="note-item">
+          <p class="note-item-text">${escapeHtml(n.text)}</p>
+          <div class="note-item-footer">
+            <span class="note-item-date">${escapeHtml(n.date)}</span>
+            <button class="btn-text note-delete-btn" data-nid="${n.id}">삭제</button>
+          </div>
+        </div>`).join('');
+
+      listEl.querySelectorAll('.note-delete-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const nid     = parseInt(btn.dataset.nid, 10);
+          const updated = loadNotes(q.id).filter(n => n.id !== nid);
+          saveNotes(q.id, updated);
+          renderNoteList();
+        });
+      });
+    }
+    renderNoteList();
+
+    const noteInput = document.getElementById('note-input');
+
+    function submitNote() {
+      const text = noteInput.value.trim();
+      if (!text) return;
+      const notes = loadNotes(q.id);
+      notes.push({ id: Date.now(), text, date: formatDateTime(new Date()) });
+      saveNotes(q.id, notes);
+      noteInput.value = '';
+      renderNoteList();
+    }
+
+    document.getElementById('btn-note-save').addEventListener('click', submitNote);
+
+    noteInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && e.ctrlKey) { e.preventDefault(); submitNote(); }
+    });
+
+    // 이벤트: 문제 수정
+    const qTextDisplay = document.getElementById('q-text-display');
+    const qEditWrap    = document.getElementById('q-edit-wrap');
+    const qEditArea    = document.getElementById('q-edit-area');
+
+    document.getElementById('btn-edit-q').addEventListener('click', () => {
+      qTextDisplay.parentElement.style.display = 'none';
+      qEditWrap.style.display = 'block';
+      qEditArea.focus();
+      qEditArea.setSelectionRange(qEditArea.value.length, qEditArea.value.length);
+    });
+
+    document.getElementById('btn-edit-cancel').addEventListener('click', () => {
+      qEditArea.value = loadQEdit(q.id) || q.question;
+      qEditWrap.style.display = 'none';
+      qTextDisplay.parentElement.style.display = '';
+    });
+
+    document.getElementById('btn-edit-save').addEventListener('click', () => {
+      const newText = qEditArea.value.trim();
+      if (newText) {
+        saveQEdit(q.id, newText);
+        qTextDisplay.textContent = newText;
+      }
+      qEditWrap.style.display = 'none';
+      qTextDisplay.parentElement.style.display = '';
     });
 
     // 이벤트: 오버라이드
@@ -486,6 +707,21 @@ function initResultPage() {
     const text  = generateResultText(examData, scores, round);
     saveResultToStorage(round, scores, text);
     sessionStorage.setItem('resultSaved', String(round));
+
+    // results/ 폴더에 파일 저장 (File System Access API)
+    const filename = `C_CPP_시험결과_${round}회차.txt`;
+    writeResultFile(filename, text).then(ok => {
+      const statusEl = document.getElementById('save-status');
+      if (!statusEl) return;
+      if (ok) {
+        statusEl.textContent = `✔ 결과 파일 저장 완료: ${filename}`;
+        statusEl.className   = 'save-status save-ok';
+      } else {
+        statusEl.textContent = '⚠ 파일 자동 저장 실패 (폴더 미설정 또는 권한 없음). 아래 버튼으로 수동 다운로드하세요.';
+        statusEl.className   = 'save-status save-warn';
+      }
+      statusEl.style.display = 'block';
+    });
   }
 
   const round = parseInt(sessionStorage.getItem('resultSaved'), 10);
