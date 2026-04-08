@@ -735,6 +735,14 @@ function initExamPage() {
   }
 
   renderQ(currentIndex);
+
+  // 이벤트: 시험 그만보기
+  document.getElementById('btn-quit').addEventListener('click', () => {
+    if (window.confirm('시험을 종료하시겠습니까?\n지금까지의 답안과 결과가 저장되지 않습니다.')) {
+      clearExamData();
+      window.location.href = 'index.html';
+    }
+  });
 }
 
 // ============================================================

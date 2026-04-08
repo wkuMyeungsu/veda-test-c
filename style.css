@@ -268,16 +268,37 @@ body {
   align-items: center;
   margin-bottom: 16px;
   margin-top: 8px;
+  gap: 8px;
 }
 .exam-title {
   font-size: 14px;
   font-weight: 500;
   color: #5F6368;
+  flex: 1;
 }
 .progress-text {
   font-size: 13px;
   color: #673AB7;
   font-weight: 600;
+}
+
+.btn-quit {
+  background: transparent;
+  color: #BDBDBD;
+  border: 1px solid #E8EAED;
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.btn-quit:hover {
+  background: #FCE8E6;
+  border-color: #D93025;
+  color: #C5221F;
 }
 
 /* ── Question card ── */
@@ -605,20 +626,22 @@ body {
 .btn-pass {
   background: transparent;
   color: #9AA0A6;
-  border: 1px dashed #DADCE0;
-  padding: 8px 18px;
-  border-radius: 4px;
+  border: 1.5px dashed #DADCE0;
+  padding: 8px 20px;
+  border-radius: 20px;
   cursor: pointer;
   font-size: 13px;
   font-weight: 500;
   font-family: inherit;
+  letter-spacing: 0.2px;
   transition: all 0.15s;
   white-space: nowrap;
 }
 .btn-pass:hover {
-  background: #FEF7E0;
-  border-color: #B05A00;
-  color: #B05A00;
+  background: #FFF8E1;
+  border-color: #F9A825;
+  color: #E65100;
+  border-style: solid;
 }
 
 /* ── RESULT page ── */
