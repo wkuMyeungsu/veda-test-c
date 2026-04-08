@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C/C++ 이론 시험</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="index">
+  <div class="container">
+
+    <div class="header-card">
+      <h1>C/C++ 이론 시험</h1>
+      <p class="header-desc">문제은행에서 무작위 20문제 출제 · 합격 기준 60점 (12문제 이상)</p>
+    </div>
+
+    <div class="card info-card">
+      <div class="info-row">
+        <div class="info-item">
+          <div class="info-num">20</div>
+          <div class="info-lbl">총 문제</div>
+        </div>
+        <div class="info-item">
+          <div class="info-num">5점</div>
+          <div class="info-lbl">문제당 배점</div>
+        </div>
+        <div class="info-item">
+          <div class="info-num">60점</div>
+          <div class="info-lbl">합격 기준</div>
+        </div>
+      </div>
+      <div class="type-breakdown">
+        <div class="type-row">
+          <span class="type-badge type-ox">O/X</span>
+          4문제
+        </div>
+        <div class="type-row">
+          <span class="type-badge type-multiple">객관식</span>
+          6문제 (5지선다)
+        </div>
+        <div class="type-row">
+          <span class="type-badge type-subjective">주관식</span>
+          10문제 (빈칸 채우기 / 실행 결과 / 개념 서술)
+        </div>
+      </div>
+    </div>
+
+    <div id="error-msg" class="error-msg" style="display:none"></div>
+
+    <div class="action-row">
+      <button class="btn-primary btn-large" id="btn-start">시험 시작</button>
+      <button class="btn-secondary" id="btn-view-results">이전 결과 보기</button>
+    </div>
+
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

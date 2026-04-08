@@ -1,0 +1,272 @@
+[
+  {
+    "id": "sub_001",
+    "chapter": "CH8 배열과 문자열",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "다음 코드에서 배열의 세 번째 원소(값 3)를 출력하려면 빈칸에 무엇을 넣어야 하는가?",
+    "code": "int arr[5] = {1, 2, 3, 4, 5};\nprintf(\"%d\", arr[___]);",
+    "answer": "2",
+    "explanation": "배열 인덱스는 0부터 시작하므로 세 번째 원소는 인덱스 2이다."
+  },
+  {
+    "id": "sub_002",
+    "chapter": "CH9 포인터",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "포인터 p가 변수 x의 주소를 가리키도록 빈칸을 채우시오.",
+    "code": "int x = 10;\nint *p = ___;",
+    "answer": "&x",
+    "explanation": "& 연산자는 변수의 주소를 반환한다. p = &x 는 p에 x의 주소를 저장한다."
+  },
+  {
+    "id": "sub_003",
+    "chapter": "CH8 배열과 문자열",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "str 배열에 \"hello\"를 복사하는 코드의 빈칸을 채우시오.",
+    "code": "char str[10];\n___(str, \"hello\");",
+    "answer": "strcpy",
+    "explanation": "strcpy(dest, src) 함수는 src 문자열을 dest 배열에 복사한다. <string.h> 헤더 필요."
+  },
+  {
+    "id": "sub_004",
+    "chapter": "CH4 콘솔 입출력과 연산자",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "두 변수 a, b 중 큰 값을 max에 저장하는 삼항 연산자의 빈칸을 채우시오.",
+    "code": "int a = 5, b = 3;\nint max = (a > b) ? ___ : b;",
+    "answer": "a",
+    "explanation": "삼항 연산자 (조건) ? 참일때 : 거짓일때. a > b가 참이면 a를, 거짓이면 b를 반환한다."
+  },
+  {
+    "id": "sub_005",
+    "chapter": "CH11 동적 메모리 할당",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "힙(heap) 메모리에 int 1개를 동적 할당하는 코드의 빈칸을 채우시오.",
+    "code": "int *p = (int *)___(sizeof(int));",
+    "answer": "malloc",
+    "explanation": "malloc(size)는 힙 영역에서 size 바이트를 할당하고 void* 포인터를 반환한다. int*로 형 변환이 필요하다."
+  },
+  {
+    "id": "sub_006",
+    "chapter": "CH4 콘솔 입출력과 연산자",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 실행 결과를 쓰시오.",
+    "code": "int x = 5;\nprintf(\"%d\", x++);",
+    "answer": "5",
+    "explanation": "후위 증가 연산자(x++)는 현재 값을 먼저 사용한 후 1을 증가시킨다. 따라서 출력 시점에는 5가 출력되고, 이후 x는 6이 된다."
+  },
+  {
+    "id": "sub_007",
+    "chapter": "CH4 콘솔 입출력과 연산자",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 실행 결과를 쓰시오.",
+    "code": "int a = 10, b = 3;\nprintf(\"%d\", a % b);",
+    "answer": "1",
+    "explanation": "% 연산자는 나머지를 구한다. 10 ÷ 3 = 3 나머지 1. 따라서 결과는 1이다."
+  },
+  {
+    "id": "sub_008",
+    "chapter": "CH8 배열과 문자열",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 실행 결과를 쓰시오.",
+    "code": "int arr[3] = {10, 20, 30};\nprintf(\"%d\", arr[1]);",
+    "answer": "20",
+    "explanation": "arr[1]은 인덱스 1(두 번째 원소)인 20을 가리킨다."
+  },
+  {
+    "id": "sub_009",
+    "chapter": "CH5 제어문",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 출력 결과를 쓰시오.",
+    "code": "int x = 0;\nif (x)\n    printf(\"참\");\nelse\n    printf(\"거짓\");",
+    "answer": "거짓",
+    "explanation": "C언어에서 0은 거짓(false), 0이 아닌 값은 참(true)이다. x=0이므로 else 블록이 실행된다."
+  },
+  {
+    "id": "sub_010",
+    "chapter": "CH5 제어문",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 출력 결과를 쓰시오. (공백 포함하여 정확히)",
+    "code": "for (int i = 0; i < 3; i++)\n    printf(\"%d \", i);",
+    "answer": "0 1 2 ",
+    "explanation": "i가 0, 1, 2일 때 각각 'i '를 출력한다. 공백이 각 숫자 뒤에 붙는다."
+  },
+  {
+    "id": "sub_011",
+    "chapter": "CH4 콘솔 입출력과 연산자",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드 실행 후 x의 값을 쓰시오.",
+    "code": "int x = 3;\nx *= 4;\nx -= 2;",
+    "answer": "10",
+    "explanation": "x = 3 → x *= 4 → x = 12 → x -= 2 → x = 10"
+  },
+    {
+    "id": "sub_012",
+    "chapter": "CH1 네임스페이스",
+    "type": "short",
+    "question": "C++에서 이름 충돌을 방지하기 위해 사용되는 논리적인 영역을 무엇이라 하는가?",
+    "answer": "네임스페이스(namespace)",
+    "explanation": "namespace 키워드를 사용하여 동일한 이름의 식별자들을 구분할 수 있습니다."
+  },
+  {
+    "id": "sub_013",
+    "chapter": "CH1 네임스페이스",
+    "type": "short",
+    "question": "std::cout에서 사용된 '::' 연산자의 정식 명칭은?",
+    "answer": "범위 지정 연산자",
+    "explanation": "특정 네임스페이스나 클래스에 속한 멤버를 지정할 때 사용합니다."
+  },
+  {
+    "id": "sub_014",
+    "chapter": "CH2 링킹",
+    "type": "short",
+    "question": "컴파일 후 함수 이름이 매개변수 타입 정보를 포함한 복잡한 이름으로 변하는 현상을 무엇이라 하는가?",
+    "answer": "이름 규칙(Naming Mangling)",
+    "explanation": "C++에서 함수 중복(Overloading)을 지원하기 위해 내부적으로 이름을 변환하는 과정입니다."
+  },
+  {
+    "id": "sub_015",
+    "chapter": "CH3 클래스",
+    "type": "short",
+    "question": "클래스라는 틀에서 실제로 메모리에 할당되어 생성된 실체를 무엇이라 하는가?",
+    "answer": "객체(Object) 또는 인스턴스(Instance)",
+    "explanation": "클래스는 설계도이고, 객체는 그 설계도로 만든 실제 제품입니다."
+  },
+  {
+    "id": "sub_016",
+    "chapter": "CH4 생성자",
+    "type": "short",
+    "question": "한 생성자에서 다른 생성자를 호출하여 중복 코드를 줄이는 기법을 무엇이라 하는가?",
+    "answer": "위임 생성자",
+    "explanation": "C++11에서 도입된 기능으로 생성자 초기화 리스트에서 다른 생성자를 호출합니다."
+  },
+  {
+    "id": "sub_017",
+    "chapter": "CH4 생성자",
+    "type": "short",
+    "question": "생성자 본문이 실행되기 전 멤버 변수를 효율적으로 초기화하는 문법적 위치는?",
+    "answer": "멤버 이니셜라이저(초기화 리스트)",
+    "explanation": "const 멤버나 참조 멤버는 반드시 여기서 초기화해야 합니다."
+  },
+  {
+    "id": "sub_018",
+    "chapter": "CH5 동적 할당",
+    "type": "short",
+    "question": "동적 메모리가 할당되는 운영체제의 메모리 영역은?",
+    "answer": "힙(Heap)",
+    "explanation": "지역 변수가 저장되는 스택과 달리 힙은 사용자가 직접 관리하는 공간입니다."
+  },
+  {
+    "id": "sub_019",
+    "chapter": "CH6 호출 방식",
+    "type": "short",
+    "question": "함수 호출 시 실제 값이 복사되어 전달되는 방식을 무엇이라 하는가?",
+    "answer": "값에 의한 호출(Call by Value)",
+    "explanation": "원본에 영향을 주지 않지만 객체가 클 경우 복사 비용이 발생합니다."
+  },
+  {
+    "id": "sub_020",
+    "chapter": "CH6 참조",
+    "type": "short",
+    "question": "임시 값(rvalue)을 참조할 때 사용하며 이동(move) 문법의 기초가 되는 연산자 기호는?",
+    "answer": "&&",
+    "explanation": "rvalue 참조는 &&를 사용하며 C++11의 핵심 성능 향상 기법입니다."
+  },
+  {
+    "id": "sub_021",
+    "chapter": "CH7 연산자 오버로딩",
+    "type": "short",
+    "question": "연산자 함수를 정의할 때 사용하는 키워드는?",
+    "answer": "operator",
+    "explanation": "operator+와 같이 연산자 기호 앞에 붙여 함수명을 만듭니다."
+  },
+  {
+    "id": "sub_021",
+    "chapter": "CH1 상속",
+    "type": "short",
+    "question": "부모 클래스의 함수를 자식 클래스에서 동일한 원형으로 다시 정의하는 것을 무엇이라 하는가?",
+    "answer": "함수 오버라이딩(Overriding)",
+    "explanation": "상속받은 기능을 자식 클래스에 맞게 재정의하는 것입니다."
+  },
+  {
+    "id": "sub_022",
+    "chapter": "CH1 다형성",
+    "type": "short",
+    "question": "가상 함수를 선언할 때 사용하는 키워드는?",
+    "answer": "virtual",
+    "explanation": "virtual 선언이 있어야 동적 바인딩이 발생합니다."
+  },
+  {
+    "id": "sub_023",
+    "chapter": "CH1 가상 함수",
+    "type": "short",
+    "question": "컴파일러가 가상 함수를 관리하기 위해 내부적으로 만드는 주소 테이블의 이름은?",
+    "answer": "vtable (Virtual Function Table)",
+    "explanation": "객체마다 이 테이블을 가리키는 포인터가 생성되어 동적 바인딩을 구현합니다."
+  },
+  {
+    "id": "sub_024",
+    "chapter": "CH1 추상 클래스",
+    "type": "short",
+    "question": "함수 바디가 없고 '= 0'으로 끝나는 가상 함수를 무엇이라 하는가?",
+    "answer": "순수 가상 함수",
+    "explanation": "자식 클래스에서 반드시 오버라이딩해야 함을 강제합니다."
+  },
+  {
+    "id": "sub_025",
+    "chapter": "CH8 파일 I/O",
+    "type": "short",
+    "question": "파일 쓰기를 위한 C++ 스트림 클래스명은?",
+    "answer": "ofstream",
+    "explanation": "Output File Stream의 약자입니다."
+  },
+  {
+    "id": "sub_026",
+    "chapter": "CH9 템플릿",
+    "type": "short",
+    "question": "템플릿에서 제네릭 타입을 선언할 때 typename과 함께 사용 가능한 키워드는?",
+    "answer": "class",
+    "explanation": "template <class T>와 template <typename T>는 동일하게 동작합니다."
+  },
+  {
+    "id": "sub_027",
+    "chapter": "CH6 생성자",
+    "type": "short",
+    "question": "컴파일러가 자동으로 호출하는 묵시적 변환 생성을 막기 위해 사용하는 키워드는?",
+    "answer": "explicit",
+    "explanation": "생성자 앞에 붙여 의도치 않은 형변환을 방지합니다."
+  },
+  {
+    "id": "sub_028",
+    "chapter": "CH2 예외 처리",
+    "type": "short",
+    "question": "예외 발생 시 해당 함수가 종료되면서 생성된 지역 객체들이 자동으로 소멸되는 과정을 무엇이라 하는가?",
+    "answer": "스택 풀기 (Stack Unwinding)",
+    "explanation": "예외가 처리될 때까지 호출 스택을 거슬러 올라가며 자원을 해제합니다."
+  },
+  {
+    "id": "sub_029",
+    "chapter": "CH3 클래스",
+    "type": "short",
+    "question": "데이터와 함수를 하나의 단위로 묶는 객체 지향의 특징은?",
+    "answer": "캡슐화(Encapsulation)",
+    "explanation": "데이터 보호와 코드 독립성을 위한 기초가 됩니다."
+  },
+  {
+    "id": "sub_030",
+    "chapter": "CH5 동적 할당",
+    "type": "short",
+    "question": "배열 형태로 할당된 메모리를 해제할 때 delete와 함께 사용하는 기호는?",
+    "answer": "[]",
+    "explanation": "delete [] p; 형식을 지켜야 배열 전체의 소멸자가 호출됩니다."
+  }
+]

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>시험 결과 · C/C++ 이론 시험</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="result">
+  <div class="container">
+
+    <!-- 헤더 -->
+    <div class="header-card">
+      <h1>시험 결과</h1>
+      <p class="header-desc">C/C++ 이론 시험 채점 결과</p>
+    </div>
+
+    <!-- 시험 데이터 없을 때 -->
+    <div id="no-data-msg" class="card" style="display:none; text-align:center; padding:40px;">
+      <p style="color:#5F6368; margin-bottom:16px;">완료된 시험 결과가 없습니다.</p>
+      <a href="index.html" class="btn-primary" style="text-decoration:none; display:inline-block;">시험 시작하기</a>
+    </div>
+
+    <!-- 결과 콘텐츠 -->
+    <div id="result-content">
+
+      <!-- 점수 요약 카드 -->
+      <div class="card score-card">
+        <div class="score-center">
+          <div class="score-big" id="score-big">0</div>
+          <div class="score-denom">/ 100점</div>
+          <div id="pass-chip" class="pass-chip">-</div>
+          <div class="pass-criteria">합격 기준: 12문제 이상 / 60점</div>
+        </div>
+
+        <div class="score-breakdown">
+          <div class="score-row">
+            <span class="score-lbl"><span class="type-badge type-ox">O/X</span></span>
+            <span id="ox-row">-</span>
+          </div>
+          <div class="score-row">
+            <span class="score-lbl"><span class="type-badge type-multiple">객관식</span></span>
+            <span id="mc-row">-</span>
+          </div>
+          <div class="score-row">
+            <span class="score-lbl"><span class="type-badge type-subjective">주관식</span></span>
+            <span id="sub-row">-</span>
+          </div>
+          <div class="score-row total-row">
+            <span class="score-lbl">총 정답</span>
+            <span id="total-row">-</span>
+          </div>
+        </div>
+
+        <div class="result-action-row">
+          <button class="btn-secondary" id="btn-redownload">결과 다운로드 (.txt)</button>
+          <button class="btn-secondary" id="btn-new-exam">새 시험 시작</button>
+        </div>
+      </div>
+
+      <!-- 챕터별 결과 -->
+      <div class="card">
+        <h2 class="section-title">챕터별 결과</h2>
+        <div id="chapter-summary"></div>
+      </div>
+
+    </div><!-- /result-content -->
+
+    <!-- 시험 기록 -->
+    <div class="card" id="history-section">
+      <h2 class="section-title">시험 기록</h2>
+      <div id="history-list"></div>
+    </div>
+
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

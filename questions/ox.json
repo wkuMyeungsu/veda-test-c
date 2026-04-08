@@ -1,0 +1,242 @@
+[
+  {
+    "id": "ox_001",
+    "chapter": "CH8 배열과 문자열",
+    "type": "ox",
+    "question": "C언어에서 배열의 인덱스는 0부터 시작한다.",
+    "answer": true,
+    "explanation": "C/C++ 배열은 0-indexed이다. arr[0]이 첫 번째 원소다."
+  },
+  {
+    "id": "ox_002",
+    "chapter": "CH9 포인터",
+    "type": "ox",
+    "question": "C언어에서 포인터 변수는 메모리 주소를 저장한다.",
+    "answer": true,
+    "explanation": "포인터는 다른 변수의 메모리 주소를 값으로 저장하는 변수다."
+  },
+  {
+    "id": "ox_003",
+    "chapter": "CH03 클래스와 객체",
+    "type": "ox",
+    "question": "C++에서 클래스의 멤버는 기본(default)으로 public 접근 권한을 가진다.",
+    "answer": false,
+    "explanation": "C++ 클래스의 기본 접근 지정자는 private이다. struct는 public이 기본이다."
+  },
+  {
+    "id": "ox_004",
+    "chapter": "CH11 동적 메모리 할당",
+    "type": "ox",
+    "question": "C언어에서 malloc()으로 할당한 메모리는 free()를 호출하지 않아도 자동으로 해제된다.",
+    "answer": false,
+    "explanation": "malloc()은 힙(heap) 영역에 할당되며, 반드시 free()로 직접 해제해야 한다. 해제하지 않으면 메모리 누수가 발생한다."
+  },
+  {
+    "id": "ox_005",
+    "chapter": "CH8 배열과 문자열",
+    "type": "ox",
+    "question": "C언어에서 문자열은 널 문자('\\0')로 끝난다.",
+    "answer": true,
+    "explanation": "C 문자열은 char 배열이며, 마지막에 '\\0'(NULL 문자, ASCII 0)이 붙어 문자열의 끝을 표시한다."
+  },
+  {
+    "id": "ox_006",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "type": "ox",
+    "question": "C++에서 함수 오버로딩(overloading)은 같은 이름의 함수를 매개변수 목록을 달리하여 여러 개 정의하는 것이다.",
+    "answer": true,
+    "explanation": "오버로딩은 함수명이 같지만 매개변수의 타입 또는 개수가 달라야 한다. 반환형만 다른 경우는 오버로딩이 아니다."
+  },
+  {
+    "id": "ox_007",
+    "chapter": "CH3 변수와 자료형",
+    "type": "ox",
+    "question": "C언어에서 지역 변수를 선언만 하고 초기화하지 않으면 자동으로 0으로 초기화된다.",
+    "answer": false,
+    "explanation": "지역 변수는 초기화하지 않으면 쓰레기값(garbage value)을 가진다. 전역 변수와 정적(static) 변수는 자동으로 0으로 초기화된다."
+  },
+  {
+    "id": "ox_008",
+    "chapter": "CH4 콘솔 입출력과 연산자",
+    "type": "ox",
+    "question": "printf()와 scanf()는 <stdio.h> 헤더에 선언되어 있다.",
+    "answer": true,
+    "explanation": "표준 입출력 함수(printf, scanf, fprintf 등)는 <stdio.h> (Standard Input/Output)에 정의되어 있다."
+  },
+  {
+    "id": "ox_009",
+    "chapter": "CH12 구조체",
+    "type": "ox",
+    "question": "C언어에서 구조체(struct)는 서로 다른 자료형의 데이터를 하나로 묶을 수 있다.",
+    "answer": true,
+    "explanation": "struct는 int, float, char 등 서로 다른 타입의 멤버를 하나의 타입으로 묶는다. 모든 멤버가 같은 타입이어야 하는 배열과 다르다."
+  },
+  {
+    "id": "ox_010",
+    "chapter": "CH05 참조와 복사생성자",
+    "type": "ox",
+    "question": "C++에서 참조자(reference)는 선언 이후 다른 변수를 참조하도록 변경할 수 있다.",
+    "answer": false,
+    "explanation": "참조자는 한 번 초기화되면 재바인딩이 불가능하다. 포인터는 다른 주소를 가리킬 수 있지만 참조자는 항상 동일한 변수를 참조한다."
+  },
+  {
+    "id": "ox_011",
+    "chapter": "CH1 C++ 서론",
+    "type": "ox",
+    "question": "C++에서 인라인(inline) 함수는 컴파일러에게 함수 호출을 본문 코드로 치환해달라는 강제 명령이다.",
+    "answer": false,
+    "explanation": "인라인 선언은 컴파일러에게 보내는 '요청'이며, 컴파일러가 판단하기에 너무 복잡한 함수는 인라인화되지 않을 수 있다."
+  },
+  {
+    "id": "ox_012",
+    "chapter": "CH4 링킹과 extern",
+    "type": "ox",
+    "question": "C++ 소스에서 C 언어로 작성된 함수를 호출하려면 이름 규칙(Naming Mangling)의 차이 때문에 extern \"C\" 선언이 필요하다.",
+    "answer": true,
+    "explanation": "C++은 오버로딩 지원을 위해 함수 이름을 복잡하게 바꾸지만, C는 그렇지 않다. 따라서 C 컴파일러의 방식으로 링크하도록 지시해야 한다."
+  },
+  {
+    "id": "ox_013",
+    "chapter": "CH03 클래스와 객체",
+    "type": "ox",
+    "question": "캡슐화(Encapsulation)를 통해 정보 은닉(Data Hiding)을 달성할 수 있다.",
+    "answer": true,
+    "explanation": "데이터와 함수를 하나로 묶고 접근 제한자를 통해 외부 접근을 차단함으로써 정보 은닉을 구현한다."
+  },
+  {
+    "id": "ox_014",
+    "chapter": "CH04 생성자와 소멸자",
+    "type": "ox",
+    "question": "생성자는 반환 타입을 가질 수 없으며, void 타입조차 선언할 수 없다.",
+    "answer": true,
+    "explanation": "생성자와 소멸자는 리턴 타입 자체가 존재하지 않는 특별한 함수다."
+  },
+  {
+    "id": "ox_015",
+    "chapter": "CH04 생성자와 소멸자",
+    "type": "ox",
+    "question": "기본 생성자(Default Constructor)는 매개 변수가 하나라도 있는 생성자를 의미한다.",
+    "answer": false,
+    "explanation": "기본 생성자는 매개 변수가 아예 없거나, 모든 매개 변수에 디폴트 값이 설정된 생성자를 말한다."
+  },
+  {
+    "id": "ox_016",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "type": "ox",
+    "question": "static 멤버 함수 내에서 non-static 멤버 변수에 직접 접근하는 것이 가능하다.",
+    "answer": false,
+    "explanation": "static 함수는 객체가 생성되기 전에도 호출될 수 있으므로, 특정 객체에 속한 non-static 멤버에는 접근할 수 없다."
+  },
+  {
+    "id": "ox_017",
+    "chapter": "CH05 참조와 복사생성자",
+    "type": "ox",
+    "question": "얕은 복사(Shallow Copy)는 객체 복사 시 멤버 변수의 포인터가 가리키는 실제 메모리 공간까지 별도로 복제한다.",
+    "answer": false,
+    "explanation": "얕은 복사는 포인터 변수의 값(주소)만 복사하여 메모리를 공유한다. 실제 공간까지 복제하는 것은 깊은 복사(Deep Copy)다."
+  },
+  {
+    "id": "ox_018",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "type": "ox",
+    "question": "this 포인터는 객체 자신을 가리키는 포인터로, static 멤버 함수 내에서는 사용할 수 없다.",
+    "answer": true,
+    "explanation": "this는 호출된 객체의 주소를 의미하는데, static 함수는 특정 객체에 소속되지 않으므로 this를 가질 수 없다."
+  },
+  {
+    "id": "ox_019",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "type": "ox",
+    "question": "const 멤버 함수는 해당 함수 내에서 객체의 멤버 변수 값을 변경할 수 없음을 보장한다.",
+    "answer": true,
+    "explanation": "const 함수는 읽기 전용 함수로 정의되어 객체의 상태를 변경하지 못하게 제한한다."
+  },
+  {
+    "id": "ox_020",
+    "chapter": "CH01 상속",
+    "type": "ox",
+    "question": "상속 관계에서 파생 클래스의 객체를 생성할 때, 파생 클래스의 생성자가 기본 클래스의 생성자보다 먼저 실행된다.",
+    "answer": false,
+    "explanation": "생성 순서는 항상 부모(기본) 클래스 생성자 -> 자식(파생) 클래스 생성자 순이다. 소멸은 그 반대다."
+  },
+  {
+    "id": "ox_021",
+    "chapter": "CH01 상속",
+    "type": "ox",
+    "question": "protected로 선언된 멤버는 파생 클래스에서는 접근이 가능하지만, 외부 함수에서는 접근이 불가능하다.",
+    "answer": true,
+    "explanation": "protected는 상속 관계의 자식에게는 public처럼, 외부에게는 private처럼 동작한다."
+  },
+  {
+    "id": "ox_022",
+    "chapter": "CH01 상속",
+    "type": "ox",
+    "question": "가상 함수(Virtual Function)는 실행 시간(Runtime)에 호출될 함수가 결정되는 동적 바인딩을 가능하게 한다.",
+    "answer": true,
+    "explanation": "virtual 키워드를 사용하면 포인터의 타입이 아닌 실제 가리키는 객체의 타입에 맞춰 함수를 호출한다."
+  },
+  {
+    "id": "ox_023",
+    "chapter": "CH01 상속",
+    "type": "ox",
+    "question": "순수 가상 함수(Pure Virtual Function)를 하나 이상 포함한 클래스를 추상 클래스라고 하며, 이 클래스는 객체를 직접 생성할 수 없다.",
+    "answer": true,
+    "explanation": "추상 클래스는 설계도 역할을 하며, 구현되지 않은 함수가 있으므로 인스턴스화가 불가능하다."
+  },
+  {
+    "id": "ox_024",
+    "chapter": "CH01 상속",
+    "type": "ox",
+    "question": "업캐스팅(Upcasting)된 기본 클래스 포인터로 자식 객체를 가리키고 있을 때, delete를 수행하면 항상 자식 클래스의 소멸자가 호출된다.",
+    "answer": false,
+    "explanation": "기본 클래스의 소멸자가 virtual로 선언되어 있지 않으면 자식 클래스의 소멸자는 호출되지 않아 메모리 누수가 발생할 수 있다."
+  },
+  {
+    "id": "ox_025",
+    "chapter": "CH10 예외 처리",
+    "type": "ox",
+    "question": "C++의 catch 블록에서 처리할 수 있는 예외의 타입은 오직 클래스 타입으로 한정된다.",
+    "answer": false,
+    "explanation": "C++은 int, double, char* 등 기본 자료형도 throw하여 catch할 수 있다."
+  },
+  {
+    "id": "ox_026",
+    "chapter": "CH09 템플릿과 제네릭",
+    "type": "ox",
+    "question": "함수 템플릿 특수화(Specialization)는 일반적인 템플릿 로직보다 우선적으로 선택되어 실행된다.",
+    "answer": true,
+    "explanation": "컴파일러는 가장 구체적인 정의를 먼저 찾으므로, 특정 타입에 대해 특수화된 템플릿이 일반 템플릿보다 우선순위가 높다."
+  },
+  {
+    "id": "ox_027",
+    "chapter": "CH09 템플릿과 제네릭",
+    "type": "ox",
+    "question": "클래스 템플릿은 객체를 생성할 때 <int>와 같이 구체적인 자료형을 명시하지 않아도 컴파일러가 자동으로 추론해준다. (C++17 이전 기준)",
+    "answer": false,
+    "explanation": "함수 템플릿은 추론이 가능하지만, 클래스 템플릿은 객체 선언 시 자료형을 명시해야 한다. (C++17부터는 생성자 추론 기능이 추가됨)"
+  },
+  {
+    "id": "ox_028",
+    "chapter": "CH08 파일 입출력",
+    "type": "ox",
+    "question": "ofstream 객체를 사용할 때 ios::app 모드로 파일을 열면 기존 데이터 뒤에 새로운 내용이 추가된다.",
+    "answer": true,
+    "explanation": "app은 append의 약자로, 파일 포인터를 항상 파일 끝으로 옮겨 내용을 덧붙인다."
+  },
+  {
+    "id": "ox_029",
+    "chapter": "CH05 참조와 복사생성자",
+    "type": "ox",
+    "question": "C++11에서 도입된 && 기호는 lvalue 참조를 의미하며, 이미 이름이 있는 변수만 참조할 수 있다.",
+    "answer": false,
+    "explanation": "&&는 rvalue 참조이며, 상수나 임시 객체(rvalue)를 참조하여 '이동(move)' 성능 최적화에 사용된다."
+  },
+  {
+    "id": "ox_030",
+    "chapter": "CH10 예외 처리",
+    "type": "ox",
+    "question": "예외가 발생하여 catch 블록으로 이동할 때, 호출 스택에 생성되었던 지역 객체들이 소멸되는 과정을 스택 풀기(Stack Unwinding)라 한다.",
+    "answer": true,
+    "explanation": "예외 발생 시 정상적인 리턴 과정을 거치지 않더라도 지역 변수들의 소멸자가 안전하게 호출되도록 보장하는 메커니즘이다."
+  }
+]

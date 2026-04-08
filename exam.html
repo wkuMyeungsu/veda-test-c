@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>시험 진행 중 · C/C++ 이론 시험</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="exam">
+
+  <!-- 상단 진행 바 (fixed) -->
+  <div class="progress-bar-wrap">
+    <div class="progress-fill" id="progress-fill"></div>
+  </div>
+
+  <div class="container">
+    <div class="exam-header">
+      <span class="exam-title">C/C++ 이론 시험</span>
+      <span class="progress-text" id="progress-text">1 / 20</span>
+    </div>
+
+    <!-- 문제 카드가 JS로 렌더링됩니다 -->
+    <div id="exam-container"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

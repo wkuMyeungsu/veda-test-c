@@ -1,0 +1,455 @@
+[
+  {
+    "id": "cpp_001",
+    "chapter": "CH01 C++ 기초",
+    "type": "ox",
+    "question": "cout은 std 네임스페이스에 속하므로, using namespace std 선언 없이 사용하려면 std::cout 으로 명시해야 한다.",
+    "answer": true,
+    "explanation": "cout, cin, endl 등은 모두 std 네임스페이스에 정의되어 있다. using namespace std 선언이 없으면 std::cout 처럼 네임스페이스를 명시해야 한다."
+  },
+  {
+    "id": "cpp_002",
+    "chapter": "CH01 C++ 기초",
+    "type": "ox",
+    "question": "C++에서 new 연산자로 할당한 힙(heap) 메모리는 해당 포인터 변수의 스코프가 끝나면 자동으로 해제된다.",
+    "answer": false,
+    "explanation": "힙 메모리는 포인터 변수의 수명과 무관하며, 반드시 delete(배열은 delete[])로 직접 해제해야 한다. 포인터 변수만 소멸되면 메모리 누수가 발생한다."
+  },
+  {
+    "id": "cpp_003",
+    "chapter": "CH03 클래스와 객체",
+    "type": "ox",
+    "question": "C++에서 소멸자(destructor)는 매개변수를 달리하여 여러 개 오버로딩할 수 있다.",
+    "answer": false,
+    "explanation": "소멸자는 매개변수가 없고 반환 타입도 없으며, 클래스당 하나만 존재할 수 있다. 오버로딩이 불가능하다."
+  },
+  {
+    "id": "cpp_004",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "type": "ox",
+    "question": "C++에서 함수 오버로딩 시 반환 타입만 다르고 매개변수 목록이 동일하면 컴파일 오류가 발생한다.",
+    "answer": true,
+    "explanation": "오버로딩은 매개변수의 타입이나 개수가 달라야 구분된다. 반환 타입만 다른 함수는 호출 시 어느 함수를 선택할지 모호하여 컴파일 오류가 발생한다."
+  },
+  {
+    "id": "cpp_005",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "type": "ox",
+    "question": "C++에서 함수의 기본 매개변수(default argument)는 매개변수 목록의 오른쪽부터 순서대로 지정해야 한다.",
+    "answer": true,
+    "explanation": "void f(int a, int b = 2, int c = 3)는 유효하지만, void f(int a = 1, int b)는 컴파일 오류이다. 기본값이 있는 매개변수 뒤에는 기본값이 없는 매개변수가 올 수 없다."
+  },
+  {
+    "id": "cpp_006",
+    "chapter": "CH05 참조와 복사생성자",
+    "type": "ox",
+    "question": "복사 생성자의 매개변수를 참조자(&) 대신 값(value)으로 선언하면 무한 재귀 호출이 발생한다.",
+    "answer": true,
+    "explanation": "복사 생성자를 값으로 받으면, 인수를 복사하기 위해 다시 복사 생성자가 호출되어 무한 재귀가 발생한다. 반드시 const ClassName& 형태의 참조자로 선언해야 한다."
+  },
+  {
+    "id": "cpp_007",
+    "chapter": "CH02 예외처리",
+    "type": "ox",
+    "question": "C++의 catch(...) 블록은 타입에 관계없이 모든 종류의 예외를 처리할 수 있다.",
+    "answer": true,
+    "explanation": "catch(...)는 '모든 것을 잡는(catch-all)' 핸들러이다. 어떤 타입의 예외도 받을 수 있으며, 보통 catch 블록 목록의 마지막에 배치하여 처리되지 않은 예외를 잡는 데 사용한다."
+  },
+  {
+    "id": "cpp_008",
+    "chapter": "CH07 연산자 오버로딩 입출력스트림",
+    "type": "ox",
+    "question": "연산자 오버로딩을 사용하면 해당 연산자의 우선순위(precedence)를 바꿀 수 있다.",
+    "answer": false,
+    "explanation": "C++에서 연산자 오버로딩은 연산자의 동작(의미)을 재정의할 수 있지만, 우선순위와 결합 방향(associativity)은 언어 명세에 고정되어 있어 변경할 수 없다."
+  },
+  {
+    "id": "cpp_009",
+    "chapter": "CH07 연산자 오버로딩 입출력스트림",
+    "type": "ox",
+    "question": "friend 함수는 클래스의 멤버 함수가 아니지만 해당 클래스의 private 멤버에 직접 접근할 수 있다.",
+    "answer": true,
+    "explanation": "friend 선언을 받은 외부 함수나 클래스는 private 및 protected 멤버에 접근할 수 있다. 연산자 오버로딩 시 두 피연산자 모두의 내부 멤버에 접근해야 할 때 자주 사용된다."
+  },
+  {
+    "id": "cpp_010",
+    "chapter": "CH08 상속과 다형성",
+    "type": "ox",
+    "question": "public 상속 시, 부모 클래스의 public 멤버는 자식 클래스에서도 public 접근 권한을 유지한다.",
+    "answer": true,
+    "explanation": "public 상속에서는 부모의 public → 자식의 public, 부모의 protected → 자식의 protected 로 유지된다. private 상속이나 protected 상속을 하면 접근 권한이 제한된다."
+  },
+  {
+    "id": "cpp_011",
+    "chapter": "CH08 상속과 다형성",
+    "type": "ox",
+    "question": "순수 가상 함수를 가진 추상 클래스를 상속받은 파생 클래스가 해당 순수 가상 함수를 오버라이딩하지 않으면, 그 파생 클래스도 추상 클래스가 된다.",
+    "answer": true,
+    "explanation": "파생 클래스가 모든 순수 가상 함수를 구현해야만 비로소 객체를 생성할 수 있는 구체 클래스(concrete class)가 된다. 하나라도 미구현이면 여전히 추상 클래스이다."
+  },
+  {
+    "id": "cpp_012",
+    "chapter": "CH09 파일입출력",
+    "type": "ox",
+    "question": "ifstream 객체로 존재하지 않는 파일을 열려고 하면 자동으로 해당 이름의 빈 파일이 생성된다.",
+    "answer": false,
+    "explanation": "ifstream은 읽기 전용 스트림으로, 파일이 없으면 열기가 실패하고 스트림이 false 상태가 된다. 파일을 자동 생성하는 것은 ofstream(출력 스트림)의 기본 동작이다."
+  },
+  {
+    "id": "cpp_013",
+    "chapter": "CH10 템플릿",
+    "type": "ox",
+    "question": "C++ 함수 템플릿은 컴파일 시간(compile time)에 사용된 타입마다 별도의 함수 코드가 생성된다.",
+    "answer": true,
+    "explanation": "이 과정을 '템플릿 인스턴스화(template instantiation)'라 한다. add<int>(), add<double>() 처럼 각 타입에 맞는 코드가 컴파일 단계에서 자동 생성된다."
+  },
+  {
+    "id": "cpp_014",
+    "chapter": "CH04 객체포인터와객체배열",
+    "type": "ox",
+    "question": "객체 포인터를 통해 멤버 변수나 함수에 접근할 때는 점(.) 연산자를 사용한다.",
+    "answer": false,
+    "explanation": "객체 포인터로 멤버에 접근할 때는 화살표(->) 연산자를 사용한다. 점(.) 연산자는 객체 변수에서 직접 접근할 때 사용한다. p->func()는 (*p).func()와 동일하다."
+  },
+  {
+    "id": "cpp_015",
+    "chapter": "CH01 C++ 기초",
+    "type": "ox",
+    "question": "C++에서 delete nullptr; 을 실행하면 프로그램이 비정상 종료된다.",
+    "answer": false,
+    "explanation": "C++ 표준에 따르면 nullptr(또는 NULL, 0)을 delete하는 것은 안전하며 아무런 동작도 하지 않는다. 포인터를 delete 후 nullptr로 초기화하는 관습이 있다."
+  },
+  {
+    "id": "cpp_016",
+    "chapter": "CH01 C++ 기초",
+    "type": "multiple",
+    "question": "C++에서 표준 입출력 객체 cout과 cin이 선언된 헤더 파일은?",
+    "options": ["<stdio.h>", "<cstdio>", "<iostream>", "<string>", "<iomanip>"],
+    "answer": 2,
+    "explanation": "C++의 표준 입출력 스트림(cout, cin, cerr, endl 등)은 <iostream> 헤더에 정의되어 있다. <stdio.h>와 <cstdio>는 C 스타일의 printf/scanf를 제공한다."
+  },
+  {
+    "id": "cpp_017",
+    "chapter": "CH02 예외처리",
+    "type": "multiple",
+    "question": "C++에서 예외를 발생시켜 던지는 키워드는?",
+    "options": ["try", "catch", "throw", "except", "raise"],
+    "answer": 2,
+    "explanation": "throw 키워드로 예외 객체를 던지고, try 블록 안에서 발생한 예외를 catch 블록에서 받아 처리한다. except와 raise는 Python의 키워드이다."
+  },
+  {
+    "id": "cpp_018",
+    "chapter": "CH03 클래스와 객체",
+    "type": "multiple",
+    "question": "클래스 외부에서 멤버 함수를 정의할 때, 클래스 이름과 함수 이름 사이에 사용하는 연산자는?",
+    "options": ["::", "->", ".", ":=", "##"],
+    "answer": 0,
+    "explanation": "범위 지정 연산자(::)로 클래스 소속을 명시한다. void Point::print() { ... } 처럼 클래스명::함수명 형식으로 정의한다."
+  },
+  {
+    "id": "cpp_019",
+    "chapter": "CH04 객체포인터와객체배열",
+    "type": "multiple",
+    "question": "Dog 클래스의 포인터 p가 있을 때, 멤버 함수 bark()를 호출하는 올바른 표현식은?",
+    "options": ["p.bark()", "p->bark()", "*p.bark()", "p::bark()", "&p.bark()"],
+    "answer": 1,
+    "explanation": "포인터를 통한 멤버 접근에는 화살표 연산자(->)를 사용한다. p->bark()는 (*p).bark()와 동일하다."
+  },
+  {
+    "id": "cpp_020",
+    "chapter": "CH05 참조와 복사생성자",
+    "type": "multiple",
+    "question": "다음 중 복사 생성자가 자동으로 호출되지 않는 경우는?",
+    "options": ["Point p2 = p1; 로 초기화할 때", "함수의 인자를 값으로 전달할 때", "함수에서 객체를 값으로 반환할 때", "이미 생성된 객체에 p2 = p1; 대입 연산을 수행할 때", "Point p2(p1); 로 초기화할 때"],
+    "answer": 3,
+    "explanation": "이미 생성된 객체에 대한 p2 = p1; 은 대입 연산자(operator=)가 호출된다. 복사 생성자는 새 객체를 기존 객체로 '초기화'할 때 호출된다."
+  },
+  {
+    "id": "cpp_021",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "type": "multiple",
+    "question": "다음 중 C++ 기본 매개변수(default argument)에 대한 설명으로 옳지 않은 것은?",
+    "options": ["기본값은 매개변수 목록의 오른쪽부터 지정해야 한다.", "기본값이 있는 매개변수는 호출 시 생략 가능하다.", "기본값이 없는 매개변수를 기본값이 있는 매개변수 뒤에 선언할 수 있다.", "기본값은 함수 선언부에 한 번만 지정한다.", "기본값이 있어도 호출 시 명시적으로 다른 값을 전달할 수 있다."],
+    "answer": 2,
+    "explanation": "기본값이 없는 매개변수를 기본값이 있는 매개변수 뒤에 선언하면 컴파일 오류가 발생한다. void f(int a = 1, int b)는 불가능하며, 기본값은 반드시 오른쪽부터 순서대로 지정해야 한다."
+  },
+  {
+    "id": "cpp_022",
+    "chapter": "CH07 연산자 오버로딩 입출력스트림",
+    "type": "multiple",
+    "question": "다음 연산자 중 C++에서 오버로딩이 불가능한 것은?",
+    "options": ["[]", "->", "+", "::", "=="],
+    "answer": 3,
+    "explanation": "범위 지정 연산자(::), 멤버 접근 연산자(.), 포인터 멤버 접근(.*), 삼항 연산자(?:)는 오버로딩이 불가능하다. [], ->, +, == 등은 모두 오버로딩 가능하다."
+  },
+  {
+    "id": "cpp_023",
+    "chapter": "CH08 상속과 다형성",
+    "type": "multiple",
+    "question": "C++에서 실행 시간(runtime) 다형성을 구현하는 핵심 메커니즘은?",
+    "options": ["함수 오버로딩", "가상 함수와 동적 바인딩", "함수 템플릿", "연산자 오버로딩", "인라인 함수"],
+    "answer": 1,
+    "explanation": "가상 함수(virtual)와 업캐스팅된 포인터/참조를 사용하면, 실제 가리키는 객체 타입에 따라 런타임에 호출 함수가 결정되는 동적 바인딩이 이루어진다."
+  },
+  {
+    "id": "cpp_024",
+    "chapter": "CH09 파일입출력",
+    "type": "multiple",
+    "question": "C++에서 텍스트 파일을 읽기와 쓰기 모두 가능하게 여는 표준 파일 스트림 클래스는?",
+    "options": ["ifstream", "ofstream", "fstream", "iostream", "sstream"],
+    "answer": 2,
+    "explanation": "fstream은 ifstream(읽기)과 ofstream(쓰기)의 기능을 모두 지원한다. ios::in | ios::out 모드로 열면 읽기·쓰기를 동시에 수행할 수 있다."
+  },
+  {
+    "id": "cpp_025",
+    "chapter": "CH10 템플릿",
+    "type": "multiple",
+    "question": "다음 중 C++ 함수 템플릿을 선언하는 문법으로 올바르지 않은 것은?",
+    "options": ["template <typename T>", "template <class T>", "template <T>", "template <typename T1, typename T2>", "template <typename T, int N>"],
+    "answer": 2,
+    "explanation": "template <T>는 유효하지 않은 문법이다. 타입 매개변수를 선언하려면 typename 또는 class 키워드가 필요하다. template <typename T>와 template <class T>는 동일하게 동작한다."
+  },
+  {
+    "id": "cpp_026",
+    "chapter": "CH01 C++ 기초",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "변수 score의 값을 화면에 출력하려면 빈칸에 무엇을 넣어야 하는가?",
+    "code": "int score = 95;\ncout ___ score << endl;",
+    "answer": "<<",
+    "explanation": "cout과 함께 사용하는 출력 삽입 연산자는 << 이다. cout << a << b << endl; 처럼 연속으로 연결하여 사용할 수 있다."
+  },
+  {
+    "id": "cpp_027",
+    "chapter": "CH01 C++ 기초",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "힙(heap) 메모리에 정수 하나를 동적 할당하려면 빈칸에 무엇을 넣어야 하는가?",
+    "code": "int *p = ___ int(10);\ncout << *p << endl;\ndelete p;",
+    "answer": "new",
+    "explanation": "C++에서 힙 메모리 동적 할당에는 new 연산자를 사용한다. new int(10)은 int 크기의 메모리를 할당하고 10으로 초기화한다. 사용 후 반드시 delete로 해제해야 한다."
+  },
+  {
+    "id": "cpp_028",
+    "chapter": "CH02 예외처리",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "throw로 던진 int 타입 예외를 받으려면 빈칸에 무엇을 넣어야 하는가?",
+    "code": "try {\n    throw 42;\n} ___ (int e) {\n    cout << \"예외 코드: \" << e << endl;\n}",
+    "answer": "catch",
+    "explanation": "예외를 처리하는 블록은 catch 키워드로 시작하며, 괄호 안에 받을 예외의 타입과 변수명을 명시한다."
+  },
+  {
+    "id": "cpp_029",
+    "chapter": "CH03 클래스와 객체",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "생성자에서 멤버 초기화 리스트(member initializer list)를 시작하려면 매개변수 목록 뒤에 무엇을 넣어야 하는가?",
+    "code": "class Point {\n    int x, y;\npublic:\n    Point(int a, int b) ___ x(a), y(b) {}\n};",
+    "answer": ":",
+    "explanation": "멤버 초기화 리스트는 콜론(:)으로 시작한다. 생성자 본문 실행 전에 멤버 변수를 초기화하며, const 멤버나 참조 멤버는 반드시 이 방식으로만 초기화해야 한다."
+  },
+  {
+    "id": "cpp_030",
+    "chapter": "CH05 참조와 복사생성자",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "함수 호출 후 x의 값이 6이 되도록 참조 매개변수로 선언하려면 빈칸에 무엇을 넣어야 하는가?",
+    "code": "void addOne(int ___ n) {\n    n = n + 1;\n}\nint main() {\n    int x = 5;\n    addOne(x);\n    // x == 6\n}",
+    "answer": "&",
+    "explanation": "& 를 타입 뒤에 붙이면 참조 매개변수가 된다. 참조로 전달된 변수는 함수 내에서의 변경이 원본 변수에 그대로 반영된다."
+  },
+  {
+    "id": "cpp_031",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "power(3) 호출 시 9를 반환하도록 기본 매개변수를 설정하려면 빈칸에 무엇을 넣어야 하는가?",
+    "code": "int power(int base, int exp ___) {\n    int result = 1;\n    for (int i = 0; i < exp; i++) result *= base;\n    return result;\n}\n// power(3) -> 9",
+    "answer": "= 2",
+    "explanation": "기본 매개변수는 = 값 형식으로 선언한다. exp = 2 로 설정하면 power(3)은 power(3, 2)와 동일하게 3^2 = 9를 반환한다."
+  },
+  {
+    "id": "cpp_032",
+    "chapter": "CH07 연산자 오버로딩 입출력스트림",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "두 Vector 객체를 + 연산으로 더할 수 있도록 빈칸에 함수 이름을 작성하시오.",
+    "code": "class Vector {\n    int x, y;\npublic:\n    Vector(int x, int y) : x(x), y(y) {}\n    Vector ___(const Vector& v) const {\n        return Vector(x + v.x, y + v.y);\n    }\n};",
+    "answer": "operator+",
+    "explanation": "연산자 오버로딩 함수명은 operator + 연산자기호 형식이다. operator+로 정의하면 v1 + v2 표현식이 이 함수를 호출한다."
+  },
+  {
+    "id": "cpp_033",
+    "chapter": "CH08 상속과 다형성",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "파생 클래스(Dog) 생성자에서 기본 클래스(Animal) 생성자를 호출하려면 빈칸에 무엇을 넣어야 하는가?",
+    "code": "class Animal {\npublic:\n    Animal() { cout << \"Animal\" << endl; }\n};\nclass Dog : public Animal {\npublic:\n    Dog() ___ Animal() { cout << \"Dog\" << endl; }\n};",
+    "answer": ":",
+    "explanation": "파생 클래스 생성자에서 기본 클래스 생성자를 호출할 때 멤버 초기화 리스트(:)를 사용한다. Dog() : Animal() {} 형식으로 작성하면 Animal()이 먼저 실행된 뒤 Dog 생성자 본문이 실행된다."
+  },
+  {
+    "id": "cpp_034",
+    "chapter": "CH09 파일입출력",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "ifstream 객체를 생성한 뒤 파일을 여는 멤버 함수의 이름을 쓰시오.",
+    "code": "#include <fstream>\nifstream fin;\nfin.___(\"data.txt\");\nif (!fin) cout << \"파일 열기 실패\" << endl;",
+    "answer": "open",
+    "explanation": "파일 스트림의 open(파일명) 멤버 함수로 파일을 연다. 생성자에 파일명을 바로 전달하는 ifstream fin(\"data.txt\"); 형식으로 선언과 동시에 열 수도 있다."
+  },
+  {
+    "id": "cpp_035",
+    "chapter": "CH10 템플릿",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "타입에 무관하게 동작하는 함수 템플릿을 선언하려면 빈칸에 무엇을 넣어야 하는가?",
+    "code": "___ <typename T>\nT getMax(T a, T b) {\n    return (a > b) ? a : b;\n}",
+    "answer": "template",
+    "explanation": "함수 템플릿 선언은 template <typename T> (또는 template <class T>)로 시작한다. T는 호출 시 실제 타입으로 대체되는 타입 매개변수이다."
+  },
+  {
+    "id": "cpp_036",
+    "chapter": "CH05 참조와 복사생성자",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 실행 결과를 쓰시오.",
+    "code": "int a = 5;\nint &r = a;\nr = 10;\ncout << a << endl;",
+    "answer": "10",
+    "explanation": "r은 a의 참조자이므로 r = 10;은 a = 10;과 동일하다. 참조자를 통한 변경은 원본 변수에 즉시 반영된다."
+  },
+  {
+    "id": "cpp_037",
+    "chapter": "CH08 상속과 다형성",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 실행 결과를 순서대로 쓰시오.",
+    "code": "class A {\npublic:\n    A()  { cout << \"A 생성\" << endl; }\n    ~A() { cout << \"A 소멸\" << endl; }\n};\nclass B : public A {\npublic:\n    B()  { cout << \"B 생성\" << endl; }\n    ~B() { cout << \"B 소멸\" << endl; }\n};\nint main() {\n    B b;\n    return 0;\n}",
+    "answer": "A 생성\nB 생성\nB 소멸\nA 소멸",
+    "explanation": "객체 생성 시 부모 클래스 생성자가 먼저 실행되고 자식 클래스 생성자가 나중에 실행된다. 소멸 시에는 반대로 자식 소멸자가 먼저, 부모 소멸자가 나중에 실행된다."
+  },
+  {
+    "id": "cpp_038",
+    "chapter": "CH05 참조와 복사생성자",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 실행 결과를 순서대로 쓰시오.",
+    "code": "class Box {\n    int val;\npublic:\n    Box(int v) : val(v) { cout << \"생성: \" << val << endl; }\n    Box(const Box& b) : val(b.val) { cout << \"복사: \" << val << endl; }\n};\nint main() {\n    Box b1(5);\n    Box b2 = b1;\n    return 0;\n}",
+    "answer": "생성: 5\n복사: 5",
+    "explanation": "Box b1(5)에서 일반 생성자가 호출되어 '생성: 5'가 출력된다. Box b2 = b1;은 새 객체를 기존 객체로 초기화하므로 복사 생성자가 호출되어 '복사: 5'가 출력된다."
+  },
+  {
+    "id": "cpp_039",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 실행 결과를 순서대로 쓰시오.",
+    "code": "void print(int x)    { cout << \"int: \"    << x << endl; }\nvoid print(double x) { cout << \"double: \" << x << endl; }\nint main() {\n    print(10);\n    print(3.14);\n    return 0;\n}",
+    "answer": "int: 10\ndouble: 3.14",
+    "explanation": "print(10)은 정수 리터럴이므로 int 버전이 호출된다. print(3.14)는 double 리터럴이므로 double 버전이 호출된다. 컴파일러가 인수 타입에 맞는 함수를 자동으로 선택하는 것이 함수 오버로딩이다."
+  },
+  {
+    "id": "cpp_040",
+    "chapter": "CH08 상속과 다형성",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 실행 결과를 쓰시오.",
+    "code": "class Shape {\npublic:\n    virtual void draw() { cout << \"Shape\" << endl; }\n};\nclass Circle : public Shape {\npublic:\n    void draw() override { cout << \"Circle\" << endl; }\n};\nint main() {\n    Shape *s = new Circle();\n    s->draw();\n    delete s;\n    return 0;\n}",
+    "answer": "Circle",
+    "explanation": "s는 Shape 포인터이지만 Circle 객체를 가리킨다. draw()가 virtual이므로 동적 바인딩이 적용되어 실제 객체 타입인 Circle의 draw()가 호출된다."
+  },
+  {
+    "id": "cpp_041",
+    "chapter": "CH02 예외처리",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 실행 결과를 순서대로 쓰시오.",
+    "code": "int main() {\n    try {\n        cout << \"A\" << endl;\n        throw 1;\n        cout << \"B\" << endl;\n    } catch (int e) {\n        cout << \"C: \" << e << endl;\n    }\n    cout << \"D\" << endl;\n    return 0;\n}",
+    "answer": "A\nC: 1\nD",
+    "explanation": "A가 출력된 뒤 throw 1로 예외가 발생한다. 이후의 cout << \"B\"는 실행되지 않고 catch 블록으로 이동하여 'C: 1'이 출력된다. try-catch 블록 이후에는 정상 실행되어 D가 출력된다."
+  },
+  {
+    "id": "cpp_042",
+    "chapter": "CH07 연산자 오버로딩 입출력스트림",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 실행 결과를 쓰시오.",
+    "code": "class Num {\n    int val;\npublic:\n    Num(int v) : val(v) {}\n    Num operator+(const Num& n) const { return Num(val + n.val); }\n    void print() const { cout << val << endl; }\n};\nint main() {\n    Num a(3), b(4);\n    (a + b).print();\n    return 0;\n}",
+    "answer": "7",
+    "explanation": "a + b는 operator+를 호출하여 val = 3 + 4 = 7인 새 Num 객체를 반환한다. 반환된 임시 객체의 print()를 호출하면 7이 출력된다."
+  },
+  {
+    "id": "cpp_043",
+    "chapter": "CH10 템플릿",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 실행 결과를 순서대로 쓰시오.",
+    "code": "template <typename T>\nT add(T a, T b) { return a + b; }\nint main() {\n    cout << add(5, 3)     << endl;\n    cout << add(2.0, 3.0) << endl;\n    return 0;\n}",
+    "answer": "8\n5",
+    "explanation": "add(5, 3)은 T=int로 인스턴스화되어 5+3=8을 반환한다. add(2.0, 3.0)은 T=double로 인스턴스화되어 2.0+3.0=5.0을 반환하며, cout은 5.0을 정수 형태 5로 출력한다."
+  },
+  {
+    "id": "cpp_044",
+    "chapter": "CH02 예외처리",
+    "type": "subjective",
+    "subtype": "concept",
+    "question": "C++ 예외 처리에서 try, throw, catch의 각 역할을 설명하시오.",
+    "answer": "try 블록 안에 예외가 발생할 수 있는 코드를 작성한다. throw는 예외 객체를 던져 예외가 발생했음을 알린다. catch 블록은 throw된 예외 타입을 받아 처리하는 코드를 작성한다.",
+    "explanation": "try 안에서 throw가 실행되면 이후 코드는 건너뛰고 대응하는 catch 블록으로 제어가 이동한다. 처리되지 않은 예외는 호출 스택을 따라 상위로 전파된다."
+  },
+  {
+    "id": "cpp_045",
+    "chapter": "CH05 참조와 복사생성자",
+    "type": "subjective",
+    "subtype": "concept",
+    "question": "C++에서 얕은 복사(Shallow Copy)의 문제점을 설명하시오.",
+    "answer": "얕은 복사는 포인터 멤버의 주소만 복사하여 두 객체가 같은 동적 메모리를 공유하게 된다. 한 객체의 소멸자가 해당 메모리를 해제하면, 다른 객체의 포인터는 해제된 메모리를 가리키는 댕글링 포인터(dangling pointer)가 되어 이중 해제(double free) 오류나 미정의 동작이 발생한다.",
+    "explanation": "이 문제를 해결하기 위해 포인터 멤버가 있는 클래스는 깊은 복사(Deep Copy)를 수행하는 복사 생성자와 대입 연산자를 직접 정의해야 한다."
+  },
+  {
+    "id": "cpp_046",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "type": "subjective",
+    "subtype": "concept",
+    "question": "C++에서 함수 오버로딩(Overloading)과 함수 오버라이딩(Overriding)의 차이점을 설명하시오.",
+    "answer": "오버로딩은 같은 이름의 함수를 매개변수 타입 또는 개수를 달리하여 같은 클래스(범위) 내에 여러 개 정의하는 것으로 컴파일 시간에 호출할 함수가 결정된다. 오버라이딩은 상속 관계에서 부모 클래스의 가상 함수를 자식 클래스에서 동일한 시그니처(이름, 매개변수, 반환형)로 재정의하는 것으로 런타임 동적 바인딩으로 함수가 결정된다.",
+    "explanation": "오버로딩은 정적 다형성, 오버라이딩은 동적 다형성의 기반이 된다."
+  },
+  {
+    "id": "cpp_047",
+    "chapter": "CH07 연산자 오버로딩 입출력스트림",
+    "type": "subjective",
+    "subtype": "concept",
+    "question": "C++에서 friend 함수를 사용하는 주된 이유를 설명하시오.",
+    "answer": "멤버 함수 방식으로 연산자를 오버로딩하면 왼쪽 피연산자가 반드시 해당 클래스 타입이어야 한다. cout << obj 처럼 왼쪽 피연산자가 다른 타입(ostream)일 때나, 두 클래스의 private 멤버에 모두 접근해야 할 때 friend 함수를 사용하여 외부 함수에 private 멤버 접근 권한을 부여한다.",
+    "explanation": "friend 키워드는 캡슐화를 의도적으로 허용하는 경우에만 제한적으로 사용해야 한다."
+  },
+  {
+    "id": "cpp_048",
+    "chapter": "CH08 상속과 다형성",
+    "type": "subjective",
+    "subtype": "concept",
+    "question": "C++에서 기본 클래스의 소멸자를 가상 함수(virtual)로 선언해야 하는 이유를 설명하시오.",
+    "answer": "기본 클래스 포인터로 파생 클래스 객체를 delete할 때, 소멸자가 virtual이 아니면 기본 클래스의 소멸자만 호출된다. 파생 클래스에서 동적 할당한 자원이 해제되지 않아 메모리 누수가 발생한다. 소멸자를 virtual로 선언하면 동적 바인딩에 의해 파생 클래스 소멸자부터 순서대로 올바르게 호출된다.",
+    "explanation": "상속을 통해 다형성을 활용하는 클래스는 반드시 virtual 소멸자를 선언해야 한다."
+  },
+  {
+    "id": "cpp_049",
+    "chapter": "CH10 템플릿",
+    "type": "subjective",
+    "subtype": "concept",
+    "question": "C++에서 함수 템플릿(function template)과 함수 오버로딩(function overloading)의 차이점을 설명하시오.",
+    "answer": "함수 오버로딩은 타입마다 함수 본문을 직접 작성하므로 각각 독립적인 구현을 가진다. 함수 템플릿은 타입에 무관한 알고리즘을 하나의 코드로 정의하면 컴파일러가 사용된 타입에 맞게 코드를 자동 생성(인스턴스화)한다.",
+    "explanation": "함수 오버로딩은 타입별로 다른 동작이 필요할 때, 함수 템플릿은 알고리즘이 동일하고 타입만 달라질 때 적합하다."
+  },
+  {
+    "id": "cpp_050",
+    "chapter": "CH09 파일입출력",
+    "type": "subjective",
+    "subtype": "concept",
+    "question": "C++ 파일 스트림에서 ios::app 모드와 ios::trunc 모드의 차이를 설명하시오.",
+    "answer": "ios::app(append)은 파일을 열 때 기존 내용을 유지하고 파일 포인터를 끝으로 이동시켜 새 데이터를 뒤에 추가한다. ios::trunc(truncate)는 파일을 열 때 기존 내용을 모두 삭제하고 빈 파일로 만든다. ofstream의 기본 모드는 ios::out | ios::trunc이다.",
+    "explanation": "로그처럼 이전 기록을 누적해야 할 때 ios::app을 사용하고, 매번 새로 덮어쓸 때는 기본 ofstream(ios::trunc)을 사용한다."
+  }
+]

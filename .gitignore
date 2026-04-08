@@ -1,0 +1,16 @@
+# PDF 수업자료 (용량 크고 저작권 문제)
+docs/refs/
+
+# 시험 결과 텍스트 파일
+results/*.txt
+
+# 시스템 파일
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 에디터
+.vscode/
+.idea/
+*.swp
+*.swo
