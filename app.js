@@ -147,30 +147,43 @@ function scoreExam(examData) {
 }
 
 // ============================================================
-// localStorage 결과 저장 / 조회
+// 결과 파일 읽기 (File System Access API)
 // ============================================================
 
-function saveResultToStorage(round, scores, text) {
-  localStorage.setItem(`examResult_${round}`, JSON.stringify({
-    round,
-    date: new Date().toISOString(),
-    totalScore: scores.totalScore,
-    pass: scores.pass,
-    totalCorrect: scores.totalCorrect,
-    text
-  }));
+function parseResultText(filename, text) {
+  const roundM   = text.match(/\((\d+)회차\)/);
+  const dateM    = text.match(/날짜:\s*(.+)/);
+  const scoreM   = text.match(/총점:\s*(\d+)/);
+  const passM    = text.match(/판정:\s*(PASS|FAIL)/);
+  const correctM = text.match(/정답 문제:\s*(\d+)/);
+  if (!roundM) return null;
+  return {
+    round:        parseInt(roundM[1], 10),
+    date:         dateM?.[1]?.trim()     || '',
+    totalScore:   parseInt(scoreM?.[1]   || '0', 10),
+    pass:         passM?.[1] === 'PASS',
+    totalCorrect: parseInt(correctM?.[1] || '0', 10),
+    text,
+    filename
+  };
 }
 
-function getAllStoredResults() {
-  const results = [];
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key && key.startsWith('examResult_')) {
-      try { results.push(JSON.parse(localStorage.getItem(key))); }
-      catch { /* skip */ }
+async function readResultFiles() {
+  const dir = await getResultsDir(false);
+  if (!dir) return [];
+  const out = [];
+  try {
+    for await (const [name, handle] of dir.entries()) {
+      if (handle.kind !== 'file' || !name.endsWith('.txt')) continue;
+      try {
+        const file   = await handle.getFile();
+        const text   = await file.text();
+        const parsed = parseResultText(name, text);
+        if (parsed) out.push(parsed);
+      } catch { /* skip */ }
     }
-  }
-  return results.sort((a, b) => b.round - a.round);
+  } catch { return []; }
+  return out.sort((a, b) => b.round - a.round);
 }
 
 // ============================================================
@@ -765,10 +778,11 @@ function initResultPage() {
   if (!sessionStorage.getItem('resultSaved')) {
     const round = useRound();
     const text  = generateResultText(examData, scores, round);
-    saveResultToStorage(round, scores, text);
+    // 세션 내 다운로드용으로 sessionStorage에만 임시 보관
+    sessionStorage.setItem('currentResultText', text);
     sessionStorage.setItem('resultSaved', String(round));
 
-    // results/ 폴더에 파일 저장 (File System Access API)
+    // results/ 폴더에 파일로 저장
     const filename = `C_CPP_시험결과_${round}회차.txt`;
     writeResultFile(filename, text).then(ok => {
       const statusEl = document.getElementById('save-status');
@@ -789,13 +803,19 @@ function initResultPage() {
   setupHistory();
 }
 
-function setupHistory() {
+async function setupHistory() {
   const container = document.getElementById('history-list');
   if (!container) return;
 
-  const results = getAllStoredResults();
+  container.innerHTML = '<p class="file-hint" style="color:#9AA0A6">기록을 불러오는 중...</p>';
+
+  const results = await readResultFiles();
+
   if (results.length === 0) {
-    container.innerHTML = '<p class="file-hint">저장된 시험 기록이 없습니다.</p>';
+    const dir = await getResultsDir(false);
+    container.innerHTML = dir
+      ? '<p class="file-hint">저장된 시험 기록이 없습니다.</p>'
+      : '<p class="file-hint">결과 저장 폴더가 설정되지 않았습니다.<br>홈 화면에서 폴더를 선택하면 기록이 표시됩니다.</p>';
     return;
   }
 
@@ -806,7 +826,7 @@ function setupHistory() {
         <span class="pass-chip-sm ${r.pass ? 'pass' : 'fail'}">${r.pass ? 'PASS' : 'FAIL'}</span>
         <span class="history-score">${r.totalScore}점</span>
         <span class="history-correct">${r.totalCorrect}/20</span>
-        <span class="history-date">${formatDateTime(new Date(r.date))}</span>
+        <span class="history-date">${escapeHtml(r.date)}</span>
         <button class="btn-text history-toggle">▶ 상세</button>
       </div>
       <pre class="file-view history-detail" style="display:none">${escapeHtml(r.text || '')}</pre>
@@ -856,11 +876,10 @@ function renderResult(examData, scores, round) {
       </div>`;
   }).join('');
 
-  // 다운로드 버튼
+  // 다운로드 버튼 (세션 내 결과를 sessionStorage에서 읽음)
   document.getElementById('btn-redownload').addEventListener('click', () => {
-    const stored = localStorage.getItem(`examResult_${round}`);
-    if (!stored) return;
-    const { text } = JSON.parse(stored);
+    const text = sessionStorage.getItem('currentResultText');
+    if (!text) { alert('다운로드할 결과를 찾을 수 없습니다.\nresults 폴더에 저장된 파일을 직접 사용하세요.'); return; }
     const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement('a');
@@ -1228,6 +1247,11 @@ async function initManagePage() {
 // ============================================================
 
 document.addEventListener('DOMContentLoaded', () => {
+  // 이전 버전 localStorage 결과 데이터 정리
+  Object.keys(localStorage)
+    .filter(k => k.startsWith('examResult_'))
+    .forEach(k => localStorage.removeItem(k));
+
   const page = document.body.dataset.page;
   if (page === 'index')  initIndexPage();
   else if (page === 'exam')    initExamPage();
