@@ -973,29 +973,7 @@ body {
 /* ── Empty state (no exam data) ── */
 .empty-state-card {
   text-align: center;
-  padding: 48px 24px 40px;
-}
-.empty-icon-wrap {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background: #EDE7F6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 20px;
-}
-.empty-title {
-  font-size: 16px;
-  font-weight: 500;
-  color: #3C4043;
-  margin-bottom: 8px;
-}
-.empty-desc {
-  font-size: 13px;
-  color: #9AA0A6;
-  line-height: 1.7;
-  margin-bottom: 28px;
+  padding: 28px 24px;
 }
 .empty-actions {
   display: flex;
