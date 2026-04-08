@@ -871,6 +871,10 @@ body {
 }
 .history-detail {
   margin-top: 12px;
+  max-height: 420px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-radius: 6px;
 }
 
 /* 유형별 점수 분류 */
