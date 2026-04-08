@@ -113,3 +113,65 @@ cpp_047 | 주관식(concept)     | friend 함수 사용 이유              | 20
 cpp_048 | 주관식(concept)     | 가상 소멸자 필요성 (메모리 누수)   | 2026-04-08
 cpp_049 | 주관식(concept)     | 함수 템플릿 vs 함수 오버로딩 차이  | 2026-04-08
 cpp_050 | 주관식(concept)     | ios::app vs ios::trunc 차이       | 2026-04-08
+
+# ── C 언어 교재 문제 (c_lang_questions.json) ──
+clang_ox_001 | OX  | 컴파일러 역할 - 고급 언어 → 기계어                | 2026-04-08
+clang_ox_002 | OX  | Windows7 = 시스템 소프트웨어(OS)                  | 2026-04-08
+clang_ox_003 | OX  | C 프로그램 반드시 main() 포함                     | 2026-04-08
+clang_ox_004 | OX  | 컴파일 시 문법 오류 = 컴파일 에러(런타임 아님)      | 2026-04-08
+clang_ox_005 | OX  | signed/unsigned 메모리 크기 변경 안 됨             | 2026-04-08
+clang_ox_006 | OX  | C 변수 사용 전 반드시 선언                         | 2026-04-08
+clang_ox_007 | OX  | scanf 정수 입력 시 & 주소 연산자 필수              | 2026-04-08
+clang_ox_008 | OX  | 0.5 + 10에서 10 자동으로 double 변환               | 2026-04-08
+clang_ox_009 | OX  | switch 조건식에 float 사용 불가                    | 2026-04-08
+clang_ox_010 | OX  | do-while 조건 거짓이어도 최소 한 번 실행            | 2026-04-08
+clang_ox_011 | OX  | break는 현재 반복문 하나만 탈출                     | 2026-04-08
+clang_ox_012 | OX  | C 함수 return으로 두 개 이상 값 반환 불가           | 2026-04-08
+clang_ox_013 | OX  | 함수 원형 매개변수 이름 생략 가능                   | 2026-04-08
+clang_ox_014 | OX  | static 지역변수 함수 종료 후에도 값 유지            | 2026-04-08
+clang_ox_015 | OX  | 동일 이름 지역변수가 전역변수보다 우선              | 2026-04-08
+clang_ox_016 | OX  | int arr[5] 마지막 유효 인덱스는 4                  | 2026-04-08
+clang_ox_017 | OX  | 초기화 목록으로 배열 크기 자동 결정 가능            | 2026-04-08
+clang_ox_018 | OX  | strcmp 동일 문자열 → 0 반환                       | 2026-04-08
+clang_ox_019 | OX  | 구조체 멤버 서로 다른 자료형 가능                  | 2026-04-08
+clang_ox_020 | OX  | fopen 실패 시 NULL 반환                           | 2026-04-08
+clang_mc_001 | 객관식 | 시스템 소프트웨어 = Windows7(OS)                 | 2026-04-08
+clang_mc_002 | 객관식 | 고급 언어 → 기계어 변환 = 컴파일                 | 2026-04-08
+clang_mc_003 | 객관식 | 유효하지 않은 식별자 = 7Count(숫자 시작)          | 2026-04-08
+clang_mc_004 | 객관식 | 유효하지 않은 변수명 = st-count(하이픈 포함)      | 2026-04-08
+clang_mc_005 | 객관식 | 메모리 크기 확인 연산자 = sizeof                 | 2026-04-08
+clang_mc_006 | 객관식 | double형 메모리 크기 = 8바이트                   | 2026-04-08
+clang_mc_007 | 객관식 | printf 8진수 출력 형식 지정자 = %o               | 2026-04-08
+clang_mc_008 | 객관식 | 100/10*2+(int)3.5 = 23 연산자 우선순위           | 2026-04-08
+clang_mc_009 | 객관식 | 반복 제어문이 아닌 것 = switch                   | 2026-04-08
+clang_mc_010 | 객관식 | switch break 없으면 fall-through 발생            | 2026-04-08
+clang_mc_011 | 객관식 | 자기 자신 호출 함수 = 재귀 함수                  | 2026-04-08
+clang_mc_012 | 객관식 | static 지역변수 설명 = 함수 종료 후 값 유지       | 2026-04-08
+clang_mc_013 | 객관식 | 전역/static 변수 저장 영역 = 데이터 영역          | 2026-04-08
+clang_mc_014 | 객관식 | int arr[4]={10,20,30,40} arr[2] = 30            | 2026-04-08
+clang_mc_015 | 객관식 | 문자열 출력 함수 = puts()                        | 2026-04-08
+clang_mc_016 | 객관식 | 문자열 연결 함수 = strcat()                      | 2026-04-08
+clang_mc_017 | 객관식 | strcmp str1 > str2 → 양수 반환                  | 2026-04-08
+clang_mc_018 | 객관식 | 정수형 포인터 선언 = int *p;                     | 2026-04-08
+clang_mc_019 | 객관식 | 구조체 포인터 멤버 접근 = -> 연산자              | 2026-04-08
+clang_mc_020 | 객관식 | fopen 텍스트 읽기 모드 = "r"                    | 2026-04-08
+clang_sub_001 | 주관식(code_blank)  | sizeof 연산자 빈칸 채우기          | 2026-04-08
+clang_sub_002 | 주관식(code_blank)  | scanf 주소 연산자 & 빈칸           | 2026-04-08
+clang_sub_003 | 주관식(code_blank)  | (double) 형변환 cast 연산자        | 2026-04-08
+clang_sub_004 | 주관식(code_blank)  | for 문 조건식 i <= 5               | 2026-04-08
+clang_sub_005 | 주관식(code_blank)  | switch break 빈칸 채우기           | 2026-04-08
+clang_sub_006 | 주관식(code_blank)  | return 문 빈칸 채우기              | 2026-04-08
+clang_sub_007 | 주관식(code_blank)  | static 지역변수 선언 키워드        | 2026-04-08
+clang_sub_008 | 주관식(code_blank)  | strcmp 함수명 빈칸 채우기          | 2026-04-08
+clang_sub_009 | 주관식(code_blank)  | * 역참조 연산자 빈칸               | 2026-04-08
+clang_sub_010 | 주관식(code_blank)  | -> 구조체 포인터 멤버 접근 연산자  | 2026-04-08
+clang_sub_011 | 주관식(code_result) | 후위/전위 증가 연산자 출력 5, 7    | 2026-04-08
+clang_sub_012 | 주관식(code_result) | 짝수 합산 1~5 중 2+4=6            | 2026-04-08
+clang_sub_013 | 주관식(code_result) | static 변수 3회 호출 1,2,3 출력   | 2026-04-08
+clang_sub_014 | 주관식(code_result) | 배열 역순 출력 50 40 30 20 10      | 2026-04-08
+clang_sub_015 | 주관식(code_result) | 포인터 산술 *(p+2) vs *p+2 = 3,3  | 2026-04-08
+clang_sub_016 | 주관식(code_result) | 구조체 값 복사 독립성 3 10 출력    | 2026-04-08
+clang_sub_017 | 주관식(concept)     | 컴파일 에러 vs 런타임 에러 차이    | 2026-04-08
+clang_sub_018 | 주관식(concept)     | 지역변수 vs static 지역변수 차이   | 2026-04-08
+clang_sub_019 | 주관식(concept)     | Call by Value vs Call by Reference | 2026-04-08
+clang_sub_020 | 주관식(concept)     | 구조체(struct) 사용 목적           | 2026-04-08
