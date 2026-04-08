@@ -582,6 +582,7 @@ function initExamPage() {
 
         <div class="nav-row">
           <button class="btn-secondary" id="btn-prev" ${idx === 0 ? 'disabled' : ''}>이전</button>
+          <button class="btn-pass" id="btn-pass">패스 →</button>
           <button class="btn-primary" id="btn-next" ${nextDis}>${isLast ? '제출' : '다음'}</button>
         </div>
       </div>`;
@@ -709,6 +710,19 @@ function initExamPage() {
       renderQ(currentIndex);
     });
     document.getElementById('btn-next').addEventListener('click', () => {
+      if (isLast) {
+        sessionStorage.removeItem('examCurrentIndex');
+        window.location.href = 'result.html';
+      } else {
+        currentIndex++;
+        save();
+        renderQ(currentIndex);
+      }
+    });
+
+    // 이벤트: 패스 (틀림 처리 + 다음)
+    document.getElementById('btn-pass').addEventListener('click', () => {
+      setOverride(false);
       if (isLast) {
         sessionStorage.removeItem('examCurrentIndex');
         window.location.href = 'result.html';

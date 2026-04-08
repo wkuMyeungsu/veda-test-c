@@ -599,6 +599,26 @@ body {
   margin-top: 20px;
   padding-top: 16px;
   border-top: 1px solid #F1F3F4;
+  gap: 8px;
+}
+
+.btn-pass {
+  background: transparent;
+  color: #9AA0A6;
+  border: 1px dashed #DADCE0;
+  padding: 8px 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.btn-pass:hover {
+  background: #FEF7E0;
+  border-color: #B05A00;
+  color: #B05A00;
 }
 
 /* ── RESULT page ── */
