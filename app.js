@@ -972,6 +972,63 @@ async function initManagePage() {
       ).join('');
   }
 
+  function buildDetailHtml(q) {
+    const fullText = loadQEdit(q.id) || q.question || '';
+
+    let answerHtml = '';
+    if (q.type === 'ox') {
+      const yes = q.answer === true;
+      answerHtml = `
+        <div class="detail-row">
+          <span class="detail-lbl">정답</span>
+          <span class="detail-ans-chip ${yes ? 'chip-pass' : 'chip-fail'}">${yes ? 'O &nbsp;(참)' : 'X &nbsp;(거짓)'}</span>
+        </div>`;
+    } else if (q.type === 'multiple') {
+      answerHtml = `
+        <div class="detail-row detail-options-wrap">
+          <span class="detail-lbl">보기</span>
+          <div class="detail-options">
+            ${(q.options || []).map((opt, i) => `
+              <div class="detail-option ${i === q.answer ? 'detail-option-correct' : ''}">
+                <span class="detail-opt-circle">${CIRCLES[i]}</span>
+                <span class="detail-opt-text">${escapeHtml(opt)}</span>
+                ${i === q.answer ? '<span class="detail-correct-mark">✔ 정답</span>' : ''}
+              </div>`).join('')}
+          </div>
+        </div>`;
+    } else {
+      answerHtml = `
+        <div class="detail-row">
+          <span class="detail-lbl">모범 답안</span>
+          <span class="detail-ans-text">${escapeHtml(String(q.answer ?? ''))}</span>
+        </div>`;
+    }
+
+    const codeHtml = q.code
+      ? `<pre class="code-block detail-code">${escapeHtml(q.code)}</pre>`
+      : '';
+
+    const explHtml = q.explanation ? `
+      <div class="detail-row">
+        <span class="detail-lbl">해설</span>
+        <span class="detail-expl">${escapeHtml(q.explanation)}</span>
+      </div>` : '';
+
+    const noteCount = loadNotes(q.id).length;
+    const noteHtml  = noteCount > 0
+      ? `<div class="detail-note-info"><span class="note-count">${noteCount}개</span> 메모 저장됨</div>`
+      : '';
+
+    return `
+      <div class="qmc-detail">
+        <p class="detail-full-question">${escapeHtml(fullText)}</p>
+        ${codeHtml}
+        ${answerHtml}
+        ${explHtml}
+        ${noteHtml}
+      </div>`;
+  }
+
   function renderList() {
     const filtered   = getFiltered();
     const total      = filtered.length;
@@ -991,9 +1048,9 @@ async function initManagePage() {
       container.innerHTML = '<div class="card" style="text-align:center;padding:32px;color:#9AA0A6">검색 결과가 없습니다.</div>';
     } else {
       container.innerHTML = page.map((q, localIdx) => {
-        const globalIdx  = start + localIdx + 1;
-        const rawText    = loadQEdit(q.id) || q.question || '';
-        const preview    = rawText.length > 90 ? rawText.slice(0, 90) + '…' : rawText;
+        const globalIdx   = start + localIdx + 1;
+        const rawText     = loadQEdit(q.id) || q.question || '';
+        const preview     = rawText.length > 90 ? rawText.slice(0, 90) + '…' : rawText;
         const hasOverride = q._base && !!loadQFull(q.id);
         return `
           <div class="card q-manage-card">
@@ -1002,22 +1059,34 @@ async function initManagePage() {
                 <span class="qmc-num">${globalIdx}</span>
                 <span class="type-badge type-${q.type}">${TYPE_LABELS[q.type] || q.type}</span>
                 ${q.chapter ? `<span class="qmc-chapter">${escapeHtml(q.chapter)}</span>` : ''}
-                ${q._user      ? '<span class="badge-user">사용자 추가</span>'  : ''}
-                ${hasOverride  ? '<span class="badge-edited">수정됨</span>'      : ''}
+                ${q._user     ? '<span class="badge-user">사용자 추가</span>' : ''}
+                ${hasOverride ? '<span class="badge-edited">수정됨</span>'    : ''}
               </div>
               <div class="qmc-actions">
-                <button class="btn-text qmc-edit-btn" data-id="${escapeHtml(q.id)}">수정</button>
-                <button class="btn-text qmc-del-btn"  data-id="${escapeHtml(q.id)}" style="color:#D93025">삭제</button>
+                <button class="btn-text qmc-detail-btn" data-id="${escapeHtml(q.id)}">▶ 상세</button>
+                <button class="btn-text qmc-edit-btn"   data-id="${escapeHtml(q.id)}">수정</button>
+                <button class="btn-text qmc-del-btn"    data-id="${escapeHtml(q.id)}" style="color:#D93025">삭제</button>
               </div>
             </div>
             <p class="qmc-preview">${escapeHtml(preview)}</p>
             ${q.code ? '<p class="qmc-code-hint">코드 포함</p>' : ''}
+            <div class="qmc-detail-wrap" style="display:none">${buildDetailHtml(q)}</div>
           </div>`;
       }).join('');
     }
 
     renderPagination(total, totalPages);
 
+    container.querySelectorAll('.qmc-detail-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const card    = btn.closest('.q-manage-card');
+        const wrap    = card.querySelector('.qmc-detail-wrap');
+        const visible = wrap.style.display !== 'none';
+        wrap.style.display   = visible ? 'none' : 'block';
+        btn.textContent      = visible ? '▶ 상세' : '▼ 접기';
+        btn.classList.toggle('detail-open', !visible);
+      });
+    });
     container.querySelectorAll('.qmc-edit-btn').forEach(btn =>
       btn.addEventListener('click', () => openEditModal(btn.dataset.id)));
     container.querySelectorAll('.qmc-del-btn').forEach(btn =>
