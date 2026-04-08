@@ -55,11 +55,18 @@ python -m http.server 8000
 > Windows — 탐색기에서 폴더 열고 주소창에 `cmd` 입력 후 Enter  
 > Mac — 폴더에서 우클릭 → `폴더에서 새 터미널 열기`
 
-#### Node.js가 설치된 경우
+#### Node.js를 사용하는 경우
+
+> Node.js가 없다면 먼저 설치하세요 → **[Node.js 공식 다운로드](https://nodejs.org/ko)**  
+> LTS(안정화) 버전을 선택하여 설치하세요.
 
 ```bash
+# 압축 해제한 폴더 안에서 실행
 npx serve .
 ```
+
+터미널에 표시되는 주소(`http://localhost:3000` 등)로 브라우저 접속  
+종료하려면 터미널에서 `Ctrl + C`
 
 ---
 
