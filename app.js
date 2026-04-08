@@ -803,6 +803,80 @@ function initResultPage() {
   setupHistory();
 }
 
+function renderHistoryDetail(text) {
+  // ── 헤더 파싱 ──────────────────────────────────────────
+  const oxM      = text.match(/\[O\/X\]\s+(\d+)\/4\s+정답\s+\((\d+)점\)/);
+  const mcM      = text.match(/\[객관식\]\s+(\d+)\/6\s+정답\s+\((\d+)점\)/);
+  const subM     = text.match(/\[주관식\]\s+(\d+)\/10\s+정답\s+\((\d+)점\)/);
+
+  const summaryHtml = `
+    <div class="hd-breakdown">
+      <div class="hd-b-item">
+        <span class="type-badge type-ox">O/X</span>
+        <strong>${oxM?.[1] ?? '?'}</strong>/4
+        <span class="hd-b-pts">${oxM?.[2] ?? '?'}점</span>
+      </div>
+      <div class="hd-b-item">
+        <span class="type-badge type-multiple">객관식</span>
+        <strong>${mcM?.[1] ?? '?'}</strong>/6
+        <span class="hd-b-pts">${mcM?.[2] ?? '?'}점</span>
+      </div>
+      <div class="hd-b-item">
+        <span class="type-badge type-subjective">주관식</span>
+        <strong>${subM?.[1] ?? '?'}</strong>/10
+        <span class="hd-b-pts">${subM?.[2] ?? '?'}점</span>
+      </div>
+    </div>`;
+
+  // ── 문제별 파싱 ────────────────────────────────────────
+  const qSection = text.split('--- 문제별 상세 ---')[1] || '';
+  const qBlocks  = qSection.split(/\n(?=\d+\. \[)/).map(b => b.trim()).filter(Boolean);
+
+  const qRows = qBlocks.map(block => {
+    const lines     = block.split('\n');
+    const firstLine = lines[0] || '';
+
+    const numM      = firstLine.match(/^(\d+)\./);
+    const typeM     = firstLine.match(/\[([^\]]+)\]/);
+    const statusStr = firstLine.replace(/^\d+\.\s*\[[^\]]+\]\s*/, '').trim();
+    const isCorrect = statusStr.startsWith('맞음');
+    const isOverride = statusStr.includes('오버라이드');
+
+    const get = (prefix) => {
+      const line = lines.find(l => l.trimStart().startsWith(prefix));
+      return line ? line.trimStart().slice(prefix.length).trim() : '';
+    };
+
+    const qText  = get('Q. ');
+    const myAns  = get('내 답:');
+    const corrAns = get('정답:').replace(/^정답:\s*/, '');  // 정답:  (두칸) 처리
+    const expl   = get('해설:');
+
+    const preview = qText.length > 55 ? qText.slice(0, 55) + '…' : qText;
+
+    return `
+      <div class="hd-q-row ${isCorrect ? 'hd-q-ok' : 'hd-q-fail'}">
+        <div class="hd-q-top">
+          <span class="hd-q-num">${numM?.[1] ?? ''}</span>
+          <span class="hd-q-icon">${isCorrect ? '✔' : '✘'}</span>
+          <span class="hd-q-badge type-badge type-${typeM?.[1] === 'O/X' ? 'ox' : typeM?.[1] === '객관식' ? 'multiple' : 'subjective'}">${typeM?.[1] ?? ''}</span>
+          ${isOverride ? '<span class="hd-override-badge">수동</span>' : ''}
+          <span class="hd-q-preview">${escapeHtml(preview)}</span>
+        </div>
+        ${!isCorrect ? `
+          <div class="hd-q-ans">
+            <span class="hd-my-ans">내 답: ${escapeHtml(myAns || '미응답')}</span>
+            <span class="hd-arr">→</span>
+            <span class="hd-corr-ans">정답: ${escapeHtml(corrAns)}</span>
+          </div>
+          ${expl ? `<p class="hd-q-expl">${escapeHtml(expl)}</p>` : ''}
+        ` : ''}
+      </div>`;
+  }).join('');
+
+  return `<div class="history-detail-body">${summaryHtml}<div class="hd-q-list">${qRows}</div></div>`;
+}
+
 async function setupHistory() {
   const container = document.getElementById('history-list');
   if (!container) return;
@@ -829,7 +903,7 @@ async function setupHistory() {
         <span class="history-date">${escapeHtml(r.date)}</span>
         <button class="btn-text history-toggle">▶ 상세</button>
       </div>
-      <pre class="file-view history-detail" style="display:none">${escapeHtml(r.text || '')}</pre>
+      <div class="history-detail" style="display:none">${renderHistoryDetail(r.text || '')}</div>
     </div>`).join('');
 
   container.querySelectorAll('.history-toggle').forEach(btn => {

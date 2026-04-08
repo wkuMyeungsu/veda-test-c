@@ -870,9 +870,104 @@ body {
   margin-left: auto;
 }
 .history-detail {
-  margin-top: 10px;
-  max-height: 400px;
-  overflow-y: auto;
+  margin-top: 12px;
+}
+
+/* 유형별 점수 분류 */
+.history-detail-body { display: flex; flex-direction: column; gap: 12px; }
+
+.hd-breakdown {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 10px 14px;
+  background: #F8F5FF;
+  border-radius: 6px;
+}
+.hd-b-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: #3C4043;
+}
+.hd-b-item strong { color: #202124; }
+.hd-b-pts {
+  font-size: 11px;
+  color: #9AA0A6;
+  margin-left: 2px;
+}
+
+/* 문제 목록 */
+.hd-q-list { display: flex; flex-direction: column; gap: 4px; }
+
+.hd-q-row {
+  border-radius: 6px;
+  padding: 8px 12px;
+  border-left: 3px solid transparent;
+}
+.hd-q-ok   { background: #F1F8F4; border-left-color: #34A853; }
+.hd-q-fail { background: #FFF8F8; border-left-color: #EA4335; }
+
+.hd-q-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.hd-q-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: #9AA0A6;
+  min-width: 18px;
+}
+.hd-q-icon {
+  font-size: 13px;
+  font-weight: 700;
+}
+.hd-q-ok   .hd-q-icon { color: #34A853; }
+.hd-q-fail .hd-q-icon { color: #EA4335; }
+
+.hd-q-badge { font-size: 10px; padding: 1px 6px; }
+
+.hd-override-badge {
+  font-size: 10px;
+  color: #B05A00;
+  background: #FEF7E0;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+.hd-q-preview {
+  font-size: 12px;
+  color: #5F6368;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 오답 시 내 답 → 정답 */
+.hd-q-ans {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 5px;
+  padding-left: 24px;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+.hd-my-ans   { color: #EA4335; }
+.hd-arr      { color: #9AA0A6; }
+.hd-corr-ans { color: #137333; font-weight: 500; }
+
+.hd-q-expl {
+  margin-top: 4px;
+  padding-left: 24px;
+  font-size: 11px;
+  color: #9AA0A6;
+  line-height: 1.5;
 }
 
 /* ── No exam data message ── */
