@@ -835,10 +835,388 @@ body {
 /* ── No exam data message ── */
 #no-data-msg { text-align: center; padding: 40px 24px; }
 
+/* ══════════════════════════════════════════════════════════
+   MANAGE 페이지
+   ══════════════════════════════════════════════════════════ */
+
+.manage-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* ── 툴바 ── */
+.manage-toolbar { padding: 16px 20px; }
+
+.toolbar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.toolbar-filters {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+.filter-select {
+  height: 34px;
+  border: 1px solid #DADCE0;
+  border-radius: 4px;
+  padding: 0 10px;
+  font-size: 13px;
+  font-family: inherit;
+  color: #3C4043;
+  background: #fff;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.filter-select:focus { border-color: #673AB7; }
+
+.filter-input {
+  flex: 1;
+  min-width: 120px;
+  height: 34px;
+  border: 1px solid #DADCE0;
+  border-radius: 4px;
+  padding: 0 12px;
+  font-size: 13px;
+  font-family: inherit;
+  color: #3C4043;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.filter-input:focus { border-color: #673AB7; }
+
+.manage-stats {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: #5F6368;
+}
+.stat-item { display: flex; align-items: center; gap: 4px; }
+.stat-item strong { color: #202124; font-weight: 600; }
+.stat-sep { color: #DADCE0; }
+
+/* ── 문제 카드 ── */
+.q-manage-card {
+  padding: 16px 20px;
+  cursor: default;
+  transition: box-shadow 0.15s;
+}
+.q-manage-card:hover { box-shadow: 0 3px 10px rgba(103,58,183,0.12); }
+
+.qmc-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.qmc-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+.qmc-num {
+  font-size: 11px;
+  font-weight: 600;
+  color: #9AA0A6;
+  min-width: 20px;
+}
+.qmc-chapter {
+  font-size: 12px;
+  color: #5F6368;
+  background: #F1F3F4;
+  padding: 1px 8px;
+  border-radius: 10px;
+}
+.badge-user {
+  font-size: 10px;
+  font-weight: 700;
+  color: #0B57D0;
+  background: #E8F0FE;
+  padding: 1px 7px;
+  border-radius: 10px;
+  letter-spacing: 0.2px;
+}
+.badge-edited {
+  font-size: 10px;
+  font-weight: 700;
+  color: #B05A00;
+  background: #FEF7E0;
+  padding: 1px 7px;
+  border-radius: 10px;
+}
+
+.qmc-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.qmc-edit-btn  { font-size: 12px; padding: 3px 10px; color: #673AB7; }
+.qmc-del-btn   { font-size: 12px; padding: 3px 10px; }
+.qmc-del-btn:hover { background: #FCE8E6; }
+
+.qmc-preview {
+  font-size: 13px;
+  color: #3C4043;
+  line-height: 1.5;
+  word-break: break-word;
+}
+.qmc-code-hint {
+  margin-top: 4px;
+  font-size: 11px;
+  color: #9AA0A6;
+}
+
+/* ── 페이지네이션 ── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 16px 0 32px;
+  flex-wrap: wrap;
+}
+.btn-page {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 8px;
+  border: 1px solid #DADCE0;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 13px;
+  font-family: inherit;
+  color: #3C4043;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.btn-page:hover:not(:disabled) { background: #EDE7F6; border-color: #673AB7; color: #673AB7; }
+.btn-page.active { background: #673AB7; border-color: #673AB7; color: #fff; font-weight: 600; }
+.btn-page:disabled { color: #BDBDBD; border-color: #E8EAED; cursor: not-allowed; }
+.pg-ellipsis { font-size: 13px; color: #9AA0A6; padding: 0 4px; line-height: 34px; }
+.pg-info { font-size: 12px; color: #9AA0A6; margin-left: 8px; white-space: nowrap; }
+
+/* ══════════════════════════════════════════════════════════
+   모달 (추가/수정 폼)
+   ══════════════════════════════════════════════════════════ */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  z-index: 500;
+  padding: 24px 16px;
+  overflow-y: auto;
+}
+
+.modal-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  width: 100%;
+  max-width: 580px;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px 14px;
+  border-bottom: 1px solid #E8EAED;
+  background: #FAFAFE;
+}
+.modal-title {
+  font-size: 17px;
+  font-weight: 500;
+  color: #202124;
+}
+.modal-close {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  color: #5F6368;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  line-height: 1;
+  transition: background 0.12s;
+}
+.modal-close:hover { background: #F1F3F4; color: #202124; }
+
+.modal-body {
+  padding: 20px 24px;
+  overflow-y: auto;
+  max-height: calc(80vh - 140px);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.modal-footer {
+  padding: 14px 24px;
+  border-top: 1px solid #E8EAED;
+  background: #FAFAFE;
+}
+.modal-footer-btns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+/* ── 폼 요소 ── */
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.form-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #5F6368;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.form-hint { font-weight: 400; text-transform: none; color: #9AA0A6; }
+.req { color: #C5221F; }
+
+.form-input {
+  height: 36px;
+  border: 1px solid #DADCE0;
+  border-radius: 4px;
+  padding: 0 12px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #202124;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.form-input:focus { border-color: #673AB7; box-shadow: 0 0 0 2px #EDE7F6; }
+
+.form-textarea {
+  width: 100%;
+  border: 1px solid #DADCE0;
+  border-radius: 4px;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #202124;
+  resize: vertical;
+  outline: none;
+  line-height: 1.6;
+  min-height: 64px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.form-textarea:focus { border-color: #673AB7; box-shadow: 0 0 0 2px #EDE7F6; }
+
+.form-code {
+  font-family: 'Courier New', Consolas, monospace;
+  font-size: 13px;
+  background: #F8F9FA;
+}
+
+/* 유형 라디오 */
+.type-radios {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.type-radio {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: #3C4043;
+  cursor: pointer;
+  padding: 6px 12px;
+  border: 1px solid #DADCE0;
+  border-radius: 20px;
+  transition: all 0.12s;
+  user-select: none;
+}
+.type-radio:has(input:checked) {
+  background: #EDE7F6;
+  border-color: #673AB7;
+  color: #512DA8;
+  font-weight: 500;
+}
+.type-radio input { display: none; }
+
+/* 객관식 보기 */
+.mc-options { display: flex; flex-direction: column; gap: 6px; }
+.mc-option-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mc-opt-num {
+  font-size: 14px;
+  color: #673AB7;
+  font-weight: 600;
+  width: 20px;
+  flex-shrink: 0;
+  text-align: center;
+}
+.mc-opt-input { flex: 1; }
+.mc-ans-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.mc-ans-label input { display: none; }
+.mc-ans-check {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border: 2px solid #DADCE0;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 24px;
+  font-size: 13px;
+  color: #BDBDBD;
+  transition: all 0.12s;
+}
+.mc-ans-label:has(input:checked) .mc-ans-check {
+  background: #1E8E3E;
+  border-color: #1E8E3E;
+  color: #fff;
+}
+
+/* 폼 에러 */
+.form-error {
+  font-size: 12px;
+  color: #C5221F;
+  margin-bottom: 6px;
+  display: none;
+}
+
 /* ── Responsive ── */
 @media (max-width: 480px) {
   .container { padding: 16px 12px 60px; }
   .score-big { font-size: 48px; }
   .nav-row { gap: 8px; }
   .btn-primary, .btn-secondary { padding: 10px 16px; font-size: 13px; }
+  .toolbar-filters { flex-direction: column; }
+  .modal-body { max-height: calc(70vh - 140px); }
 }

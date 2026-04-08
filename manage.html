@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>문제 관리 · C/C++ 이론 시험</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="manage">
+  <div class="container">
+
+    <div class="header-card">
+      <div class="manage-header-row">
+        <div>
+          <h1>문제 관리</h1>
+          <p class="header-desc">문제 조회 · 추가 · 수정 · 삭제</p>
+        </div>
+        <a href="index.html" class="btn-secondary btn-sm" style="text-decoration:none">← 홈</a>
+      </div>
+    </div>
+
+    <!-- 툴바 -->
+    <div class="card manage-toolbar">
+      <div class="toolbar-row">
+        <div class="toolbar-filters">
+          <select id="filter-type" class="filter-select">
+            <option value="">전체 유형</option>
+            <option value="ox">O/X</option>
+            <option value="multiple">객관식</option>
+            <option value="subjective">주관식</option>
+            <option value="short">단답형</option>
+          </select>
+          <select id="filter-chapter" class="filter-select">
+            <option value="">전체 챕터</option>
+          </select>
+          <input type="text" id="filter-search" class="filter-input" placeholder="키워드 검색...">
+        </div>
+        <button class="btn-primary btn-sm" id="btn-add-q">+ 문제 추가</button>
+      </div>
+      <div class="manage-stats" id="manage-stats"></div>
+    </div>
+
+    <!-- 문제 목록 -->
+    <div id="q-list-container"></div>
+
+    <!-- 페이지네이션 -->
+    <div class="pagination" id="pagination"></div>
+
+  </div>
+
+  <!-- ── 추가 / 수정 모달 ── -->
+  <div class="modal-overlay" id="modal-overlay" style="display:none">
+    <div class="modal-card">
+
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-title">문제 추가</h2>
+        <button class="modal-close" id="modal-close" aria-label="닫기">✕</button>
+      </div>
+
+      <div class="modal-body">
+
+        <!-- 유형 -->
+        <div class="form-row">
+          <label class="form-label">유형 <span class="req">*</span></label>
+          <div class="type-radios">
+            <label class="type-radio"><input type="radio" name="q-type" value="ox"> O/X</label>
+            <label class="type-radio"><input type="radio" name="q-type" value="multiple"> 객관식</label>
+            <label class="type-radio"><input type="radio" name="q-type" value="subjective"> 주관식</label>
+            <label class="type-radio"><input type="radio" name="q-type" value="short"> 단답형</label>
+          </div>
+        </div>
+
+        <!-- 챕터 -->
+        <div class="form-row">
+          <label class="form-label" for="f-chapter">챕터</label>
+          <input type="text" id="f-chapter" class="form-input" placeholder="예: CH4 콘솔 입출력과 연산자">
+        </div>
+
+        <!-- 문제 -->
+        <div class="form-row">
+          <label class="form-label" for="f-question">문제 <span class="req">*</span></label>
+          <textarea id="f-question" class="form-textarea" rows="3" placeholder="문제를 입력하세요..."></textarea>
+        </div>
+
+        <!-- 코드 (주관식/단답형만) -->
+        <div class="form-row" id="f-code-row" style="display:none">
+          <label class="form-label" for="f-code">코드 <span class="form-hint">(선택)</span></label>
+          <textarea id="f-code" class="form-textarea form-code" rows="4" placeholder="코드 블록이 있으면 입력하세요..."></textarea>
+        </div>
+
+        <!-- O/X 정답 -->
+        <div id="f-ox-wrap" style="display:none">
+          <div class="form-row">
+            <label class="form-label">정답 <span class="req">*</span></label>
+            <div class="type-radios">
+              <label class="type-radio"><input type="radio" name="ox-ans" value="true"> O (참)</label>
+              <label class="type-radio"><input type="radio" name="ox-ans" value="false"> X (거짓)</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 객관식 보기 -->
+        <div id="f-mc-wrap" style="display:none">
+          <div class="form-row">
+            <label class="form-label">보기 5개 <span class="req">*</span><span class="form-hint"> · 우측 ✔로 정답 선택</span></label>
+            <div class="mc-options">
+              <div class="mc-option-row">
+                <span class="mc-opt-num">①</span>
+                <input type="text" class="form-input mc-opt-input" id="mc-opt-0" placeholder="보기 1">
+                <label class="mc-ans-label"><input type="radio" name="mc-ans" value="0"><span class="mc-ans-check">✔</span></label>
+              </div>
+              <div class="mc-option-row">
+                <span class="mc-opt-num">②</span>
+                <input type="text" class="form-input mc-opt-input" id="mc-opt-1" placeholder="보기 2">
+                <label class="mc-ans-label"><input type="radio" name="mc-ans" value="1"><span class="mc-ans-check">✔</span></label>
+              </div>
+              <div class="mc-option-row">
+                <span class="mc-opt-num">③</span>
+                <input type="text" class="form-input mc-opt-input" id="mc-opt-2" placeholder="보기 3">
+                <label class="mc-ans-label"><input type="radio" name="mc-ans" value="2"><span class="mc-ans-check">✔</span></label>
+              </div>
+              <div class="mc-option-row">
+                <span class="mc-opt-num">④</span>
+                <input type="text" class="form-input mc-opt-input" id="mc-opt-3" placeholder="보기 4">
+                <label class="mc-ans-label"><input type="radio" name="mc-ans" value="3"><span class="mc-ans-check">✔</span></label>
+              </div>
+              <div class="mc-option-row">
+                <span class="mc-opt-num">⑤</span>
+                <input type="text" class="form-input mc-opt-input" id="mc-opt-4" placeholder="보기 5">
+                <label class="mc-ans-label"><input type="radio" name="mc-ans" value="4"><span class="mc-ans-check">✔</span></label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 주관식 유형 -->
+        <div id="f-subj-wrap" style="display:none">
+          <div class="form-row">
+            <label class="form-label" for="f-subtype">주관식 유형</label>
+            <select id="f-subtype" class="filter-select">
+              <option value="code_blank">빈칸 채우기</option>
+              <option value="code_result">실행 결과 유추</option>
+              <option value="concept">개념 서술</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 모범 답안 (ox/multiple 제외) -->
+        <div class="form-row" id="f-answer-row" style="display:none">
+          <label class="form-label" for="f-answer">모범 답안 <span class="req">*</span></label>
+          <textarea id="f-answer" class="form-textarea" rows="2" placeholder="정답 또는 모범 답안을 입력하세요..."></textarea>
+        </div>
+
+        <!-- 해설 -->
+        <div class="form-row">
+          <label class="form-label" for="f-explanation">해설 <span class="form-hint">(선택)</span></label>
+          <textarea id="f-explanation" class="form-textarea" rows="2" placeholder="해설을 입력하세요..."></textarea>
+        </div>
+
+      </div><!-- /modal-body -->
+
+      <div class="modal-footer">
+        <p class="form-error" id="form-error"></p>
+        <div class="modal-footer-btns">
+          <button class="btn-secondary" id="btn-modal-cancel">취소</button>
+          <button class="btn-primary" id="btn-modal-save">저장</button>
+        </div>
+      </div>
+
+    </div><!-- /modal-card -->
+  </div><!-- /modal-overlay -->
+
+  <script src="app.js"></script>
+</body>
+</html>

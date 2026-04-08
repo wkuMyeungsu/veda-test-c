@@ -47,20 +47,33 @@ function formatDateTime(date) {
 // 문제 로드 & 시험 구성
 // ============================================================
 
-async function loadAllQuestions() {
+async function loadBaseQuestions() {
   const mRes = await fetch('./questions/manifest.json');
   if (!mRes.ok) throw new Error('manifest.json을 찾을 수 없습니다.');
   const files = await mRes.json();
-
   const responses = await Promise.all(files.map(f => fetch(`./questions/${f}`)));
   responses.forEach((r, i) => { if (!r.ok) throw new Error(`${files[i]} 로드 실패`); });
-  const arrays  = await Promise.all(responses.map(r => r.json()));
-  const all     = arrays.flat();
+  const arrays = await Promise.all(responses.map(r => r.json()));
+  return arrays.flat();
+}
+
+async function loadAllQuestions() {
+  const base       = await loadBaseQuestions();
+  const deletedIds = loadDeletedIds();
+
+  // 전체 오버라이드 적용 + 삭제 필터
+  const processed = base
+    .filter(q => !deletedIds.has(q.id))
+    .map(q => { const ov = loadQFull(q.id); return ov ? { ...q, ...ov, id: q.id } : q; });
+
+  // 사용자 추가 문제 병합
+  const userQs   = loadUserQuestions().filter(q => !deletedIds.has(q.id));
+  const combined = [...processed, ...userQs];
 
   return {
-    ox:         all.filter(q => q.type === 'ox'),
-    multiple:   all.filter(q => q.type === 'multiple'),
-    subjective: all.filter(q => q.type === 'subjective' || q.type === 'short')
+    ox:         combined.filter(q => q.type === 'ox'),
+    multiple:   combined.filter(q => q.type === 'multiple'),
+    subjective: combined.filter(q => q.type === 'subjective' || q.type === 'short')
   };
 }
 
@@ -251,6 +264,31 @@ function loadNotes(qId) {
 function saveNotes(qId, notes) { localStorage.setItem(`notes_${qId}`, JSON.stringify(notes)); }
 function loadQEdit(qId)        { return localStorage.getItem(`qEdit_${qId}`) || null; }
 function saveQEdit(qId, text)  { localStorage.setItem(`qEdit_${qId}`, text); }
+
+// 사용자 추가 문제
+function loadUserQuestions() {
+  try { return JSON.parse(localStorage.getItem('userQuestions')) || []; }
+  catch { return []; }
+}
+function saveUserQuestions(qs) { localStorage.setItem('userQuestions', JSON.stringify(qs)); }
+
+// 삭제된 기본 문제 ID
+function loadDeletedIds() {
+  try { return new Set(JSON.parse(localStorage.getItem('deletedQIds')) || []); }
+  catch { return new Set(); }
+}
+function addDeletedId(id) {
+  const ids = JSON.parse(localStorage.getItem('deletedQIds') || '[]');
+  if (!ids.includes(id)) { ids.push(id); localStorage.setItem('deletedQIds', JSON.stringify(ids)); }
+}
+
+// 기본 문제 전체 필드 오버라이드
+function loadQFull(id) {
+  try { return JSON.parse(localStorage.getItem(`qFull_${id}`)) || null; }
+  catch { return null; }
+}
+function saveQFull(id, q)  { localStorage.setItem(`qFull_${id}`, JSON.stringify(q)); }
+function clearQFull(id)    { localStorage.removeItem(`qFull_${id}`); }
 
 // ============================================================
 // 챕터별 요약
@@ -820,12 +858,357 @@ function renderResult(examData, scores, round) {
 }
 
 // ============================================================
+// MANAGE 페이지
+// ============================================================
+
+async function initManagePage() {
+  const PAGE_SIZE = 15;
+  let currentPage   = 1;
+  let filterType    = '';
+  let filterChapter = '';
+  let filterSearch  = '';
+  let editingId     = null;   // null = 추가 모드
+
+  // ── 데이터 ──────────────────────────────────────────────
+  let baseQuestions = [];
+  try { baseQuestions = await loadBaseQuestions(); }
+  catch (e) { console.error('기본 문제 로드 실패:', e); }
+
+  function getAllQuestions() {
+    const deleted = loadDeletedIds();
+    const processed = baseQuestions
+      .filter(q => !deleted.has(q.id))
+      .map(q => { const ov = loadQFull(q.id); return { ...(ov ? { ...q, ...ov, id: q.id } : q), _base: true }; });
+    const userQs = loadUserQuestions()
+      .filter(q => !deleted.has(q.id))
+      .map(q => ({ ...q, _user: true }));
+    return [...processed, ...userQs];
+  }
+
+  function getFiltered() {
+    return getAllQuestions().filter(q => {
+      if (filterType    && q.type    !== filterType)    return false;
+      if (filterChapter && q.chapter !== filterChapter) return false;
+      if (filterSearch) {
+        const s = filterSearch.toLowerCase();
+        const inQ = (q.question || '').toLowerCase().includes(s);
+        const inC = (q.chapter  || '').toLowerCase().includes(s);
+        const inA = String(q.answer ?? '').toLowerCase().includes(s);
+        return inQ || inC || inA;
+      }
+      return true;
+    });
+  }
+
+  function getChapters() {
+    return [...new Set(getAllQuestions().map(q => q.chapter).filter(Boolean))]
+      .sort((a, b) => a.localeCompare(b, 'ko'));
+  }
+
+  // ── 렌더 ─────────────────────────────────────────────────
+  function renderStats() {
+    const all  = getAllQuestions();
+    const ox   = all.filter(q => q.type === 'ox').length;
+    const mc   = all.filter(q => q.type === 'multiple').length;
+    const subj = all.filter(q => q.type === 'subjective' || q.type === 'short').length;
+    const statsEl = document.getElementById('manage-stats');
+    if (statsEl) statsEl.innerHTML = `
+      <span class="stat-item">전체 <strong>${all.length}</strong></span>
+      <span class="stat-sep">·</span>
+      <span class="stat-item"><span class="type-badge type-ox">O/X</span> <strong>${ox}</strong></span>
+      <span class="stat-sep">·</span>
+      <span class="stat-item"><span class="type-badge type-multiple">객관식</span> <strong>${mc}</strong></span>
+      <span class="stat-sep">·</span>
+      <span class="stat-item"><span class="type-badge type-subjective">주관식/단답</span> <strong>${subj}</strong></span>`;
+  }
+
+  function populateChapterFilter() {
+    const sel = document.getElementById('filter-chapter');
+    if (!sel) return;
+    sel.innerHTML = '<option value="">전체 챕터</option>' +
+      getChapters().map(ch =>
+        `<option value="${escapeHtml(ch)}" ${ch === filterChapter ? 'selected' : ''}>${escapeHtml(ch)}</option>`
+      ).join('');
+  }
+
+  function renderList() {
+    const filtered   = getFiltered();
+    const total      = filtered.length;
+    const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    if (currentPage > totalPages) currentPage = totalPages;
+
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const page  = filtered.slice(start, start + PAGE_SIZE);
+
+    renderStats();
+    populateChapterFilter();
+
+    const container = document.getElementById('q-list-container');
+    if (!container) return;
+
+    if (page.length === 0) {
+      container.innerHTML = '<div class="card" style="text-align:center;padding:32px;color:#9AA0A6">검색 결과가 없습니다.</div>';
+    } else {
+      container.innerHTML = page.map((q, localIdx) => {
+        const globalIdx  = start + localIdx + 1;
+        const rawText    = loadQEdit(q.id) || q.question || '';
+        const preview    = rawText.length > 90 ? rawText.slice(0, 90) + '…' : rawText;
+        const hasOverride = q._base && !!loadQFull(q.id);
+        return `
+          <div class="card q-manage-card">
+            <div class="qmc-header">
+              <div class="qmc-meta">
+                <span class="qmc-num">${globalIdx}</span>
+                <span class="type-badge type-${q.type}">${TYPE_LABELS[q.type] || q.type}</span>
+                ${q.chapter ? `<span class="qmc-chapter">${escapeHtml(q.chapter)}</span>` : ''}
+                ${q._user      ? '<span class="badge-user">사용자 추가</span>'  : ''}
+                ${hasOverride  ? '<span class="badge-edited">수정됨</span>'      : ''}
+              </div>
+              <div class="qmc-actions">
+                <button class="btn-text qmc-edit-btn" data-id="${escapeHtml(q.id)}">수정</button>
+                <button class="btn-text qmc-del-btn"  data-id="${escapeHtml(q.id)}" style="color:#D93025">삭제</button>
+              </div>
+            </div>
+            <p class="qmc-preview">${escapeHtml(preview)}</p>
+            ${q.code ? '<p class="qmc-code-hint">코드 포함</p>' : ''}
+          </div>`;
+      }).join('');
+    }
+
+    renderPagination(total, totalPages);
+
+    container.querySelectorAll('.qmc-edit-btn').forEach(btn =>
+      btn.addEventListener('click', () => openEditModal(btn.dataset.id)));
+    container.querySelectorAll('.qmc-del-btn').forEach(btn =>
+      btn.addEventListener('click', () => deleteQ(btn.dataset.id)));
+  }
+
+  function renderPagination(total, totalPages) {
+    const el = document.getElementById('pagination');
+    if (!el) return;
+    if (totalPages <= 1) { el.innerHTML = ''; return; }
+
+    // 앞뒤 2페이지 + 처음/끝
+    const visible = new Set([1, totalPages]);
+    for (let p = Math.max(1, currentPage - 2); p <= Math.min(totalPages, currentPage + 2); p++) visible.add(p);
+    const sorted = [...visible].sort((a, b) => a - b);
+
+    let html = `<button class="btn-page" id="pg-prev" ${currentPage === 1 ? 'disabled' : ''}>‹</button>`;
+    let prev = 0;
+    sorted.forEach(p => {
+      if (p - prev > 1) html += `<span class="pg-ellipsis">…</span>`;
+      html += `<button class="btn-page ${p === currentPage ? 'active' : ''}" data-p="${p}">${p}</button>`;
+      prev = p;
+    });
+    html += `<button class="btn-page" id="pg-next" ${currentPage === totalPages ? 'disabled' : ''}>›</button>`;
+    html += `<span class="pg-info">${(currentPage - 1) * PAGE_SIZE + 1}–${Math.min(currentPage * PAGE_SIZE, total)} / ${total}문제</span>`;
+
+    el.innerHTML = html;
+    el.querySelector('#pg-prev').addEventListener('click', () => { currentPage--; renderList(); window.scrollTo(0, 0); });
+    el.querySelector('#pg-next').addEventListener('click', () => { currentPage++; renderList(); window.scrollTo(0, 0); });
+    el.querySelectorAll('[data-p]').forEach(btn =>
+      btn.addEventListener('click', () => { currentPage = parseInt(btn.dataset.p, 10); renderList(); window.scrollTo(0, 0); }));
+  }
+
+  // ── 삭제 ──────────────────────────────────────────────────
+  function deleteQ(id) {
+    if (!window.confirm('이 문제를 삭제하시겠습니까?\n(기본 문제는 숨김 처리되며 복구할 수 없습니다.)')) return;
+    const userQs = loadUserQuestions();
+    if (userQs.some(q => q.id === id)) {
+      saveUserQuestions(userQs.filter(q => q.id !== id));
+    } else {
+      addDeletedId(id);
+      clearQFull(id);
+    }
+    renderList();
+  }
+
+  // ── 모달 ──────────────────────────────────────────────────
+  const overlay  = document.getElementById('modal-overlay');
+  const formErr  = document.getElementById('form-error');
+
+  function showModal()  { overlay.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+  function closeModal() { overlay.style.display = 'none'; document.body.style.overflow = ''; editingId = null; }
+
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.getElementById('btn-modal-cancel').addEventListener('click', closeModal);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+
+  // 유형 선택 → 필드 토글
+  function getSelectedType() {
+    const r = document.querySelector('input[name="q-type"]:checked');
+    return r ? r.value : null;
+  }
+
+  function updateFormFields() {
+    const type = getSelectedType();
+    document.getElementById('f-ox-wrap').style.display     = type === 'ox'         ? 'block' : 'none';
+    document.getElementById('f-mc-wrap').style.display     = type === 'multiple'   ? 'block' : 'none';
+    document.getElementById('f-subj-wrap').style.display   = type === 'subjective' ? 'block' : 'none';
+    document.getElementById('f-code-row').style.display    = (type === 'subjective' || type === 'short') ? 'block' : 'none';
+    document.getElementById('f-answer-row').style.display  = (type === 'ox' || type === 'multiple') ? 'none' : (type ? 'block' : 'none');
+  }
+
+  document.querySelectorAll('input[name="q-type"]').forEach(r =>
+    r.addEventListener('change', updateFormFields));
+
+  function clearForm() {
+    document.querySelectorAll('input[name="q-type"]').forEach(r => r.checked = false);
+    document.querySelectorAll('input[name="ox-ans"]').forEach(r => r.checked = false);
+    document.querySelectorAll('input[name="mc-ans"]').forEach(r => r.checked = false);
+    for (let i = 0; i < 5; i++) {
+      const el = document.getElementById(`mc-opt-${i}`);
+      if (el) el.value = '';
+    }
+    ['f-chapter','f-question','f-code','f-answer','f-explanation'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    const sub = document.getElementById('f-subtype');
+    if (sub) sub.value = 'code_blank';
+    if (formErr) { formErr.textContent = ''; formErr.style.display = 'none'; }
+    updateFormFields();
+  }
+
+  function fillForm(q) {
+    const typeRadio = document.querySelector(`input[name="q-type"][value="${q.type}"]`);
+    if (typeRadio) typeRadio.checked = true;
+    updateFormFields();
+
+    document.getElementById('f-chapter').value     = q.chapter     || '';
+    document.getElementById('f-question').value    = q.question    || '';
+    document.getElementById('f-code').value        = q.code        || '';
+    document.getElementById('f-explanation').value = q.explanation || '';
+
+    if (q.type === 'ox') {
+      const r = document.querySelector(`input[name="ox-ans"][value="${q.answer}"]`);
+      if (r) r.checked = true;
+    } else if (q.type === 'multiple') {
+      (q.options || []).forEach((opt, i) => {
+        const inp = document.getElementById(`mc-opt-${i}`);
+        if (inp) inp.value = opt;
+      });
+      const r = document.querySelector(`input[name="mc-ans"][value="${q.answer}"]`);
+      if (r) r.checked = true;
+    } else {
+      document.getElementById('f-answer').value = String(q.answer ?? '');
+    }
+    const sub = document.getElementById('f-subtype');
+    if (sub && q.subtype) sub.value = q.subtype;
+  }
+
+  function validateForm() {
+    const type = getSelectedType();
+    if (!type) return '유형을 선택하세요.';
+    if (!document.getElementById('f-question').value.trim()) return '문제 내용을 입력하세요.';
+    if (type === 'ox') {
+      if (!document.querySelector('input[name="ox-ans"]:checked')) return '정답(O/X)을 선택하세요.';
+    } else if (type === 'multiple') {
+      for (let i = 0; i < 5; i++) {
+        if (!document.getElementById(`mc-opt-${i}`).value.trim()) return `보기 ${i + 1}을 입력하세요.`;
+      }
+      if (!document.querySelector('input[name="mc-ans"]:checked')) return '정답 보기를 선택하세요.';
+    } else {
+      if (!document.getElementById('f-answer').value.trim()) return '모범 답안을 입력하세요.';
+    }
+    return null;
+  }
+
+  function collectForm() {
+    const type = getSelectedType();
+    const q = {
+      type,
+      chapter:     document.getElementById('f-chapter').value.trim(),
+      question:    document.getElementById('f-question').value.trim(),
+      explanation: document.getElementById('f-explanation').value.trim(),
+    };
+    const code = document.getElementById('f-code').value.trim();
+    if (code) q.code = code;
+
+    if (type === 'ox') {
+      q.answer = document.querySelector('input[name="ox-ans"]:checked').value === 'true';
+    } else if (type === 'multiple') {
+      q.options = [0,1,2,3,4].map(i => document.getElementById(`mc-opt-${i}`).value.trim());
+      q.answer  = parseInt(document.querySelector('input[name="mc-ans"]:checked').value, 10);
+    } else {
+      q.answer = document.getElementById('f-answer').value.trim();
+      if (type === 'subjective') q.subtype = document.getElementById('f-subtype').value;
+    }
+    return q;
+  }
+
+  function openAddModal() {
+    editingId = null;
+    document.getElementById('modal-title').textContent = '문제 추가';
+    clearForm();
+    showModal();
+  }
+
+  function openEditModal(id) {
+    const q = getAllQuestions().find(x => x.id === id);
+    if (!q) return;
+    editingId = id;
+    document.getElementById('modal-title').textContent = '문제 수정';
+    clearForm();
+    fillForm(q);
+    showModal();
+  }
+
+  document.getElementById('btn-modal-save').addEventListener('click', () => {
+    const err = validateForm();
+    if (err) {
+      formErr.textContent = err;
+      formErr.style.display = 'block';
+      return;
+    }
+    formErr.style.display = 'none';
+
+    const q = collectForm();
+
+    if (editingId === null) {
+      q.id = `user_${Date.now()}`;
+      const userQs = loadUserQuestions();
+      userQs.push(q);
+      saveUserQuestions(userQs);
+    } else {
+      const userQs = loadUserQuestions();
+      const uIdx   = userQs.findIndex(x => x.id === editingId);
+      if (uIdx >= 0) {
+        userQs[uIdx] = { ...q, id: editingId };
+        saveUserQuestions(userQs);
+      } else {
+        saveQFull(editingId, q);
+      }
+    }
+
+    closeModal();
+    renderList();
+  });
+
+  // ── 필터 이벤트 ──────────────────────────────────────────
+  document.getElementById('filter-type').addEventListener('change', e => {
+    filterType = e.target.value; currentPage = 1; renderList();
+  });
+  document.getElementById('filter-chapter').addEventListener('change', e => {
+    filterChapter = e.target.value; currentPage = 1; renderList();
+  });
+  document.getElementById('filter-search').addEventListener('input', e => {
+    filterSearch = e.target.value; currentPage = 1; renderList();
+  });
+  document.getElementById('btn-add-q').addEventListener('click', openAddModal);
+
+  // 초기 렌더
+  renderList();
+}
+
+// ============================================================
 // 라우터
 // ============================================================
 
 document.addEventListener('DOMContentLoaded', () => {
   const page = document.body.dataset.page;
   if (page === 'index')  initIndexPage();
-  else if (page === 'exam')   initExamPage();
-  else if (page === 'result') initResultPage();
+  else if (page === 'exam')    initExamPage();
+  else if (page === 'result')  initResultPage();
+  else if (page === 'manage')  initManagePage();
 });
