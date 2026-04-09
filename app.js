@@ -158,14 +158,17 @@ function parseResultText(filename, text) {
   const dateM    = text.match(/날짜:\s*(.+)/);
   const scoreM   = text.match(/총점:\s*(\d+)/);
   const passM    = text.match(/판정:\s*(PASS|FAIL)/);
-  const correctM = text.match(/정답 문제:\s*(\d+)/);
+  const correctM = text.match(/정답 문제:\s*(\d+)\s*\/\s*(\d+)/);
   if (!roundM) return null;
+  const isChapter = text.includes('챕터 연습');
   return {
     round:        parseInt(roundM[1], 10),
     date:         dateM?.[1]?.trim()     || '',
     totalScore:   parseInt(scoreM?.[1]   || '0', 10),
     pass:         passM?.[1] === 'PASS',
     totalCorrect: parseInt(correctM?.[1] || '0', 10),
+    totalQ:       parseInt(correctM?.[2] || (isChapter ? '0' : '20'), 10),
+    mode:         isChapter ? 'chapter' : 'regular',
     text,
     filename
   };
@@ -959,6 +962,38 @@ function renderHistoryDetail(text) {
   return `<div class="history-detail-body">${summaryHtml}<div class="hd-q-list">${qRows}</div></div>`;
 }
 
+function renderHistoryItems(container, items) {
+  if (items.length === 0) {
+    container.innerHTML = '<p class="file-hint">해당 유형의 기록이 없습니다.</p>';
+    return;
+  }
+  container.innerHTML = items.map(r => {
+    const scoreLabel = r.mode === 'chapter' ? `${r.totalScore}%` : `${r.totalScore}점`;
+    const correctLabel = `${r.totalCorrect}/${r.totalQ}`;
+    return `
+    <div class="history-item">
+      <div class="history-meta">
+        <span class="history-round">${r.round}회차</span>
+        <span class="pass-chip-sm ${r.pass ? 'pass' : 'fail'}">${r.pass ? 'PASS' : 'FAIL'}</span>
+        <span class="history-score">${scoreLabel}</span>
+        <span class="history-correct">${correctLabel}</span>
+        <span class="history-date">${escapeHtml(r.date)}</span>
+        <button class="btn-text history-toggle">▶ 상세</button>
+      </div>
+      <div class="history-detail" style="display:none">${renderHistoryDetail(r.text || '')}</div>
+    </div>`;
+  }).join('');
+
+  container.querySelectorAll('.history-toggle').forEach(btn => {
+    btn.addEventListener('click', function () {
+      const detail  = this.closest('.history-item').querySelector('.history-detail');
+      const visible = detail.style.display !== 'none';
+      detail.style.display = visible ? 'none' : 'block';
+      this.textContent = visible ? '▶ 상세' : '▼ 접기';
+    });
+  });
+}
+
 async function setupHistory() {
   const container = document.getElementById('history-list');
   if (!container) return;
@@ -975,27 +1010,30 @@ async function setupHistory() {
     return;
   }
 
-  container.innerHTML = results.map(r => `
-    <div class="history-item">
-      <div class="history-meta">
-        <span class="history-round">${r.round}회차</span>
-        <span class="pass-chip-sm ${r.pass ? 'pass' : 'fail'}">${r.pass ? 'PASS' : 'FAIL'}</span>
-        <span class="history-score">${r.totalScore}점</span>
-        <span class="history-correct">${r.totalCorrect}/20</span>
-        <span class="history-date">${escapeHtml(r.date)}</span>
-        <button class="btn-text history-toggle">▶ 상세</button>
-      </div>
-      <div class="history-detail" style="display:none">${renderHistoryDetail(r.text || '')}</div>
-    </div>`).join('');
+  const regularItems = results.filter(r => r.mode === 'regular');
+  const chapterItems = results.filter(r => r.mode === 'chapter');
 
-  container.querySelectorAll('.history-toggle').forEach(btn => {
-    btn.addEventListener('click', function () {
-      const detail  = this.closest('.history-item').querySelector('.history-detail');
-      const visible = detail.style.display !== 'none';
-      detail.style.display = visible ? 'none' : 'block';
-      this.textContent = visible ? '▶ 상세' : '▼ 접기';
-    });
+  // 탭 전환
+  const tabs = document.querySelectorAll('.history-tab');
+  let activeTab = 'regular';
+
+  function switchTab(tab) {
+    activeTab = tab;
+    tabs.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tab));
+    renderHistoryItems(container, tab === 'regular' ? regularItems : chapterItems);
+  }
+
+  tabs.forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab));
   });
+
+  // 탭 카운트 표시
+  tabs.forEach(btn => {
+    const count = btn.dataset.tab === 'regular' ? regularItems.length : chapterItems.length;
+    btn.textContent = `${btn.textContent} (${count})`;
+  });
+
+  switchTab('regular');
 }
 
 function renderResult(examData, scores, round) {

@@ -1698,3 +1698,36 @@ body[data-page="manage"] .pagination {
   font-size: 13px;
   color: #5F6368;
 }
+
+/* ============================================================
+   시험 기록 탭
+   ============================================================ */
+.history-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #E0E0E0;
+  padding-bottom: 0;
+}
+
+.history-tab {
+  padding: 8px 16px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #5F6368;
+  font-weight: 500;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.history-tab:hover {
+  color: #1A73E8;
+}
+
+.history-tab.active {
+  color: #1A73E8;
+  border-bottom-color: #1A73E8;
+}
