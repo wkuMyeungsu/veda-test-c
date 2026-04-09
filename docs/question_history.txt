@@ -323,3 +323,35 @@ ptr_sh_012 | 단답형      | sizeof(arr) vs sizeof(p) 차이 (array decay)     
 ptr_sh_013 | 단답형      | p = realloc(p,n) 위험한 이유와 올바른 패턴      | 2026-04-09
 ptr_sh_014 | 단답형      | arr+1 vs &arr+1 이동 거리 차이                  | 2026-04-09
 ptr_sh_015 | 단답형      | *p++ / (*p)++ / ++*p / *++p 네 가지 구분        | 2026-04-09
+
+# ── C++ 문자열 집중 연습 (cpp_string_dynamic.json) ──
+cppstr_ox_001 | OX     | string == 연산자는 내용 비교                         | 2026-04-09
+cppstr_ox_002 | OX     | string::length() == string::size() 동일              | 2026-04-09
+cppstr_ox_003 | OX     | string s; 선언 시 nullptr 아닌 빈 문자열             | 2026-04-09
+cppstr_ox_004 | OX     | string::find() 실패 시 string::npos 반환             | 2026-04-09
+cppstr_ox_005 | OX     | string::at() 범위 초과 시 예외 발생 ([]는 UB)        | 2026-04-09
+cppstr_mc_001 | 객관식 | substr(pos, len) 두 번째 인자 = 길이                 | 2026-04-09
+cppstr_mc_002 | 객관식 | operator[] 잘못된 설명 (범위 초과 검사 안 함)        | 2026-04-09
+cppstr_mc_003 | 객관식 | find() 반환값 = 첫 번째 발견 위치                    | 2026-04-09
+cppstr_sh_001 | 단답형 | at() vs [] 차이 (예외 발생 여부)                     | 2026-04-09
+cppstr_sh_002 | 단답형 | string::npos 의미 (find 실패 반환값)                 | 2026-04-09
+cppdyn_ox_001 | OX     | new = 생성자 호출, malloc = 생성자 호출 안 함        | 2026-04-09
+cppdyn_ox_002 | OX     | delete[]로 단일 객체 해제 시 UB                      | 2026-04-09
+cppdyn_ox_003 | OX     | 스코프 벗어날 때 new 할당 메모리 자동 해제 안 됨     | 2026-04-09
+cppdyn_ox_004 | OX     | new 실패 시 bad_alloc 예외 발생                      | 2026-04-09
+cppdyn_ox_005 | OX     | delete nullptr 안전 (정상 처리)                      | 2026-04-09
+cppdyn_ox_006 | OX     | 가상 소멸자 없으면 Base* 삭제 시 파생 소멸자 미호출  | 2026-04-09
+cppdyn_ox_007 | OX     | new int() = 0 초기화, new int = 미초기화             | 2026-04-09
+cppdyn_ox_008 | OX     | new int(5) = 값 5로 초기화, new int[5] = 배열 5개   | 2026-04-09
+cppdyn_mc_001 | 객관식 | new[] 할당 해제 = delete[]                           | 2026-04-09
+cppdyn_mc_002 | 객관식 | new(nothrow) 실패 시 반환값 = nullptr                | 2026-04-09
+cppdyn_mc_003 | 객관식 | 가상 소멸자 없는 Base* delete 결과 (Derived 누수)    | 2026-04-09
+cppdyn_mc_004 | 객관식 | 포인터 재대입 전 해제 안 하면 메모리 누수            | 2026-04-09
+cppdyn_mc_005 | 객관식 | 얕은 복사 double free 위험                          | 2026-04-09
+cppdyn_mc_006 | 객관식 | new vs malloc 핵심 차이 (생성자/소멸자 호출)         | 2026-04-09
+cppdyn_mc_007 | 객관식 | new int() vs new int 초기화 차이                     | 2026-04-09
+cppdyn_sh_001 | 단답형 | 복사 생성자 필요한 이유 (포인터 멤버 얕은 복사 문제) | 2026-04-09
+cppdyn_sh_002 | 단답형 | 가상 소멸자 필요한 이유 (업캐스팅 delete 누수)       | 2026-04-09
+cppdyn_sh_003 | 단답형 | RAII 개념 (자원 획득 = 초기화)                       | 2026-04-09
+cppdyn_bl_001 | 빈칸   | new(nothrow) 사용법 빈칸                             | 2026-04-09
+cppdyn_bl_002 | 빈칸   | delete[] 배열 해제 빈칸                              | 2026-04-09

@@ -1,0 +1,316 @@
+[
+  {
+    "id": "cppstr_ox_001",
+    "chapter": "CH01 C++ 기초",
+    "type": "ox",
+    "question": "std::string에서 == 연산자는 두 문자열의 내용을 비교한다.",
+    "answer": true,
+    "explanation": "std::string의 operator==는 내용(값)을 비교하도록 오버로딩되어 있다. char* 포인터와 달리 주소가 아닌 실제 문자열 내용을 비교한다."
+  },
+  {
+    "id": "cppstr_ox_002",
+    "chapter": "CH01 C++ 기초",
+    "type": "ox",
+    "question": "std::string::length()와 std::string::size()는 서로 다른 값을 반환한다.",
+    "answer": false,
+    "explanation": "length()와 size()는 완전히 동일한 결과를 반환한다. size()는 STL 컨테이너와의 일관성을 위해 추가되었으며, 두 함수는 내부적으로 동일하다."
+  },
+  {
+    "id": "cppstr_ox_003",
+    "chapter": "CH01 C++ 기초",
+    "type": "ox",
+    "question": "std::string s; 로 선언하면 s는 nullptr 상태이다.",
+    "answer": false,
+    "explanation": "std::string s; 는 빈 문자열 \"\"로 초기화된다. s.empty()는 true, s.size()는 0이다. nullptr은 포인터 개념으로 std::string에는 해당하지 않는다."
+  },
+  {
+    "id": "cppstr_ox_004",
+    "chapter": "CH01 C++ 기초",
+    "type": "ox",
+    "question": "std::string::at(i)은 범위를 초과하면 std::out_of_range 예외를 던지지만, operator[](i)는 범위를 초과해도 예외 없이 undefined behavior이다.",
+    "answer": true,
+    "explanation": "at()은 경계 검사를 수행하여 범위 초과 시 std::out_of_range 예외를 던진다. operator[]는 경계 검사를 하지 않으므로 범위 초과 시 undefined behavior가 발생한다."
+  },
+  {
+    "id": "cppstr_ox_005",
+    "chapter": "CH01 C++ 기초",
+    "type": "ox",
+    "question": "std::string::find()가 검색에 실패하면 -1을 반환한다.",
+    "answer": false,
+    "explanation": "find()는 실패 시 std::string::npos를 반환한다. npos는 size_t 타입의 최댓값(보통 SIZE_MAX)으로, -1처럼 보이는 경우도 있으나 정확한 반환값은 string::npos이다."
+  },
+  {
+    "id": "cppstr_mc_001",
+    "chapter": "CH01 C++ 기초",
+    "type": "multiple",
+    "question": "std::string s = \"hello\"; 일 때 s.substr(1, 3) 의 반환값은?",
+    "options": [
+      "\"hel\"",
+      "\"ell\"",
+      "\"ello\"",
+      "\"lo\"",
+      "\"hello\""
+    ],
+    "answer": 1,
+    "explanation": "substr(pos, len)은 pos 위치부터 len개의 문자를 반환한다. substr(1,3)은 인덱스 1('e')부터 3글자 → \"ell\"이다."
+  },
+  {
+    "id": "cppstr_mc_002",
+    "chapter": "CH01 C++ 기초",
+    "type": "multiple",
+    "question": "다음 중 std::string에 대한 설명으로 옳지 않은 것은?",
+    "options": [
+      "empty()는 size() == 0과 동일하다.",
+      "c_str()로 const char* 형태로 변환할 수 있다.",
+      "+ 연산자로 두 string을 연결할 수 있다.",
+      "operator[]는 범위 초과 시 std::out_of_range 예외를 던진다.",
+      "== 연산자로 두 문자열의 내용을 비교할 수 있다."
+    ],
+    "answer": 3,
+    "explanation": "operator[]는 경계 검사를 하지 않는다. 범위 초과 시 undefined behavior이다. 경계 검사가 필요하면 at()을 사용해야 한다."
+  },
+  {
+    "id": "cppstr_mc_003",
+    "chapter": "CH01 C++ 기초",
+    "type": "multiple",
+    "question": "다음 코드의 출력 결과는?\n\nstd::string s = \"hello\";\nstd::cout << s.find(\"ll\");",
+    "options": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "string::npos"
+    ],
+    "answer": 2,
+    "explanation": "find()는 부분 문자열의 첫 번째 위치를 반환한다. \"ll\"은 인덱스 2부터 시작하므로 2를 반환한다."
+  },
+  {
+    "id": "cppstr_sh_001",
+    "chapter": "CH01 C++ 기초",
+    "type": "short",
+    "question": "std::string::at(i)와 operator[](i)의 차이를 설명하시오.",
+    "answer": "at(i)은 경계 검사를 수행하여 범위 초과 시 std::out_of_range 예외를 던진다. operator[]는 경계 검사를 하지 않아 범위 초과 시 undefined behavior가 발생한다.",
+    "explanation": "안전성이 필요할 때는 at(), 성능이 중요하고 범위가 보장될 때는 operator[]를 사용한다."
+  },
+  {
+    "id": "cppstr_sh_002",
+    "chapter": "CH01 C++ 기초",
+    "type": "short",
+    "question": "std::string::find()가 검색 실패 시 반환하는 값의 이름과 그 값을 설명하시오.",
+    "answer": "std::string::npos를 반환한다. npos는 size_t 타입의 최댓값(보통 0xFFFFFFFF 또는 0xFFFFFFFFFFFFFFFF)으로, '찾지 못함'을 나타내는 특수값이다.",
+    "explanation": "find() 결과를 -1과 비교하면 타입 불일치로 오작동할 수 있다. 반드시 if (pos == string::npos) 패턴으로 확인해야 한다."
+  },
+  {
+    "id": "cppdyn_ox_001",
+    "chapter": "CH01 C++ 기초",
+    "type": "ox",
+    "question": "new로 객체를 생성하면 생성자가 호출되지만, malloc으로 메모리를 할당하면 생성자가 호출되지 않는다.",
+    "answer": true,
+    "explanation": "new는 메모리 할당 후 생성자를 자동 호출하고, delete는 소멸자를 자동 호출한다. malloc/free는 C 함수로 생성자/소멸자를 전혀 호출하지 않아 C++ 객체에 사용하면 안 된다."
+  },
+  {
+    "id": "cppdyn_ox_002",
+    "chapter": "CH01 C++ 기초",
+    "type": "ox",
+    "question": "new[]로 할당한 배열을 delete([] 없이)로 해제해도 단순 int 배열에서는 문제없다.",
+    "answer": false,
+    "explanation": "new[]로 할당한 메모리는 반드시 delete[]로 해제해야 한다. delete와 delete[]를 혼용하면 int 배열이라도 undefined behavior이며, 클래스 배열에서는 소멸자가 일부만 호출되어 심각한 오류가 발생한다."
+  },
+  {
+    "id": "cppdyn_ox_003",
+    "chapter": "CH01 C++ 기초",
+    "type": "ox",
+    "question": "new로 할당한 메모리는 해당 블록 스코프를 벗어나면 자동으로 해제된다.",
+    "answer": false,
+    "explanation": "new로 할당된 메모리는 힙에 저장되며, 스코프와 무관하게 delete를 명시적으로 호출할 때까지 유지된다. 스코프를 벗어나도 자동 해제되지 않아 포인터 변수만 사라지고 메모리 누수가 발생한다."
+  },
+  {
+    "id": "cppdyn_ox_004",
+    "chapter": "CH01 C++ 기초",
+    "type": "ox",
+    "question": "C++에서 new는 메모리 할당 실패 시 기본적으로 nullptr을 반환한다.",
+    "answer": false,
+    "explanation": "기본 new는 실패 시 nullptr이 아닌 std::bad_alloc 예외를 던진다. nullptr을 반환받으려면 new(std::nothrow) 형식을 사용해야 한다."
+  },
+  {
+    "id": "cppdyn_ox_005",
+    "chapter": "CH01 C++ 기초",
+    "type": "ox",
+    "question": "delete nullptr은 안전하게 동작한다.",
+    "answer": true,
+    "explanation": "C++ 표준에 따르면 delete nullptr은 아무 동작도 하지 않고 안전하게 반환된다. 따라서 delete 전에 NULL 체크를 굳이 할 필요가 없다."
+  },
+  {
+    "id": "cppdyn_ox_006",
+    "chapter": "CH01 C++ 기초",
+    "type": "ox",
+    "question": "기본 클래스 소멸자가 virtual이 아닐 때 기본 클래스 포인터로 파생 클래스 객체를 delete하면 파생 클래스 소멸자가 호출되지 않는다.",
+    "answer": true,
+    "explanation": "가상 소멸자가 없으면 delete 시 정적 타입(기본 클래스) 소멸자만 호출된다. 파생 클래스에서 동적으로 할당한 멤버가 있다면 메모리 누수가 발생한다. 다형성을 사용할 때는 반드시 virtual ~Base()를 선언해야 한다."
+  },
+  {
+    "id": "cppdyn_ox_007",
+    "chapter": "CH01 C++ 기초",
+    "type": "ox",
+    "question": "new int()와 new int는 완전히 동일하다.",
+    "answer": false,
+    "explanation": "new int()는 값 초기화(value-initialization)로 0으로 초기화된다. new int는 기본 초기화(default-initialization)로 초기화되지 않아 쓰레기값을 가진다. 중요한 차이이다."
+  },
+  {
+    "id": "cppdyn_ox_008",
+    "chapter": "CH01 C++ 기초",
+    "type": "ox",
+    "question": "new int(5)와 new int[5]는 동일하게 int 5개 배열을 할당한다.",
+    "answer": false,
+    "explanation": "new int(5)는 int 1개를 할당하고 값을 5로 초기화한다. new int[5]는 int 5개짜리 배열을 할당한다. 괄호()는 초기화값, 대괄호[]는 배열 크기이다."
+  },
+  {
+    "id": "cppdyn_mc_001",
+    "chapter": "CH01 C++ 기초",
+    "type": "multiple",
+    "question": "int *p = new int[5]; 를 올바르게 해제하는 코드는?",
+    "options": [
+      "delete p;",
+      "delete[] p;",
+      "free(p);",
+      "delete *p;",
+      "p = nullptr;"
+    ],
+    "answer": 1,
+    "explanation": "new[]로 할당한 배열은 반드시 delete[]로 해제해야 한다. delete p;는 단일 객체 해제이며 배열에 사용하면 undefined behavior이다."
+  },
+  {
+    "id": "cppdyn_mc_002",
+    "chapter": "CH01 C++ 기초",
+    "type": "multiple",
+    "question": "메모리 할당 실패 시 예외 없이 nullptr을 반환받으려면 어떻게 해야 하는가?",
+    "options": [
+      "int *p = new int;",
+      "int *p = new(std::nothrow) int;",
+      "int *p = malloc(sizeof(int));",
+      "int *p = new int(); if(!p) {}",
+      "try { int *p = new int; } catch(...) { p = nullptr; }"
+    ],
+    "answer": 1,
+    "explanation": "new(std::nothrow)를 사용하면 할당 실패 시 예외 대신 nullptr을 반환한다. 기본 new는 실패 시 std::bad_alloc을 던진다."
+  },
+  {
+    "id": "cppdyn_mc_003",
+    "chapter": "CH01 C++ 기초",
+    "type": "multiple",
+    "question": "다음 코드의 문제점은?\n\nclass Base { public: ~Base() {} };\nclass Derived : public Base { int *data; public: Derived() { data = new int(0); } ~Derived() { delete data; } };\nBase *p = new Derived();\ndelete p;",
+    "options": [
+      "문제없다.",
+      "Base에 virtual 소멸자가 없어 Derived 소멸자가 호출되지 않아 data가 누수된다.",
+      "Derived를 Base 포인터에 대입할 수 없다.",
+      "delete p 대신 delete[] p를 써야 한다.",
+      "new Derived() 대신 new Derived를 써야 한다."
+    ],
+    "answer": 1,
+    "explanation": "Base의 소멸자가 virtual이 아니므로 delete p는 Base 소멸자만 호출한다. Derived 소멸자가 호출되지 않아 data(동적 할당 멤버)가 해제되지 않아 메모리 누수가 발생한다."
+  },
+  {
+    "id": "cppdyn_mc_004",
+    "chapter": "CH01 C++ 기초",
+    "type": "multiple",
+    "question": "다음 코드에서 메모리 누수가 발생하는 이유는?\n\nint *p = new int(10);\np = new int(20);\ndelete p;",
+    "options": [
+      "delete p를 두 번 해야 한다.",
+      "첫 번째 new int(10)의 주소를 잃어버려 해제할 수 없다.",
+      "new int(20) 이후에는 delete가 필요 없다.",
+      "p에 새 주소를 대입하면 자동으로 이전 메모리가 해제된다.",
+      "문제없다."
+    ],
+    "answer": 1,
+    "explanation": "p = new int(20) 시점에 new int(10)의 주소를 덮어쓰므로 첫 번째 메모리를 해제할 방법이 없다. 반드시 p를 재사용하기 전에 delete p를 호출해야 한다."
+  },
+  {
+    "id": "cppdyn_mc_005",
+    "chapter": "CH01 C++ 기초",
+    "type": "multiple",
+    "question": "다음 클래스를 복사 생성할 때 발생하는 문제는?\n\nclass MyArr {\n    int *data;\npublic:\n    MyArr() { data = new int(0); }\n    ~MyArr() { delete data; }\n};\nMyArr a;\nMyArr b = a;",
+    "options": [
+      "문제없다.",
+      "컴파일 오류가 발생한다.",
+      "b = a 시 얕은 복사로 a.data와 b.data가 같은 주소를 가리켜 소멸 시 double free가 발생한다.",
+      "b의 생성자가 호출되지 않는다.",
+      "a의 data가 nullptr이 된다."
+    ],
+    "answer": 2,
+    "explanation": "기본 복사 생성자는 얕은 복사(주소 복사)를 수행한다. a.data와 b.data가 같은 주소를 가리키게 되어, 소멸 시 같은 메모리를 두 번 delete(double free)하는 undefined behavior가 발생한다."
+  },
+  {
+    "id": "cppdyn_mc_006",
+    "chapter": "CH01 C++ 기초",
+    "type": "multiple",
+    "question": "C++에서 new와 malloc의 가장 중요한 차이는?",
+    "options": [
+      "new는 힙에, malloc은 스택에 할당한다.",
+      "new는 생성자/소멸자를 호출하지만 malloc/free는 호출하지 않는다.",
+      "new는 항상 초기화하지만 malloc은 초기화하지 않는다.",
+      "malloc이 더 빠르므로 성능이 중요할 때 사용한다.",
+      "new는 크기를 지정하지 않아도 된다."
+    ],
+    "answer": 1,
+    "explanation": "가장 핵심적인 차이는 생성자/소멸자 호출 여부이다. C++ 객체에 malloc을 사용하면 초기화(생성자)와 정리(소멸자)가 이루어지지 않아 심각한 오류가 발생한다."
+  },
+  {
+    "id": "cppdyn_mc_007",
+    "chapter": "CH01 C++ 기초",
+    "type": "multiple",
+    "question": "다음 중 new int()와 new int의 차이로 옳은 것은?",
+    "options": [
+      "완전히 동일하다.",
+      "new int()는 0으로 초기화되고, new int는 초기화되지 않아 쓰레기값을 가진다.",
+      "new int()는 힙에, new int는 스택에 할당된다.",
+      "new int()는 실패 시 nullptr 반환, new int는 예외를 던진다.",
+      "new int()는 int 0개, new int는 int 1개를 할당한다."
+    ],
+    "answer": 1,
+    "explanation": "new int()는 값 초기화(value-initialization)로 0을 보장한다. new int는 기본 초기화(default-initialization)로 초기화되지 않아 쓰레기값이다. 이 차이는 클래스 타입에도 동일하게 적용된다."
+  },
+  {
+    "id": "cppdyn_sh_001",
+    "chapter": "CH01 C++ 기초",
+    "type": "short",
+    "question": "동적으로 할당한 멤버 변수를 가진 클래스에서 복사 생성자를 직접 정의해야 하는 이유를 설명하시오.",
+    "answer": "기본 복사 생성자는 얕은 복사(주소 복사)를 수행한다. 동적 할당 멤버가 있으면 복사 후 두 객체가 같은 메모리를 가리켜, 한 객체가 소멸할 때 delete하면 다른 객체가 댕글링 포인터를 가지게 된다(double free). 이를 막기 위해 깊은 복사(deep copy)를 수행하는 복사 생성자를 직접 정의해야 한다.",
+    "explanation": "Rule of Three: 소멸자, 복사 생성자, 복사 대입 연산자 중 하나를 정의하면 나머지 둘도 정의해야 한다."
+  },
+  {
+    "id": "cppdyn_sh_002",
+    "chapter": "CH01 C++ 기초",
+    "type": "short",
+    "question": "다형성을 사용하는 기본 클래스의 소멸자를 virtual로 선언해야 하는 이유를 설명하시오.",
+    "answer": "기본 클래스 포인터로 파생 클래스 객체를 delete할 때, virtual 소멸자가 없으면 기본 클래스 소멸자만 호출되고 파생 클래스 소멸자가 호출되지 않는다. 파생 클래스에서 동적 할당한 자원이 해제되지 않아 메모리 누수가 발생한다.",
+    "explanation": "다형성을 사용하는 클래스(기본 클래스)는 항상 virtual ~Base() {}를 선언해야 한다."
+  },
+  {
+    "id": "cppdyn_sh_003",
+    "chapter": "CH01 C++ 기초",
+    "type": "short",
+    "question": "RAII(Resource Acquisition Is Initialization)의 개념을 설명하고, C++ 동적 할당에서 어떻게 적용되는지 설명하시오.",
+    "answer": "RAII는 자원 획득을 객체 초기화와 결합하여, 객체의 생명주기가 자원의 생명주기를 관리하는 기법이다. 동적 할당에서는 생성자에서 new로 메모리를 할당하고 소멸자에서 delete로 해제하여, 객체가 스코프를 벗어나면 자동으로 자원이 해제된다. std::unique_ptr이 대표적 예이다.",
+    "explanation": "RAII를 사용하면 예외가 발생해도 스택 풀기(stack unwinding) 과정에서 소멸자가 호출되어 자원이 안전하게 해제된다."
+  },
+  {
+    "id": "cppdyn_bl_001",
+    "chapter": "CH01 C++ 기초",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "메모리 할당 실패 시 예외 없이 nullptr을 반환받는 코드의 빈칸을 채우시오.",
+    "code": "int *p = new ___ int[1000000];\nif (p == nullptr) {\n    // 할당 실패 처리\n}",
+    "answer": "(std::nothrow)",
+    "explanation": "new(std::nothrow)는 할당 실패 시 std::bad_alloc 예외 대신 nullptr을 반환한다. <new> 헤더에 정의되어 있으며, 예외 처리 없이 nullptr 체크로 실패를 처리하고 싶을 때 사용한다."
+  },
+  {
+    "id": "cppdyn_bl_002",
+    "chapter": "CH01 C++ 기초",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "다음 코드에서 동적 배열을 올바르게 해제하는 빈칸을 채우시오.",
+    "code": "int *arr = new int[10];\nfor (int i = 0; i < 10; i++) arr[i] = i;\n// 사용 후 해제\n___arr;",
+    "answer": "delete[]",
+    "explanation": "new[]로 할당한 배열은 반드시 delete[]로 해제해야 한다. delete([] 없이)를 사용하면 undefined behavior이며, 클래스 배열의 경우 일부 소멸자만 호출되는 심각한 문제가 발생한다."
+  }
+]
