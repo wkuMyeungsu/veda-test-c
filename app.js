@@ -160,7 +160,9 @@ function parseResultText(filename, text) {
   const passM    = text.match(/판정:\s*(PASS|FAIL)/);
   const correctM = text.match(/정답 문제:\s*(\d+)\s*\/\s*(\d+)/);
   if (!roundM) return null;
-  const isChapter = text.includes('챕터 연습');
+  const isChapter  = text.includes('챕터 연습');
+  const chaptersM  = text.match(/선택 챕터:\s*(.+)/);
+  const chapters   = chaptersM ? chaptersM[1].trim().split(/,\s*/) : [];
   return {
     round:        parseInt(roundM[1], 10),
     date:         dateM?.[1]?.trim()     || '',
@@ -169,6 +171,7 @@ function parseResultText(filename, text) {
     totalCorrect: parseInt(correctM?.[1] || '0', 10),
     totalQ:       parseInt(correctM?.[2] || (isChapter ? '0' : '20'), 10),
     mode:         isChapter ? 'chapter' : 'regular',
+    chapters,
     text,
     filename
   };
@@ -970,6 +973,9 @@ function renderHistoryItems(container, items) {
   container.innerHTML = items.map(r => {
     const scoreLabel = r.mode === 'chapter' ? `${r.totalScore}%` : `${r.totalScore}점`;
     const correctLabel = `${r.totalCorrect}/${r.totalQ}`;
+    const chapterTagsHtml = (r.mode === 'chapter' && r.chapters.length > 0)
+      ? `<div class="history-chapter-tags">${r.chapters.map(ch => `<span class="history-ch-tag">${escapeHtml(ch)}</span>`).join('')}</div>`
+      : '';
     return `
     <div class="history-item">
       <div class="history-meta">
@@ -980,6 +986,7 @@ function renderHistoryItems(container, items) {
         <span class="history-date">${escapeHtml(r.date)}</span>
         <button class="btn-text history-toggle">▶ 상세</button>
       </div>
+      ${chapterTagsHtml}
       <div class="history-detail" style="display:none">${renderHistoryDetail(r.text || '')}</div>
     </div>`;
   }).join('');
