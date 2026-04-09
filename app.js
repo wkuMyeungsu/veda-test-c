@@ -475,7 +475,6 @@ function initExamPage() {
   }
 
   let currentIndex = parseInt(sessionStorage.getItem('examCurrentIndex') || '0', 10);
-  const total      = examData.questions.length;
 
   // 타이머
   const timerEl = document.getElementById('exam-timer');
@@ -523,7 +522,8 @@ function initExamPage() {
   }
 
   function renderQ(idx) {
-    const q      = examData.questions[idx];
+    const q     = examData.questions[idx];
+    const total = examData.questions.length;
     const isLast = idx === total - 1;
     const isSubj = isSubjective(q);
     const ov     = examData.overrides[idx];
