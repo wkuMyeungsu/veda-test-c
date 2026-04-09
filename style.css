@@ -961,6 +961,18 @@ body {
   color: #9AA0A6;
   margin-left: auto;
 }
+.btn-history-delete {
+  margin-left: 6px;
+  color: #9AA0A6;
+  font-size: 14px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: color 0.15s, background 0.15s;
+}
+.btn-history-delete:hover {
+  color: #C5221F;
+  background: #FCE8E6;
+}
 .history-detail {
   margin-top: 12px;
   max-height: 420px;

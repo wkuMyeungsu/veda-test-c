@@ -175,7 +175,7 @@ function scoreExam(examData) {
 }
 
 // ============================================================
-// 결과 파일 읽기 (File System Access API)
+// 결과 텍스트 파싱
 // ============================================================
 
 function parseResultText(filename, text) {
@@ -185,119 +185,68 @@ function parseResultText(filename, text) {
   const passM    = text.match(/판정:\s*(PASS|FAIL)/);
   const correctM = text.match(/정답 문제:\s*(\d+)\s*\/\s*(\d+)/);
   if (!roundM) return null;
-  const isChapter  = text.includes('챕터 연습');
-  const chaptersM  = text.match(/선택 챕터:\s*(.+)/);
-  const chapters   = chaptersM ? chaptersM[1].trim().split(/,\s*/) : [];
+  const isChapter   = text.includes('챕터 연습');
+  const isFavorites = text.includes('즐겨찾기 시험');
+  const chaptersM   = text.match(/선택 챕터:\s*(.+)/);
+  const chapters    = chaptersM ? chaptersM[1].trim().split(/,\s*/) : [];
+  const mode = isFavorites ? 'favorites' : isChapter ? 'chapter' : 'regular';
   return {
     round:        parseInt(roundM[1], 10),
     date:         dateM?.[1]?.trim()     || '',
     totalScore:   parseInt(scoreM?.[1]   || '0', 10),
     pass:         passM?.[1] === 'PASS',
     totalCorrect: parseInt(correctM?.[1] || '0', 10),
-    totalQ:       parseInt(correctM?.[2] || (isChapter ? '0' : '20'), 10),
-    mode:         isChapter ? 'chapter' : 'regular',
+    totalQ:       parseInt(correctM?.[2] || (isChapter || isFavorites ? '0' : '20'), 10),
+    mode,
     chapters,
     text,
     filename
   };
 }
 
-async function readResultFiles() {
-  const dir = await getResultsDir(false);
-  if (!dir) return [];
-  const out = [];
-  try {
-    for await (const [name, handle] of dir.entries()) {
-      if (handle.kind !== 'file' || !name.endsWith('.txt')) continue;
-      try {
-        const file   = await handle.getFile();
-        const text   = await file.text();
-        const parsed = parseResultText(name, text);
-        if (parsed) out.push(parsed);
-      } catch { /* skip */ }
-    }
-  } catch { return []; }
-  return out.sort((a, b) => b.round - a.round);
-}
-
 // ============================================================
-// File System Access API — results/ 폴더 자동 저장
+// 결과 저장 / 읽기 (localStorage)
 // ============================================================
 
-const IDB_NAME  = 'cppExamDB';
-const IDB_STORE = 'settings';
+const RESULTS_KEY = 'examResultsStore';
 
-function openDB() {
-  return new Promise((resolve, reject) => {
-    const req = indexedDB.open(IDB_NAME, 1);
-    req.onupgradeneeded = e => e.target.result.createObjectStore(IDB_STORE);
-    req.onsuccess = e => resolve(e.target.result);
-    req.onerror   = e => reject(e.target.error);
-  });
-}
-
-async function saveDirHandle(handle) {
-  const db = await openDB();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(IDB_STORE, 'readwrite');
-    tx.objectStore(IDB_STORE).put(handle, 'resultsDir');
-    tx.oncomplete = () => resolve();
-    tx.onerror    = e => reject(e.target.error);
-  });
-}
-
-async function loadDirHandle() {
+function saveResultToStorage(filename, text) {
   try {
-    const db = await openDB();
-    return new Promise((resolve, reject) => {
-      const tx  = db.transaction(IDB_STORE, 'readonly');
-      const req = tx.objectStore(IDB_STORE).get('resultsDir');
-      req.onsuccess = e => resolve(e.target.result || null);
-      req.onerror   = e => reject(e.target.error);
-    });
-  } catch { return null; }
-}
-
-// 폴더 핸들 반환. 권한 없으면 재요청. prompt=true면 폴더 선택 팝업 표시.
-async function getResultsDir(prompt = true) {
-  if (!window.showDirectoryPicker) return null;  // 미지원 브라우저
-
-  let handle = await loadDirHandle();
-  if (handle) {
-    const perm = await handle.queryPermission({ mode: 'readwrite' });
-    if (perm === 'granted') return handle;
-    const req = await handle.requestPermission({ mode: 'readwrite' });
-    if (req === 'granted') return handle;
-  }
-  if (!prompt) return null;
-
-  try {
-    handle = await window.showDirectoryPicker({ mode: 'readwrite' });
-    await saveDirHandle(handle);
-    return handle;
-  } catch { return null; }  // 사용자가 취소
-}
-
-// 폴더 이름 반환 (UI 표시용). 권한 없으면 null.
-async function getResultsFolderName() {
-  const handle = await getResultsDir(false);
-  return handle ? handle.name : null;
-}
-
-// results/ 폴더에 파일 쓰기
-async function writeResultFile(filename, text) {
-  const dir = await getResultsDir(true);
-  if (!dir) return false;
-  try {
-    const fileHandle = await dir.getFileHandle(filename, { create: true });
-    const writable   = await fileHandle.createWritable();
-    await writable.write(text);
-    await writable.close();
+    const store = JSON.parse(localStorage.getItem(RESULTS_KEY) || '[]');
+    // 같은 파일명 중복 방지
+    const idx = store.findIndex(r => r.filename === filename);
+    if (idx >= 0) store[idx] = { filename, text };
+    else store.push({ filename, text });
+    localStorage.setItem(RESULTS_KEY, JSON.stringify(store));
     return true;
   } catch (e) {
-    console.error('파일 저장 실패:', e);
+    console.error('결과 저장 실패:', e);
     return false;
   }
+}
+
+async function readResultFiles() {
+  try {
+    const store = JSON.parse(localStorage.getItem(RESULTS_KEY) || '[]');
+    return store
+      .map(r => parseResultText(r.filename, r.text))
+      .filter(Boolean)
+      .sort((a, b) => b.round - a.round);
+  } catch { return []; }
+}
+
+// 하위 호환: writeResultFile → localStorage 저장 + 다운로드는 별도
+async function writeResultFile(filename, text) {
+  return saveResultToStorage(filename, text);
+}
+
+function deleteResultFromStorage(filename) {
+  try {
+    const store = JSON.parse(localStorage.getItem(RESULTS_KEY) || '[]');
+    const filtered = store.filter(r => r.filename !== filename);
+    localStorage.setItem(RESULTS_KEY, JSON.stringify(filtered));
+    return true;
+  } catch { return false; }
 }
 
 // ============================================================
@@ -384,13 +333,16 @@ function generateResultText(examData, scores, round) {
   const { results, oxCorrect, mcCorrect, subCorrect, totalCorrect, totalScore, pass, totalQ, isChapterMode } = scores;
   const now  = formatDateTime(new Date());
   const lines = [];
+  const isFavoritesMode = examData.mode === 'favorites';
 
-  const modeLabel = isChapterMode ? '챕터 연습' : '이론 시험';
+  const modeLabel = isChapterMode ? '챕터 연습' : isFavoritesMode ? '즐겨찾기 시험' : '이론 시험';
   lines.push(`===== C/C++ ${modeLabel} 결과 (${round}회차) =====`);
   lines.push(`날짜: ${now}`);
   if (isChapterMode) {
     lines.push(`선택 챕터: ${(examData.chapters || []).join(', ')}`);
     lines.push(`총점: ${totalScore}%  |  판정: ${pass ? 'PASS ✔' : 'FAIL ✘'}  (합격 기준: 60% 이상)`);
+  } else if (isFavoritesMode) {
+    lines.push(`총점: ${totalScore} / 100  |  판정: ${pass ? 'PASS ✔' : 'FAIL ✘'}  (즐겨찾기 ${totalQ}문제)`);
   } else {
     lines.push(`총점: ${totalScore} / 100  |  판정: ${pass ? 'PASS ✔' : 'FAIL ✘'}  (합격 기준: 60점 / 12문제)`);
   }
@@ -465,31 +417,9 @@ function useRound() {
 // ============================================================
 
 function initIndexPage() {
-  const startBtn    = document.getElementById('btn-start');
-  const viewBtn     = document.getElementById('btn-view-results');
-  const errorEl     = document.getElementById('error-msg');
-  const folderNameEl = document.getElementById('folder-name');
-  const setFolderBtn = document.getElementById('btn-set-folder');
-
-  async function refreshFolderDisplay() {
-    if (!folderNameEl) return;
-    const name = await getResultsFolderName();
-    if (name) {
-      folderNameEl.textContent = name;
-      folderNameEl.className   = 'folder-name set';
-    } else {
-      folderNameEl.textContent = '미설정';
-      folderNameEl.className   = 'folder-name not-set';
-    }
-  }
-  refreshFolderDisplay();
-
-  if (setFolderBtn) {
-    setFolderBtn.addEventListener('click', async () => {
-      const handle = await getResultsDir(true);
-      if (handle) refreshFolderDisplay();
-    });
-  }
+  const startBtn = document.getElementById('btn-start');
+  const viewBtn  = document.getElementById('btn-view-results');
+  const errorEl  = document.getElementById('error-msg');
 
   startBtn.addEventListener('click', async () => {
     startBtn.disabled = true;
@@ -1016,10 +946,10 @@ function initResultPage() {
       const statusEl = document.getElementById('save-status');
       if (!statusEl) return;
       if (ok) {
-        statusEl.textContent = `✔ 결과 파일 저장 완료: ${filename}`;
+        statusEl.textContent = `✔ 결과가 저장되었습니다. (시험 기록에서 확인 가능)`;
         statusEl.className   = 'save-status save-ok';
       } else {
-        statusEl.textContent = '⚠ 파일 자동 저장 실패 (폴더 미설정 또는 권한 없음). 아래 버튼으로 수동 다운로드하세요.';
+        statusEl.textContent = '⚠ 결과 저장 실패. 아래 버튼으로 수동 다운로드하세요.';
         statusEl.className   = 'save-status save-warn';
       }
       statusEl.style.display = 'block';
@@ -1144,6 +1074,7 @@ function renderHistoryItems(container, items) {
         <span class="history-correct">${correctLabel}</span>
         <span class="history-date">${escapeHtml(r.date)}</span>
         <button class="btn-text history-toggle">▶ 상세</button>
+        <button class="btn-text btn-history-delete" data-filename="${escapeHtml(r.filename)}" title="기록 삭제">🗑</button>
       </div>
       ${chapterTagsHtml}
       <div class="history-detail" style="display:none">${renderHistoryDetail(r.text || '')}</div>
@@ -1176,15 +1107,13 @@ async function setupHistory() {
   const qTextMap = new Map(allQs.map(q => [q.question?.trim(), q]));
 
   if (results.length === 0) {
-    const dir = await getResultsDir(false);
-    container.innerHTML = dir
-      ? '<p class="file-hint">저장된 시험 기록이 없습니다.</p>'
-      : '<p class="file-hint">결과 저장 폴더가 설정되지 않았습니다.<br>홈 화면에서 폴더를 선택하면 기록이 표시됩니다.</p>';
+    container.innerHTML = '<p class="file-hint">저장된 시험 기록이 없습니다.</p>';
     return;
   }
 
-  const regularItems = results.filter(r => r.mode === 'regular');
-  const chapterItems = results.filter(r => r.mode === 'chapter');
+  const regularItems   = results.filter(r => r.mode === 'regular');
+  const chapterItems   = results.filter(r => r.mode === 'chapter');
+  const favoritesItems = results.filter(r => r.mode === 'favorites');
 
   // 탭 전환
   const tabs = document.querySelectorAll('.history-tab');
@@ -1202,16 +1131,35 @@ async function setupHistory() {
           btn.title = now ? '즐겨찾기 해제' : '즐겨찾기 추가';
         });
       } else {
-        btn.style.display = 'none'; // 매칭 안 되면 숨김
+        btn.style.display = 'none';
       }
+    });
+  }
+
+  function wireDeleteButtons() {
+    container.querySelectorAll('.btn-history-delete').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const filename = this.dataset.filename;
+        if (!filename) return;
+        if (!confirm('이 시험 기록을 삭제하시겠습니까?')) return;
+        deleteResultFromStorage(filename);
+        // 해당 항목만 DOM에서 제거
+        this.closest('.history-item').remove();
+        // 남은 항목 없으면 빈 메시지 표시
+        if (!container.querySelector('.history-item')) {
+          container.innerHTML = '<p class="file-hint">해당 유형의 기록이 없습니다.</p>';
+        }
+      });
     });
   }
 
   function switchTab(tab) {
     activeTab = tab;
     tabs.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tab));
-    renderHistoryItems(container, tab === 'regular' ? regularItems : chapterItems);
+    const items = tab === 'regular' ? regularItems : tab === 'chapter' ? chapterItems : favoritesItems;
+    renderHistoryItems(container, items);
     wireFavButtons();
+    wireDeleteButtons();
   }
 
   tabs.forEach(btn => {
@@ -1220,7 +1168,9 @@ async function setupHistory() {
 
   // 탭 카운트 표시
   tabs.forEach(btn => {
-    const count = btn.dataset.tab === 'regular' ? regularItems.length : chapterItems.length;
+    const count = btn.dataset.tab === 'regular' ? regularItems.length
+                : btn.dataset.tab === 'chapter'   ? chapterItems.length
+                : favoritesItems.length;
     btn.textContent = `${btn.textContent} (${count})`;
   });
 
