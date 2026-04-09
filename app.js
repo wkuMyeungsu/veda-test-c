@@ -834,46 +834,72 @@ function initExamPage() {
       this.classList.toggle('active', now);
     });
 
-    // 이벤트: 문제 삭제 후 대체
+    // 이벤트: 문제 삭제
     document.getElementById('btn-del-q').addEventListener('click', async () => {
       if (!window.confirm('삭제하시겠습니까?')) return;
 
-      const delBtn = document.getElementById('btn-del-q');
-      delBtn.disabled = true;
-      delBtn.textContent = '교체 중...';
+      // 영구 삭제 등록
+      addDeletedId(q.id);
 
-      try {
-        const pools = await loadAllQuestions(); // 이미 deletedIds 필터 적용됨
-        const currentIds = new Set(examData.questions.map(qq => qq.id));
-        const sameType = (q.type === 'subjective' || q.type === 'short') ? 'subjective' : q.type;
-        const poolKey  = sameType === 'subjective' ? 'subjective' : sameType; // 'ox' | 'multiple' | 'subjective'
+      if (examData.mode === 'chapter' || examData.mode === 'favorites') {
+        // 챕터/즐겨찾기 모드: 해당 문제만 제거, 문제 수 감소
+        examData.questions.splice(idx, 1);
 
-        // 현재 시험에 없고, 삭제 대상도 아닌 대체 후보
-        const candidates = pools[poolKey]?.filter(cq => !currentIds.has(cq.id) && cq.id !== q.id) || [];
-
-        if (candidates.length === 0) {
-          alert('같은 유형의 대체 문제가 없습니다. 문제 풀이 완료 후 삭제해 주세요.');
-          delBtn.disabled = false;
-          delBtn.textContent = '🗑 삭제';
-          return;
-        }
-
-        // 영구 삭제 등록
-        addDeletedId(q.id);
-
-        // 대체 문제 선택
-        const replacement = candidates[Math.floor(Math.random() * candidates.length)];
-        examData.questions[idx] = replacement;
-        delete examData.answers[idx];
-        delete examData.overrides[idx];
+        // answers/overrides 인덱스 재정렬
+        const newAnswers   = {};
+        const newOverrides = {};
+        Object.entries(examData.answers).forEach(([k, v]) => {
+          const n = parseInt(k, 10);
+          if (n < idx) { newAnswers[n] = v; }
+          else if (n > idx) { newAnswers[n - 1] = v; }
+        });
+        Object.entries(examData.overrides).forEach(([k, v]) => {
+          const n = parseInt(k, 10);
+          if (n < idx) { newOverrides[n] = v; }
+          else if (n > idx) { newOverrides[n - 1] = v; }
+        });
+        examData.answers   = newAnswers;
+        examData.overrides = newOverrides;
         saveExamData(examData);
 
-        // 현재 번호 그대로 새 문제 렌더링
-        renderQ(idx);
-      } catch (e) {
-        alert('오류가 발생했습니다. 다시 시도해 주세요.');
-        delBtn.disabled = false;
-        delBtn.textContent = '🗑 삭제';
+        if (examData.questions.length === 0) {
+          // 문제가 모두 삭제된 경우 결과 페이지로
+          clearInterval(timerInterval);
+          sessionStorage.removeItem('examCurrentIndex');
+          window.location.href = 'result.html';
+          return;
+        }
+        // 마지막 문제를 삭제한 경우 인덱스 조정
+        currentIndex = Math.min(idx, examData.questions.length - 1);
+        renderQ(currentIndex);
+      } else {
+        // 일반 시험: 같은 유형 대체 문제로 교체
+        const delBtn = document.getElementById('btn-del-q');
+        delBtn.disabled = true;
+        delBtn.textContent = '교체 중...';
+        try {
+          const pools = await loadAllQuestions();
+          const currentIds = new Set(examData.questions.map(qq => qq.id));
+          const poolKey = (q.type === 'subjective' || q.type === 'short') ? 'subjective' : q.type;
+          const candidates = pools[poolKey]?.filter(cq => !currentIds.has(cq.id) && cq.id !== q.id) || [];
+
+          if (candidates.length === 0) {
+            alert('같은 유형의 대체 문제가 없습니다.');
+            delBtn.disabled = false;
+            delBtn.textContent = '🗑 삭제';
+            return;
+          }
+          const replacement = candidates[Math.floor(Math.random() * candidates.length)];
+          examData.questions[idx] = replacement;
+          delete examData.answers[idx];
+          delete examData.overrides[idx];
+          saveExamData(examData);
+          renderQ(idx);
+        } catch (e) {
+          alert('오류가 발생했습니다. 다시 시도해 주세요.');
+          delBtn.disabled = false;
+          delBtn.textContent = '🗑 삭제';
+        }
       }
     });
 
@@ -1007,26 +1033,33 @@ function initResultPage() {
 
 function renderHistoryDetail(text) {
   // ── 헤더 파싱 ──────────────────────────────────────────
-  const oxM      = text.match(/\[O\/X\]\s+(\d+)\/4\s+정답\s+\((\d+)점\)/);
-  const mcM      = text.match(/\[객관식\]\s+(\d+)\/6\s+정답\s+\((\d+)점\)/);
-  const subM     = text.match(/\[주관식\]\s+(\d+)\/10\s+정답\s+\((\d+)점\)/);
+  const oxM  = text.match(/\[O\/X\]\s+(\d+)\/(\d+)\s+정답/);
+  const mcM  = text.match(/\[객관식\]\s+(\d+)\/(\d+)\s+정답/);
+  const subM = text.match(/\[주관식\]\s+(\d+)\/(\d+)\s+정답/);
+
+  const oxC  = oxM?.[1]  ?? '?';  const oxT  = oxM?.[2]  ?? '?';
+  const mcC  = mcM?.[1]  ?? '?';  const mcT  = mcM?.[2]  ?? '?';
+  const subC = subM?.[1] ?? '?';  const subT = subM?.[2] ?? '?';
+  const oxPts  = oxM  ? parseInt(oxM[1],  10) * 5 : '?';
+  const mcPts  = mcM  ? parseInt(mcM[1],  10) * 5 : '?';
+  const subPts = subM ? parseInt(subM[1], 10) * 5 : '?';
 
   const summaryHtml = `
     <div class="hd-breakdown">
       <div class="hd-b-item">
         <span class="type-badge type-ox">O/X</span>
-        <strong>${oxM?.[1] ?? '?'}</strong>/4
-        <span class="hd-b-pts">${oxM?.[2] ?? '?'}점</span>
+        <strong>${oxC}</strong>/${oxT}
+        <span class="hd-b-pts">${oxPts}점</span>
       </div>
       <div class="hd-b-item">
         <span class="type-badge type-multiple">객관식</span>
-        <strong>${mcM?.[1] ?? '?'}</strong>/6
-        <span class="hd-b-pts">${mcM?.[2] ?? '?'}점</span>
+        <strong>${mcC}</strong>/${mcT}
+        <span class="hd-b-pts">${mcPts}점</span>
       </div>
       <div class="hd-b-item">
         <span class="type-badge type-subjective">주관식</span>
-        <strong>${subM?.[1] ?? '?'}</strong>/10
-        <span class="hd-b-pts">${subM?.[2] ?? '?'}점</span>
+        <strong>${subC}</strong>/${subT}
+        <span class="hd-b-pts">${subPts}점</span>
       </div>
     </div>`;
 
@@ -1061,7 +1094,7 @@ function renderHistoryDetail(text) {
         <div class="hd-q-top">
           <span class="hd-q-num">${numM?.[1] ?? ''}</span>
           <span class="hd-q-icon">${isCorrect ? '✔' : '✘'}</span>
-          <span class="hd-q-badge type-badge type-${typeM?.[1] === 'O/X' ? 'ox' : typeM?.[1] === '객관식' ? 'multiple' : 'subjective'}">${typeM?.[1] ?? ''}</span>
+          <span class="hd-q-badge type-badge type-${typeM?.[1] === 'O/X' ? 'ox' : typeM?.[1] === '객관식' ? 'multiple' : typeM?.[1] === '단답형' ? 'short' : 'subjective'}">${typeM?.[1] ?? ''}</span>
           ${isOverride ? '<span class="hd-override-badge">수동</span>' : ''}
           <span class="hd-q-preview">${escapeHtml(preview)}</span>
           <button class="btn-hd-fav" data-qtext="${escapeHtml(qText)}" title="즐겨찾기 추가">★</button>
