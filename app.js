@@ -1482,6 +1482,7 @@ async function initFavoritesPage() {
 
   listEl.querySelectorAll('.fav-remove-btn').forEach(btn => {
     btn.addEventListener('click', () => {
+      if (!window.confirm('즐겨찾기를 해제하시겠습니까?')) return;
       const id = btn.dataset.id;
       toggleFavorite(id);
       btn.closest('.fav-card').remove();
