@@ -48,10 +48,11 @@ function formatDateTime(date) {
 // ============================================================
 
 async function loadBaseQuestions() {
-  const mRes = await fetch('./questions/manifest.json');
+  const noCache = { cache: 'no-store' };
+  const mRes = await fetch('./questions/manifest.json', noCache);
   if (!mRes.ok) throw new Error('manifest.json을 찾을 수 없습니다.');
   const files = await mRes.json();
-  const responses = await Promise.all(files.map(f => fetch(`./questions/${f}`)));
+  const responses = await Promise.all(files.map(f => fetch(`./questions/${f}`, noCache)));
   responses.forEach((r, i) => { if (!r.ok) throw new Error(`${files[i]} 로드 실패`); });
   const arrays = await Promise.all(responses.map(r => r.json()));
   return arrays.flat();
