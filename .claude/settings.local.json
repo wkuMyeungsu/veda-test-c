@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(\" \"C:\\\\Users\\\\5-08\\\\OneDrive\\\\vscode-workspace\\\\veda테스트준비/app.js\" | head -60)",
+      "Bash(grep -n \"qEdit\\\\|수정\\\\|edit\\\\|Edit\\\\|modal\\\\|코드\\\\|code\\\\|pre\\\\|```\" \"C:\\\\Users\\\\5-08\\\\OneDrive\\\\vscode-workspace\\\\veda테스트준비/app.js\" | head -60)"
+    ]
+  }
+}

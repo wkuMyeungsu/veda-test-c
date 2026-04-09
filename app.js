@@ -849,8 +849,20 @@ function initExamPage() {
       save();
       if (isSubj) document.getElementById('btn-next').disabled = false;
     }
-    document.getElementById('btn-corr').addEventListener('click', () => setOverride(true));
-    document.getElementById('btn-wron').addEventListener('click', () => setOverride(false));
+    function setOverrideAndAdvance(val) {
+      setOverride(val);
+      if (isLast) {
+        clearInterval(timerInterval);
+        sessionStorage.removeItem('examCurrentIndex');
+        window.location.href = 'result.html';
+      } else {
+        currentIndex++;
+        save();
+        renderQ(currentIndex);
+      }
+    }
+    document.getElementById('btn-corr').addEventListener('click', () => setOverrideAndAdvance(true));
+    document.getElementById('btn-wron').addEventListener('click', () => setOverrideAndAdvance(false));
 
     // 이벤트: 내비게이션
     document.getElementById('btn-prev').addEventListener('click', () => {
