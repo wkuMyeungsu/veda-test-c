@@ -1,0 +1,657 @@
+[
+  {
+    "id": "cppx_087",
+    "type": "ox",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "반환 타입만 다르고 매개변수 목록이 완전히 동일한 두 함수는 함수 오버로딩으로 인정된다.",
+    "answer": false,
+    "explanation": "C++ 오버로딩은 매개변수의 개수나 타입이 달라야 성립한다. 반환 타입만 다른 경우 컴파일러가 호출 시 어느 함수인지 구분할 수 없으므로 컴파일 오류가 발생한다."
+  },
+  {
+    "id": "cppx_088",
+    "type": "ox",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "기본 매개변수(default argument)는 매개변수 목록의 오른쪽부터 순서대로 지정해야 한다.",
+    "answer": true,
+    "explanation": "기본 매개변수는 반드시 오른쪽(뒤)부터 지정해야 한다. 가운데 매개변수에만 기본값을 주고 오른쪽 매개변수에 기본값이 없으면 컴파일 오류다."
+  },
+  {
+    "id": "cppx_089",
+    "type": "ox",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "const 멤버 함수 내에서 멤버 변수의 값을 변경할 수 있다.",
+    "answer": false,
+    "explanation": "const 멤버 함수는 this 포인터가 const T* const 타입이 되어 멤버 변수를 수정할 수 없다. mutable로 선언된 멤버만 예외적으로 수정 가능하다."
+  },
+  {
+    "id": "cppx_090",
+    "type": "ox",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "static 멤버 함수는 this 포인터를 가지지 않는다.",
+    "answer": true,
+    "explanation": "static 멤버 함수는 특정 객체에 속하지 않으므로 this 포인터가 전달되지 않는다. 따라서 비static 멤버 변수나 비static 멤버 함수에 직접 접근할 수 없다."
+  },
+  {
+    "id": "cppx_091",
+    "type": "ox",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "static 멤버 변수는 객체를 생성하지 않아도 ClassName::변수명으로 접근할 수 있다.",
+    "answer": true,
+    "explanation": "static 멤버 변수는 클래스에 속하며 모든 인스턴스가 공유한다. 객체 없이 클래스 이름과 :: 연산자로 직접 접근 가능하다. 단, 클래스 외부에서 별도로 정의해야 한다."
+  },
+  {
+    "id": "cppx_092",
+    "type": "ox",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "기본 매개변수를 가진 함수와 오버로딩된 함수가 동시에 존재할 때 항상 모호성(ambiguity) 없이 컴파일된다.",
+    "answer": false,
+    "explanation": "기본 매개변수를 가진 함수와 오버로딩된 함수가 같은 인수 개수로 호출될 때 컴파일러가 어느 함수를 호출할지 모호해져 컴파일 오류가 발생할 수 있다."
+  },
+  {
+    "id": "cppx_093",
+    "type": "multiple",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "다음 중 함수 오버로딩이 성립하는 경우는?\n\n(A) int add(int a, int b)  /  double add(int a, int b)\n(B) void print(int n)  /  void print(int n, int m = 0)\n(C) void show(int a, double b)  /  void show(double a, int b)\n(D) int calc(int a)  /  int calc(int a, int b = 0)",
+    "options": [
+      "(A)",
+      "(B)",
+      "(C)",
+      "(D)",
+      "(C)와 (D)"
+    ],
+    "answer": 4,
+    "explanation": "(C)는 매개변수 타입 순서가 달라 오버로딩 성립. (D)는 매개변수 개수가 다르므로 오버로딩 성립. (A)는 반환 타입만 달라 불가. (B)는 인수 1개 호출 시 모호성 발생."
+  },
+  {
+    "id": "cppx_094",
+    "type": "multiple",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "다음 함수 선언에서 컴파일 오류가 발생하는 것은?\n\n(A) void f(int a, int b = 10);\n(B) void f(int a = 5, int b = 10);\n(C) void f(int a = 5, int b);\n(D) void f(int a, int b, int c = 3);",
+    "options": [
+      "(A)",
+      "(B)",
+      "(C)",
+      "(D)",
+      "(A)와 (D)"
+    ],
+    "answer": 2,
+    "explanation": "기본 매개변수는 오른쪽부터 지정해야 한다. (C)는 a에 기본값이 있지만 b에 기본값이 없어서 오류다. 기본값 있는 매개변수 오른쪽에 기본값 없는 매개변수가 올 수 없다."
+  },
+  {
+    "id": "cppx_095",
+    "type": "multiple",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "static 멤버 함수에 대한 설명으로 옳지 않은 것은?",
+    "options": [
+      "객체 없이 ClassName::func() 형태로 호출 가능하다.",
+      "this 포인터를 사용할 수 없다.",
+      "비static 멤버 변수를 직접 참조할 수 없다.",
+      "static 멤버 변수는 접근할 수 없다.",
+      "const 멤버 함수와는 독립적으로 정의된다."
+    ],
+    "answer": 3,
+    "explanation": "static 멤버 함수는 static 멤버 변수에 자유롭게 접근할 수 있다. 접근할 수 없는 것은 비static(인스턴스) 멤버 변수다."
+  },
+  {
+    "id": "cppx_096",
+    "type": "multiple",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "다음 중 const 객체에서 호출할 수 없는 멤버 함수는?",
+    "options": [
+      "void show() const;",
+      "int getValue() const;",
+      "void reset();",
+      "static int getCount();",
+      "const int& ref() const;"
+    ],
+    "answer": 2,
+    "explanation": "const 객체는 const 멤버 함수만 호출할 수 있다. void reset()은 const가 없으므로 const 객체에서 호출하면 컴파일 오류가 발생한다."
+  },
+  {
+    "id": "cppx_097",
+    "type": "multiple",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "다음 클래스에서 static 멤버 변수 count를 올바르게 외부 정의(초기화)한 것은?\n\nclass Counter {\n    static int count;\npublic:\n    Counter() { count++; }\n};",
+    "options": [
+      "static int Counter::count = 0;",
+      "int Counter::count = 0;",
+      "Counter::int count = 0;",
+      "int count = 0;",
+      "static Counter::count = 0;"
+    ],
+    "answer": 1,
+    "explanation": "static 멤버 변수는 클래스 외부에서 자료형과 클래스::변수명 형태로 정의한다. static 키워드는 외부 정의 시 붙이지 않는다."
+  },
+  {
+    "id": "cppx_098",
+    "type": "multiple",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "다음 코드에서 출력 결과는?\n\n#include <iostream>\nusing namespace std;\nclass Box {\n    static int count;\npublic:\n    Box() { count++; }\n    static int getCount() { return count; }\n};\nint Box::count = 0;\nint main() {\n    Box a, b, c;\n    cout << Box::getCount();\n}",
+    "options": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "컴파일 오류"
+    ],
+    "answer": 3,
+    "explanation": "Box 객체 a, b, c가 생성되며 각 생성자에서 count++가 호출된다. 총 3번 증가하므로 getCount()는 3을 반환한다."
+  },
+  {
+    "id": "cppx_099",
+    "type": "multiple",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "다음 중 inline 함수에 대한 설명으로 옳지 않은 것은?",
+    "options": [
+      "inline 키워드는 컴파일러에게 인라인 치환을 요청하는 힌트다.",
+      "컴파일러가 inline 요청을 거부할 수 있다.",
+      "재귀 함수는 inline으로 처리되지 않을 수 있다.",
+      "inline 함수는 반드시 헤더 파일에 정의해야 한다.",
+      "함수 호출 오버헤드를 줄이기 위해 사용한다."
+    ],
+    "answer": 3,
+    "explanation": "inline 함수는 헤더 파일에 정의하는 것이 일반적 관행이지만 '반드시'는 아니다. 다만 ODR(One Definition Rule)을 위해 여러 번역 단위에서 사용하려면 헤더에 두는 것이 권장된다."
+  },
+  {
+    "id": "cppx_100",
+    "type": "multiple",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "다음 두 함수가 동시에 존재할 때 f(3) 호출 시 발생하는 현상은?\n\nvoid f(int a, int b = 10);\nvoid f(int a);",
+    "options": [
+      "첫 번째 함수 f(int, int=10)가 호출된다.",
+      "두 번째 함수 f(int)가 호출된다.",
+      "컴파일 오류 — 모호한 호출(ambiguous call).",
+      "런타임 오류가 발생한다.",
+      "링크 오류가 발생한다."
+    ],
+    "answer": 2,
+    "explanation": "f(3) 호출 시 f(int) 와 f(int, int=10) 모두 매칭 가능하여 모호성(ambiguity)이 발생한다. 컴파일러는 어느 함수를 호출해야 할지 결정할 수 없어 컴파일 오류가 된다."
+  },
+  {
+    "id": "cppx_101",
+    "type": "subjective",
+    "subtype": "code_result",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "다음 코드의 출력 결과를 쓰시오.",
+    "code": "#include <iostream>\nusing namespace std;\nvoid print(int n) { cout << \"int:\" << n << endl; }\nvoid print(double d) { cout << \"double:\" << d << endl; }\nvoid print(int a, int b) { cout << \"sum:\" << a+b << endl; }\nint main() {\n    print(5);\n    print(3.14);\n    print(2, 8);\n    return 0;\n}",
+    "answer": "int:5\ndouble:3.14\nsum:10",
+    "explanation": "오버로딩된 세 함수가 각각 인수 타입과 개수에 따라 호출된다. print(5)→int 버전, print(3.14)→double 버전, print(2,8)→두 int 버전."
+  },
+  {
+    "id": "cppx_102",
+    "type": "subjective",
+    "subtype": "code_result",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "다음 코드의 출력 결과를 쓰시오.",
+    "code": "#include <iostream>\n#include <string>\nusing namespace std;\nvoid greet(string name, string msg = \"Hello\") {\n    cout << msg << \", \" << name << \"!\" << endl;\n}\nint main() {\n    greet(\"Alice\");\n    greet(\"Bob\", \"Hi\");\n    return 0;\n}",
+    "answer": "Hello, Alice!\nHi, Bob!",
+    "explanation": "첫 번째 호출은 msg의 기본값 \"Hello\"가 사용된다. 두 번째 호출은 \"Hi\"가 명시적으로 전달된다."
+  },
+  {
+    "id": "cppx_103",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "아래 코드에서 빈칸(___) 을 채워 const 멤버 함수를 완성하시오.\n\nclass Circle {\n    double radius;\npublic:\n    Circle(double r) : radius(r) {}\n    double getRadius() ___ { return radius; }\n};",
+    "code": "class Circle {\n    double radius;\npublic:\n    Circle(double r) : radius(r) {}\n    double getRadius() ___ { return radius; }\n};",
+    "answer": "const",
+    "explanation": "멤버 변수를 읽기만 하고 수정하지 않는 함수는 const 키워드를 함수 선언 뒤에 붙여 const 멤버 함수로 선언한다."
+  },
+  {
+    "id": "cppx_104",
+    "type": "subjective",
+    "subtype": "code_result",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "다음 코드의 출력 결과를 쓰시오.",
+    "code": "#include <iostream>\nusing namespace std;\nclass Counter {\n    static int cnt;\npublic:\n    Counter() { cnt++; }\n    ~Counter() { cnt--; }\n    static int get() { return cnt; }\n};\nint Counter::cnt = 0;\nint main() {\n    Counter a, b;\n    {\n        Counter c;\n        cout << Counter::get() << endl;\n    }\n    cout << Counter::get() << endl;\n    return 0;\n}",
+    "answer": "3\n2",
+    "explanation": "a, b, c 생성 후 get()=3. c가 블록을 벗어나 소멸하면서 cnt--, get()=2."
+  },
+  {
+    "id": "cppx_105",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "static 멤버 함수 getCount()를 객체 없이 호출하도록 빈칸을 채우시오.\n\nclass Box {\npublic:\n    static int count;\n    static int getCount() { return count; }\n};\nint Box::count = 5;\nint main() {\n    cout << ___::getCount();\n}",
+    "code": "class Box {\npublic:\n    static int count;\n    static int getCount() { return count; }\n};\nint Box::count = 5;\nint main() {\n    cout << ___::getCount();\n}",
+    "answer": "Box",
+    "explanation": "static 멤버 함수는 객체 없이 클래스명::함수명() 형태로 호출한다."
+  },
+  {
+    "id": "cppx_106",
+    "type": "subjective",
+    "subtype": "code_result",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "다음 코드의 출력 결과를 쓰시오.",
+    "code": "#include <iostream>\nusing namespace std;\nclass Num {\n    int val;\npublic:\n    Num(int v) : val(v) {}\n    int get() const { return val; }\n    void set(int v) { val = v; }\n    void show() const { cout << val << endl; }\n};\nint main() {\n    const Num n(42);\n    n.show();\n    cout << n.get() << endl;\n    return 0;\n}",
+    "answer": "42\n42",
+    "explanation": "const 객체 n은 const 멤버 함수만 호출 가능하다. show()와 get() 모두 const이므로 정상 호출. 두 번 모두 val=42를 출력한다."
+  },
+  {
+    "id": "cppx_107",
+    "type": "subjective",
+    "subtype": "code_result",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "다음 코드의 출력 결과를 쓰시오.",
+    "code": "#include <iostream>\nusing namespace std;\nint add(int a, int b = 5, int c = 10) {\n    return a + b + c;\n}\nint main() {\n    cout << add(1) << endl;\n    cout << add(1, 2) << endl;\n    cout << add(1, 2, 3) << endl;\n    return 0;\n}",
+    "answer": "16\n13\n6",
+    "explanation": "add(1): 1+5+10=16. add(1,2): 1+2+10=13. add(1,2,3): 1+2+3=6."
+  },
+  {
+    "id": "cppx_108",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "아래 코드에서 static 멤버 변수를 클래스 외부에서 올바르게 정의하도록 빈칸을 채우시오.\n\nclass Player {\npublic:\n    static int total;\n    Player() { total++; }\n};\n___ Player::total = 0;",
+    "code": "class Player {\npublic:\n    static int total;\n    Player() { total++; }\n};\n___ Player::total = 0;",
+    "answer": "int",
+    "explanation": "static 멤버 변수를 클래스 외부에서 정의할 때는 자료형(int)을 앞에 쓰고 ClassName::변수명으로 정의한다. static 키워드는 외부 정의에 붙이지 않는다."
+  },
+  {
+    "id": "cppx_109",
+    "type": "ox",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "C++에서 :: (범위 해결), .* (멤버 포인터), . (멤버 접근), ?: (삼항), sizeof 연산자는 오버로딩할 수 없다.",
+    "answer": true,
+    "explanation": "이 5가지 연산자는 C++ 표준에서 오버로딩이 금지되어 있다. 언어의 기본 의미를 변경하면 코드 해석이 불가능해지기 때문이다."
+  },
+  {
+    "id": "cppx_110",
+    "type": "ox",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "연산자 오버로딩으로 연산자의 우선순위(precedence)를 변경할 수 있다.",
+    "answer": false,
+    "explanation": "연산자 오버로딩은 연산자의 동작(의미)만 재정의할 수 있다. 우선순위와 결합성(associativity)은 변경할 수 없다."
+  },
+  {
+    "id": "cppx_111",
+    "type": "ox",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "ostream에 << 연산자를 오버로딩하려면 friend 함수로 선언하는 것이 일반적이다.",
+    "answer": true,
+    "explanation": "cout << obj 형태에서 왼쪽 피연산자가 ostream이므로 클래스의 멤버 함수로는 구현할 수 없다. friend로 선언하거나 비멤버 함수로 구현한다."
+  },
+  {
+    "id": "cppx_112",
+    "type": "ox",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "후위 증가 연산자(int형 더미 인수)와 전위 증가 연산자는 오버로딩 함수 시그니처로 구분한다.",
+    "answer": true,
+    "explanation": "전위 ++는 operator++(), 후위 ++는 operator++(int)로 int 더미 매개변수를 사용해 구분한다. 실제로 인수가 전달되지는 않는다."
+  },
+  {
+    "id": "cppx_113",
+    "type": "ox",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "iomanip의 setw()는 한 번 설정하면 이후 모든 출력에 계속 적용된다.",
+    "answer": false,
+    "explanation": "setw()는 단 한 번의 출력에만 적용되는 비고정적(non-sticky) 조작자다. setprecision이나 fixed 등은 고정적으로 유지된다."
+  },
+  {
+    "id": "cppx_114",
+    "type": "ox",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "대입 연산자(operator=)를 오버로딩할 때 자기 대입(self-assignment) 검사를 반드시 수행해야 한다.",
+    "answer": true,
+    "explanation": "obj = obj 같이 자기 자신에 대입할 때 멤버 포인터를 먼저 해제하면 데이터를 잃는다. if(this != &rhs) 검사로 자기 대입을 방지해야 한다."
+  },
+  {
+    "id": "cppx_115",
+    "type": "multiple",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "다음 중 ostream에 << 연산자를 올바르게 오버로딩한 것은?\n\nclass Point { int x, y; ... };",
+    "options": [
+      "ostream operator<<(ostream os, const Point& p) { ... }",
+      "ostream& operator<<(ostream& os, const Point& p) { os << p.x << \" \" << p.y; return os; }",
+      "void operator<<(ostream& os, const Point& p) { ... }",
+      "Point operator<<(ostream& os) { ... }",
+      "ostream& operator<<(Point& p) { ... }"
+    ],
+    "answer": 1,
+    "explanation": "스트림 연산자 <<는 ostream&를 반환하여 연쇄 출력(cout << a << b)을 가능하게 해야 한다. ostream은 복사 불가이므로 참조(&)로 받고 반환해야 한다."
+  },
+  {
+    "id": "cppx_116",
+    "type": "multiple",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "전위 ++와 후위 ++ 연산자의 오버로딩 선언 차이로 옳은 것은?",
+    "options": [
+      "전위: operator++(int), 후위: operator++()",
+      "전위: operator++(), 후위: operator++(int)",
+      "둘 다 operator++()로 동일하게 선언한다.",
+      "전위: ++operator(), 후위: operator++",
+      "반환 타입으로만 구분한다."
+    ],
+    "answer": 1,
+    "explanation": "전위 ++는 operator++(), 후위 ++는 operator++(int) — int 더미 인수로 구별한다. 전위는 수정된 자신의 참조를 반환하고, 후위는 수정 전 복사본을 값으로 반환한다."
+  },
+  {
+    "id": "cppx_117",
+    "type": "multiple",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "다음 중 iomanip을 활용한 출력에서 고정 소수점 형식으로 소수 둘째 자리까지 출력하는 올바른 조합은?",
+    "options": [
+      "cout << setw(2) << 3.14159;",
+      "cout << setprecision(2) << 3.14159;",
+      "cout << fixed << setprecision(2) << 3.14159;",
+      "cout << scientific << setw(2) << 3.14159;",
+      "cout << hex << setprecision(2) << 3.14159;"
+    ],
+    "answer": 2,
+    "explanation": "fixed와 setprecision(n)을 함께 사용하면 소수점 아래 n자리를 고정 소수점 형식으로 출력한다. fixed 없이 setprecision만 사용하면 유효숫자 개수로 동작한다."
+  },
+  {
+    "id": "cppx_118",
+    "type": "multiple",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "대입 연산자(operator=)의 반환 타입을 T& (참조)로 권장하는 이유는?",
+    "options": [
+      "컴파일 오류를 방지하기 위해",
+      "복사본 생성을 막기 위해 void로 해야 한다.",
+      "a = b = c; 와 같이 연쇄 대입을 허용하기 위해",
+      "소멸자 호출을 방지하기 위해",
+      "자기 대입 검사를 생략하기 위해"
+    ],
+    "answer": 2,
+    "explanation": "a = b = c 연쇄 대입에서 b = c의 결과가 a에 대입된다. 반환 타입이 참조(T&)여야 연쇄 대입이 가능하다. void로 반환하면 연쇄 대입이 불가하다."
+  },
+  {
+    "id": "cppx_119",
+    "type": "multiple",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "다음 코드의 출력 결과는?\n\n#include <iostream>\n#include <iomanip>\nusing namespace std;\nint main() {\n    double x = 3.14159;\n    cout << fixed << setprecision(2) << x << endl;\n    cout << setw(10) << x << endl;\n    return 0;\n}",
+    "options": [
+      "3.14\n      3.14",
+      "3.14\n3.14",
+      "3.14159\n3.14",
+      "3.14\n3.14159",
+      "3.14\n    3.14"
+    ],
+    "answer": 0,
+    "explanation": "fixed+setprecision(2)로 3.14가 출력된다. setprecision은 sticky하므로 두 번째 출력도 소수 2자리가 유지된다. setw(10)으로 오른쪽 정렬되어 앞에 공백 6개가 붙어 '      3.14'가 출력된다."
+  },
+  {
+    "id": "cppx_120",
+    "type": "multiple",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "다음 중 멤버 함수로는 오버로딩할 수 없고 반드시 비멤버(friend) 함수로 오버로딩해야 하는 연산자는?",
+    "options": [
+      "operator+",
+      "operator[]",
+      "operator=",
+      "operator<<(ostream& os, const T& obj) 형태의 입출력 연산자",
+      "operator++"
+    ],
+    "answer": 3,
+    "explanation": "cout << obj 형태에서 왼쪽 피연산자가 ostream 타입이다. 멤버 함수는 왼쪽 피연산자가 자신의 클래스 타입이어야 하므로 비멤버(friend) 함수로 정의해야 한다."
+  },
+  {
+    "id": "cppx_121",
+    "type": "multiple",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "다음 코드에서 빈칸에 들어갈 올바른 코드는?\n\nclass Vec {\n    int x;\npublic:\n    Vec(int x) : x(x) {}\n    Vec operator+(const Vec& rhs) const {\n        return Vec(___);\n    }\n};",
+    "options": [
+      "rhs.x",
+      "x + rhs.x",
+      "this.x + rhs.x",
+      "x + rhs",
+      "*this + rhs.x"
+    ],
+    "answer": 1,
+    "explanation": "operator+는 두 Vec의 x 값을 더한 새 Vec를 반환해야 한다. this->x는 그냥 x로 접근 가능하므로 x + rhs.x가 올바르다."
+  },
+  {
+    "id": "cppx_122",
+    "type": "multiple",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "다음 중 operator[] 오버로딩의 반환 타입을 T& (참조)로 해야 하는 이유로 가장 적절한 것은?",
+    "options": [
+      "복사를 줄여 속도를 높이기 위해",
+      "arr[i] = value; 처럼 왼값(lvalue)으로 사용하기 위해",
+      "배열 범위 초과를 방지하기 위해",
+      "const 객체에서도 호출하기 위해",
+      "소멸자를 호출하지 않기 위해"
+    ],
+    "answer": 1,
+    "explanation": "arr[i] = value 처럼 [] 결과에 대입하려면 반환값이 lvalue, 즉 참조(T&)여야 한다. 값(T)을 반환하면 임시 객체에 대입하는 것이므로 원본이 수정되지 않는다."
+  },
+  {
+    "id": "cppx_123",
+    "type": "multiple",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "다음 코드의 출력 결과는?\n\n#include <iostream>\nusing namespace std;\nclass Int {\n    int v;\npublic:\n    Int(int v) : v(v) {}\n    Int& operator++() { ++v; return *this; }\n    Int operator++(int) { Int tmp = *this; ++v; return tmp; }\n    int get() const { return v; }\n};\nint main() {\n    Int a(5);\n    cout << (++a).get() << endl;\n    cout << (a++).get() << endl;\n    cout << a.get() << endl;\n    return 0;\n}",
+    "options": [
+      "5\n6\n7",
+      "6\n6\n7",
+      "6\n7\n7",
+      "5\n5\n7",
+      "6\n6\n6"
+    ],
+    "answer": 1,
+    "explanation": "++a: v가 5→6으로 증가 후 참조 반환, get()=6. a++: 현재 v=6인 복사본 반환(get()=6)하고 v는 6→7로 증가. 마지막 a.get()=7."
+  },
+  {
+    "id": "cppx_124",
+    "type": "subjective",
+    "subtype": "code_result",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "다음 코드의 출력 결과를 쓰시오.",
+    "code": "#include <iostream>\nusing namespace std;\nclass Point {\npublic:\n    int x, y;\n    Point(int x, int y) : x(x), y(y) {}\n    Point operator+(const Point& rhs) const {\n        return Point(x + rhs.x, y + rhs.y);\n    }\n    friend ostream& operator<<(ostream& os, const Point& p) {\n        os << \"(\" << p.x << \",\" << p.y << \")\";\n        return os;\n    }\n};\nint main() {\n    Point a(1, 2), b(3, 4);\n    Point c = a + b;\n    cout << c << endl;\n    return 0;\n}",
+    "answer": "(4,6)",
+    "explanation": "operator+는 (1+3, 2+4) = (4,6)인 Point를 반환한다. operator<<는 (4,6) 형식으로 출력한다."
+  },
+  {
+    "id": "cppx_125",
+    "type": "subjective",
+    "subtype": "code_result",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "다음 코드의 출력 결과를 쓰시오.",
+    "code": "#include <iostream>\nusing namespace std;\nclass Cnt {\n    int n;\npublic:\n    Cnt(int n = 0) : n(n) {}\n    Cnt& operator++() { ++n; return *this; }\n    Cnt operator++(int) { Cnt t(n); ++n; return t; }\n    int get() const { return n; }\n};\nint main() {\n    Cnt c(10);\n    Cnt d = c++;\n    Cnt e = ++c;\n    cout << d.get() << \" \" << e.get() << \" \" << c.get() << endl;\n    return 0;\n}",
+    "answer": "10 12 12",
+    "explanation": "c(10)에서 c++(후위): d=10(복사), c는 11. ++c(전위): c는 12, e=12(참조). 결과: d=10, e=12, c=12."
+  },
+  {
+    "id": "cppx_126",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "두 Fraction 객체의 동등성을 비교하는 함수명 빈칸을 채우시오.\n\nclass Fraction {\n    int num, den;\npublic:\n    Fraction(int n, int d) : num(n), den(d) {}\n    bool ___(const Fraction& rhs) const {\n        return num * rhs.den == rhs.num * den;\n    }\n};",
+    "code": "class Fraction {\n    int num, den;\npublic:\n    Fraction(int n, int d) : num(n), den(d) {}\n    bool ___(const Fraction& rhs) const {\n        return num * rhs.den == rhs.num * den;\n    }\n};",
+    "answer": "operator==",
+    "explanation": "연산자 오버로딩 함수명은 operator 뒤에 연산자 기호를 붙인다. 등호 비교이므로 operator==로 선언한다."
+  },
+  {
+    "id": "cppx_127",
+    "type": "subjective",
+    "subtype": "code_result",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "다음 코드의 출력 결과를 쓰시오.",
+    "code": "#include <iostream>\n#include <iomanip>\nusing namespace std;\nint main() {\n    double pi = 3.14159265;\n    cout << fixed << setprecision(3) << pi << endl;\n    cout << setw(10) << pi << endl;\n    cout << left << setw(10) << pi << \"|\" << endl;\n    return 0;\n}",
+    "answer": "3.142\n     3.142\n3.142     |",
+    "explanation": "fixed+setprecision(3): 3.142(반올림). setw(10) 오른쪽 정렬(기본): '     3.142'. left+setw(10) 왼쪽 정렬: '3.142     |'."
+  },
+  {
+    "id": "cppx_128",
+    "type": "subjective",
+    "subtype": "code_result",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "다음 코드의 출력 결과를 쓰시오.",
+    "code": "#include <iostream>\nusing namespace std;\nclass Arr {\n    int data[3];\npublic:\n    Arr() { data[0]=10; data[1]=20; data[2]=30; }\n    int& operator[](int i) { return data[i]; }\n    int operator[](int i) const { return data[i]; }\n};\nint main() {\n    Arr a;\n    a[1] = 99;\n    cout << a[0] << \" \" << a[1] << \" \" << a[2] << endl;\n    return 0;\n}",
+    "answer": "10 99 30",
+    "explanation": "a[1]=99으로 data[1]이 99로 변경된다. a[0]=10, a[1]=99, a[2]=30 순서로 출력."
+  },
+  {
+    "id": "cppx_129",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "cin으로 Point 객체를 입력받도록 operator>>를 완성하시오. 빈칸을 채우시오.\n\nfriend ___ operator>>(istream& is, Point& p) {\n    is >> p.x >> p.y;\n    return is;\n}",
+    "code": "friend ___ operator>>(istream& is, Point& p) {\n    is >> p.x >> p.y;\n    return is;\n}",
+    "answer": "istream&",
+    "explanation": ">> 스트림 연산자는 연쇄 입력(cin >> a >> b)이 가능하도록 istream&를 반환해야 한다."
+  },
+  {
+    "id": "cppx_130",
+    "type": "subjective",
+    "subtype": "code_result",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "다음 코드의 출력 결과를 쓰시오.",
+    "code": "#include <iostream>\nusing namespace std;\nclass MyStr {\n    char ch;\npublic:\n    MyStr(char c) : ch(c) {}\n    bool operator==(const MyStr& rhs) const { return ch == rhs.ch; }\n    bool operator!=(const MyStr& rhs) const { return !(*this == rhs); }\n};\nint main() {\n    MyStr a('A'), b('A'), c('B');\n    cout << (a == b) << \" \" << (a != c) << \" \" << (a == c) << endl;\n    return 0;\n}",
+    "answer": "1 1 0",
+    "explanation": "a==b: 'A'=='A' → true(1). a!=c: !('A'=='B') → !false → true(1). a==c: 'A'=='B' → false(0)."
+  },
+  {
+    "id": "cppx_131",
+    "type": "subjective",
+    "subtype": "code_result",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "다음 코드의 출력 결과를 쓰시오.",
+    "code": "#include <iostream>\nusing namespace std;\nclass Val {\n    int v;\npublic:\n    Val(int v) : v(v) {}\n    Val& operator=(const Val& rhs) {\n        if(this != &rhs) v = rhs.v;\n        return *this;\n    }\n    int get() const { return v; }\n};\nint main() {\n    Val a(1), b(2), c(3);\n    a = b = c;\n    cout << a.get() << \" \" << b.get() << \" \" << c.get() << endl;\n    return 0;\n}",
+    "answer": "3 3 3",
+    "explanation": "a = b = c는 오른쪽부터 b = c(b.v=3, b반환)가 먼저 실행되고, 그 결과로 a = b(a.v=3)가 실행된다. 최종 a=3, b=3, c=3."
+  },
+  {
+    "id": "cppx_132",
+    "type": "subjective",
+    "subtype": "code_result",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "다음 코드의 출력 결과를 쓰시오.",
+    "code": "#include <iostream>\nusing namespace std;\nclass Score {\n    int s;\npublic:\n    Score(int s) : s(s) {}\n    Score operator-(const Score& rhs) const { return Score(s - rhs.s); }\n    friend ostream& operator<<(ostream& os, const Score& sc) {\n        os << sc.s;\n        return os;\n    }\n};\nint main() {\n    Score a(100), b(37);\n    Score c = a - b;\n    cout << c << endl;\n    return 0;\n}",
+    "answer": "63",
+    "explanation": "operator-: 100-37=63의 Score를 반환. operator<<: 63 출력."
+  },
+  {
+    "id": "cppx_133",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "함수 객체(functor)를 완성하도록 operator()를 선언하는 빈칸을 채우시오.\n\nclass Adder {\n    int base;\npublic:\n    Adder(int b) : base(b) {}\n    int ___(int x) const { return base + x; }\n};",
+    "code": "class Adder {\n    int base;\npublic:\n    Adder(int b) : base(b) {}\n    int ___(int x) const { return base + x; }\n};",
+    "answer": "operator()(int x)",
+    "explanation": "함수 객체(functor)는 operator()를 오버로딩해서 객체를 함수처럼 호출할 수 있도록 한다. Adder add(5); add(3); → 8."
+  },
+  {
+    "id": "cppx_134",
+    "type": "ox",
+    "chapter": "CH08 상속과 다형성",
+    "question": "순수 가상 함수(= 0)를 하나라도 가진 클래스는 추상 클래스이며, 직접 객체를 생성할 수 없다.",
+    "answer": true,
+    "explanation": "순수 가상 함수가 있으면 추상 클래스가 된다. 추상 클래스는 인스턴스를 직접 생성할 수 없고, 파생 클래스에서 모든 순수 가상 함수를 구현해야 객체 생성이 가능하다."
+  },
+  {
+    "id": "cppx_135",
+    "type": "ox",
+    "chapter": "CH08 상속과 다형성",
+    "question": "기반 클래스 포인터(Base*)로 파생 클래스 객체를 가리킬 때, 가상 함수가 아닌 함수를 호출하면 기반 클래스의 함수가 호출된다.",
+    "answer": true,
+    "explanation": "가상 함수가 아닌 경우 정적 바인딩(static binding)이 적용되어 포인터의 선언 타입인 Base의 함수가 호출된다. 동적 바인딩은 virtual 함수에만 적용된다."
+  },
+  {
+    "id": "cppx_136",
+    "type": "ox",
+    "chapter": "CH08 상속과 다형성",
+    "question": "override 키워드는 파생 클래스에서 기반 클래스의 가상 함수를 올바르게 재정의했는지 컴파일러가 검사하게 한다.",
+    "answer": true,
+    "explanation": "override를 붙이면 기반 클래스에 동일한 시그니처의 virtual 함수가 없을 경우 컴파일 오류가 발생한다. 오타나 시그니처 불일치를 컴파일 시간에 잡을 수 있다."
+  },
+  {
+    "id": "cppx_137",
+    "type": "multiple",
+    "chapter": "CH08 상속과 다형성",
+    "question": "다음 코드의 출력 결과는?\n\n#include <iostream>\nusing namespace std;\nstruct Animal {\n    virtual void speak() { cout << \"Animal\" << endl; }\n};\nstruct Dog : Animal {\n    void speak() override { cout << \"Dog\" << endl; }\n};\nstruct Cat : Animal {\n    void speak() override { cout << \"Cat\" << endl; }\n};\nvoid makeSound(Animal* a) { a->speak(); }\nint main() {\n    Dog d; Cat c;\n    makeSound(&d);\n    makeSound(&c);\n    return 0;\n}",
+    "options": [
+      "Animal\nAnimal",
+      "Dog\nAnimal",
+      "Dog\nCat",
+      "Animal\nDog",
+      "컴파일 오류"
+    ],
+    "answer": 2,
+    "explanation": "speak()이 virtual이므로 동적 바인딩이 적용된다. makeSound(&d)는 Dog::speak()→Dog, makeSound(&c)는 Cat::speak()→Cat을 출력한다."
+  },
+  {
+    "id": "cppx_138",
+    "type": "multiple",
+    "chapter": "CH08 상속과 다형성",
+    "question": "가상 소멸자에 대한 설명으로 옳지 않은 것은?",
+    "options": [
+      "기반 클래스의 소멸자를 virtual로 선언하면 Base* ptr로 delete 시 파생 클래스 소멸자도 호출된다.",
+      "가상 소멸자가 없으면 Base* ptr = new Derived(); delete ptr; 에서 메모리 누수가 발생할 수 있다.",
+      "순수 가상 소멸자(virtual ~Base() = 0)를 선언하면 반드시 정의도 제공해야 한다.",
+      "가상 소멸자는 vtable 크기를 증가시키지 않는다.",
+      "파생 클래스의 소멸자는 자동으로 virtual이 된다."
+    ],
+    "answer": 3,
+    "explanation": "가상 소멸자를 선언하면 소멸자 포인터도 vtable에 추가되므로 vtable 크기가 증가한다. 다른 모든 설명은 옳다."
+  },
+  {
+    "id": "cppx_139",
+    "type": "multiple",
+    "chapter": "CH08 상속과 다형성",
+    "question": "dynamic_cast에 대한 설명으로 옳은 것은?",
+    "options": [
+      "컴파일 시간에 타입을 검사한다.",
+      "포인터 다운캐스팅 실패 시 예외를 던진다.",
+      "포인터 다운캐스팅 실패 시 nullptr을 반환한다.",
+      "가상 함수 없이도 사용 가능하다.",
+      "업캐스팅(파생→기반)에만 사용된다."
+    ],
+    "answer": 2,
+    "explanation": "dynamic_cast는 런타임에 타입을 검사한다. 포인터 캐스팅 실패 시 nullptr 반환, 참조 캐스팅 실패 시 std::bad_cast 예외를 던진다. 다형성(가상 함수)이 있어야 사용 가능하다."
+  },
+  {
+    "id": "cppx_140",
+    "type": "multiple",
+    "chapter": "CH08 상속과 다형성",
+    "question": "다음 중 final 키워드에 대한 설명으로 옳은 것은?",
+    "options": [
+      "final 클래스는 추상 클래스다.",
+      "final 함수는 파생 클래스에서 반드시 재정의해야 한다.",
+      "final 클래스는 상속될 수 없다.",
+      "final은 일반 함수(비가상)에도 사용할 수 있다.",
+      "final 키워드는 C++11 이전에 도입되었다."
+    ],
+    "answer": 2,
+    "explanation": "final 클래스는 더 이상 상속할 수 없다. final 가상 함수는 파생 클래스에서 재정의할 수 없다. final은 C++11에서 도입되었으며 가상 함수에만 의미가 있다."
+  },
+  {
+    "id": "cppx_141",
+    "type": "subjective",
+    "subtype": "code_result",
+    "chapter": "CH08 상속과 다형성",
+    "question": "다음 코드의 출력 결과를 쓰시오.",
+    "code": "#include <iostream>\nusing namespace std;\nclass Shape {\npublic:\n    virtual void draw() { cout << \"Shape\" << endl; }\n    virtual ~Shape() {}\n};\nclass Circle : public Shape {\npublic:\n    void draw() override { cout << \"Circle\" << endl; }\n};\nclass Rect : public Shape {\npublic:\n    void draw() override { cout << \"Rect\" << endl; }\n};\nint main() {\n    Shape* arr[3];\n    arr[0] = new Shape();\n    arr[1] = new Circle();\n    arr[2] = new Rect();\n    for(int i = 0; i < 3; i++) arr[i]->draw();\n    for(int i = 0; i < 3; i++) delete arr[i];\n    return 0;\n}",
+    "answer": "Shape\nCircle\nRect",
+    "explanation": "Shape* 배열에 Shape, Circle, Rect 포인터가 저장된다. draw()가 virtual이므로 동적 바인딩으로 각 실제 타입의 draw()가 호출된다."
+  },
+  {
+    "id": "cppx_142",
+    "type": "subjective",
+    "subtype": "code_result",
+    "chapter": "CH08 상속과 다형성",
+    "question": "다음 코드의 출력 결과를 쓰시오.",
+    "code": "#include <iostream>\nusing namespace std;\nclass Base {\npublic:\n    Base() { cout << \"Base()\" << endl; }\n    virtual ~Base() { cout << \"~Base()\" << endl; }\n};\nclass Derived : public Base {\npublic:\n    Derived() { cout << \"Derived()\" << endl; }\n    ~Derived() { cout << \"~Derived()\" << endl; }\n};\nint main() {\n    Base* p = new Derived();\n    delete p;\n    return 0;\n}",
+    "answer": "Base()\nDerived()\n~Derived()\n~Base()",
+    "explanation": "생성 시 Base() → Derived() 순서. 가상 소멸자 덕분에 delete p 시 ~Derived() → ~Base() 순서로 소멸자가 모두 호출된다."
+  },
+  {
+    "id": "cppx_143",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "chapter": "CH08 상속과 다형성",
+    "question": "순수 가상 함수로 선언하여 추상 클래스를 만드는 빈칸을 채우시오.\n\nclass Animal {\npublic:\n    virtual void sound() ___ 0;\n    virtual ~Animal() {}\n};",
+    "code": "class Animal {\npublic:\n    virtual void sound() ___ 0;\n    virtual ~Animal() {}\n};",
+    "answer": "=",
+    "explanation": "순수 가상 함수는 virtual 반환형 함수명(매개변수) = 0; 형태다. 빈칸에 = 을 채워 = 0 형태를 완성한다."
+  },
+  {
+    "id": "cppx_144",
+    "type": "subjective",
+    "subtype": "code_result",
+    "chapter": "CH08 상속과 다형성",
+    "question": "다음 코드의 출력 결과를 쓰시오.",
+    "code": "#include <iostream>\nusing namespace std;\nclass A {\npublic:\n    virtual void f() { cout << \"A\" << endl; }\n    void g() { cout << \"Ag\" << endl; }\n};\nclass B : public A {\npublic:\n    void f() override { cout << \"B\" << endl; }\n    void g() { cout << \"Bg\" << endl; }\n};\nint main() {\n    A* p = new B();\n    p->f();\n    p->g();\n    delete p;\n    return 0;\n}",
+    "answer": "B\nAg",
+    "explanation": "p->f(): f()는 virtual이므로 동적 바인딩 → B::f() 호출 → 'B'. p->g(): g()는 비virtual이므로 정적 바인딩 → A::g() 호출 → 'Ag'."
+  }
+]

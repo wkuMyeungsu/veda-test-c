@@ -1,0 +1,591 @@
+[
+  {
+    "id": "cppx_145",
+    "chapter": "CH09 파일입출력",
+    "type": "ox",
+    "question": "ifstream 객체로 존재하지 않는 파일을 열면 열기에 실패하고, is_open()이 false를 반환한다.",
+    "answer": true,
+    "explanation": "ifstream은 읽기 전용 스트림이므로 파일이 없으면 열기가 실패하며 is_open()은 false를 반환한다. 파일이 없을 때 자동 생성하는 것은 ofstream이다."
+  },
+  {
+    "id": "cppx_146",
+    "chapter": "CH09 파일입출력",
+    "type": "ox",
+    "question": "ofstream 객체로 파일을 열 때 해당 파일이 존재하지 않으면 자동으로 새 파일을 생성한다.",
+    "answer": true,
+    "explanation": "ofstream은 기본적으로 ios::out | ios::trunc 모드로 동작하며, 파일이 없으면 새로 생성하고 있으면 내용을 지운다."
+  },
+  {
+    "id": "cppx_147",
+    "chapter": "CH09 파일입출력",
+    "type": "ox",
+    "question": "ios::app 플래그를 사용하면 파일을 열 때 기존 내용이 삭제되고 처음부터 새로 쓴다.",
+    "answer": false,
+    "explanation": "ios::app(append) 모드는 파일의 기존 내용을 유지하고 파일 끝에 이어서 쓴다. 기존 내용을 삭제하는 것은 ios::trunc이다."
+  },
+  {
+    "id": "cppx_148",
+    "chapter": "CH09 파일입출력",
+    "type": "ox",
+    "question": "파일 스트림 객체에 대해 if(!file) 조건식으로 파일 열기 실패를 확인할 수 있다.",
+    "answer": true,
+    "explanation": "파일 스트림은 bool로 변환될 때 열기가 성공했으면 true, 실패하면 false를 반환하므로 if(!file)로 열기 실패를 확인할 수 있다."
+  },
+  {
+    "id": "cppx_149",
+    "chapter": "CH09 파일입출력",
+    "type": "ox",
+    "question": "seekg()는 출력 스트림의 쓰기 위치를 변경하는 함수이다.",
+    "answer": false,
+    "explanation": "seekg()는 입력 스트림(g = get)의 읽기 위치를 변경한다. 출력 스트림의 쓰기 위치를 변경하는 함수는 seekp()(p = put)이다."
+  },
+  {
+    "id": "cppx_150",
+    "chapter": "CH09 파일입출력",
+    "type": "ox",
+    "question": "fstream 클래스는 파일을 읽기와 쓰기 모두에 사용할 수 있다.",
+    "answer": true,
+    "explanation": "fstream은 ifstream(읽기)과 ofstream(쓰기)의 기능을 모두 갖추고 있어, 하나의 객체로 읽기와 쓰기를 동시에 수행할 수 있다."
+  },
+  {
+    "id": "cppx_151",
+    "chapter": "CH09 파일입출력",
+    "type": "ox",
+    "question": "while(!file.eof()) 패턴으로 파일을 읽을 때, 마지막 데이터가 두 번 처리되는 문제가 발생할 수 있다.",
+    "answer": true,
+    "explanation": "eof() 플래그는 읽기 실패 후에야 설정된다. 따라서 마지막 데이터를 읽은 후 루프 조건을 다시 검사할 때는 아직 false이고, 본문에서 데이터를 또 처리한 뒤 다음 읽기에서 eof가 설정되므로 마지막 값이 중복 처리될 수 있다."
+  },
+  {
+    "id": "cppx_152",
+    "chapter": "CH09 파일입출력",
+    "type": "multiple",
+    "question": "다음 중 파일을 읽기 전용으로 여는 스트림 클래스는?",
+    "options": [
+      "ofstream",
+      "fstream",
+      "ifstream",
+      "iostream",
+      "stringstream"
+    ],
+    "answer": 2,
+    "explanation": "ifstream(input file stream)은 파일을 읽기 전용으로 여는 클래스이다. 파일이 존재하지 않으면 열기에 실패한다."
+  },
+  {
+    "id": "cppx_153",
+    "chapter": "CH09 파일입출력",
+    "type": "multiple",
+    "question": "ofstream f(\"log.txt\", ___); 와 같이 파일 끝에 이어 쓰기 모드로 열기 위한 플래그는?",
+    "options": [
+      "ios::in",
+      "ios::trunc",
+      "ios::binary",
+      "ios::app",
+      "ios::ate"
+    ],
+    "answer": 3,
+    "explanation": "ios::app(append) 플래그는 파일을 열 때 파일 포인터를 끝으로 이동시켜 기존 내용 뒤에 이어 쓰도록 한다."
+  },
+  {
+    "id": "cppx_154",
+    "chapter": "CH09 파일입출력",
+    "type": "multiple",
+    "question": "파일의 현재 읽기 위치를 파일 시작으로부터 10바이트 뒤로 이동시키는 코드로 올바른 것은?",
+    "options": [
+      "fin.seekg(10, ios::end)",
+      "fin.seekg(10, ios::cur)",
+      "fin.seekg(10, ios::beg)",
+      "fin.tellg(10, ios::beg)",
+      "fin.seekp(10, ios::beg)"
+    ],
+    "answer": 2,
+    "explanation": "seekg(offset, direction)에서 ios::beg는 파일 시작 기준이다. seekg(10, ios::beg)는 파일 시작으로부터 10바이트 위치로 이동시킨다. tellg()는 위치를 반환하고, seekp()는 쓰기 위치를 변경한다."
+  },
+  {
+    "id": "cppx_155",
+    "chapter": "CH09 파일입출력",
+    "type": "multiple",
+    "question": "파일에서 한 줄 전체를 공백 포함하여 읽는 올바른 코드는?",
+    "options": [
+      "fin >> line;",
+      "fin.read(line, 100);",
+      "getline(fin, line);",
+      "fin.get(line);",
+      "fin.getc(line);"
+    ],
+    "answer": 2,
+    "explanation": "getline(stream, string)은 개행 문자까지 한 줄 전체를 읽어 string에 저장한다. >> 연산자는 공백에서 멈추므로 한 줄 전체를 읽지 못한다."
+  },
+  {
+    "id": "cppx_156",
+    "chapter": "CH09 파일입출력",
+    "type": "multiple",
+    "question": "바이너리 파일을 읽기/쓰기 모드로 열 때 사용하는 플래그 조합으로 올바른 것은?",
+    "options": [
+      "ios::in | ios::out",
+      "ios::binary",
+      "ios::in | ios::binary",
+      "ios::in | ios::out | ios::binary",
+      "ios::app | ios::binary"
+    ],
+    "answer": 3,
+    "explanation": "파일을 읽기/쓰기 모두 가능한 바이너리 모드로 열려면 ios::in | ios::out | ios::binary를 함께 지정해야 한다."
+  },
+  {
+    "id": "cppx_157",
+    "chapter": "CH09 파일입출력",
+    "type": "multiple",
+    "question": "다음 코드에서 파일 열기 성공 여부를 확인하는 방법으로 올바르지 않은 것은?\n\nifstream fin(\"data.txt\");",
+    "options": [
+      "if (!fin)",
+      "if (fin.fail())",
+      "if (!fin.is_open())",
+      "if (fin.good())",
+      "if (fin == nullptr)"
+    ],
+    "answer": 4,
+    "explanation": "스트림 객체를 nullptr와 비교하는 것은 유효하지 않다. 파일 열기 실패 확인은 !fin, fin.fail(), !fin.is_open() 등을 사용한다. fin.good()은 스트림 상태가 정상이면 true를 반환하므로 열기 성공 확인에 사용 가능하다."
+  },
+  {
+    "id": "cppx_158",
+    "chapter": "CH09 파일입출력",
+    "type": "multiple",
+    "question": "현재 읽기 위치(파일 포인터)를 바이트 단위로 반환하는 함수는?",
+    "options": [
+      "seekg()",
+      "seekp()",
+      "tellg()",
+      "tellp()",
+      "getpos()"
+    ],
+    "answer": 2,
+    "explanation": "tellg()는 입력 스트림에서 현재 읽기 위치를 반환한다. seekg()는 위치를 변경하고, tellp()/seekp()는 출력 스트림용이다."
+  },
+  {
+    "id": "cppx_159",
+    "chapter": "CH09 파일입출력",
+    "type": "multiple",
+    "question": "파일에 구조체를 바이너리로 저장할 때 사용하는 멤버 함수는?",
+    "options": [
+      "fout << data;",
+      "fout.put(data);",
+      "fout.write(reinterpret_cast<char*>(&data), sizeof(data));",
+      "fout.print(&data, sizeof(data));",
+      "fout.save(&data, sizeof(data));"
+    ],
+    "answer": 2,
+    "explanation": "write(const char* buffer, streamsize n)은 buffer에서 n바이트를 파일에 이진으로 기록한다. 구조체 포인터를 char*로 캐스팅하여 크기만큼 써야 한다."
+  },
+  {
+    "id": "cppx_160",
+    "chapter": "CH09 파일입출력",
+    "type": "multiple",
+    "question": "ios::trunc 플래그에 대한 설명으로 올바른 것은?",
+    "options": [
+      "파일을 읽기 전용으로 연다.",
+      "파일 포인터를 파일 끝에 위치시킨다.",
+      "파일을 열 때 기존 내용을 모두 삭제한다.",
+      "파일을 바이너리 모드로 연다.",
+      "파일이 없으면 열기에 실패한다."
+    ],
+    "answer": 2,
+    "explanation": "ios::trunc(truncate) 플래그는 파일을 열 때 기존 내용을 모두 삭제하여 크기를 0으로 만든다. ofstream의 기본 동작에 포함된다."
+  },
+  {
+    "id": "cppx_161",
+    "chapter": "CH09 파일입출력",
+    "type": "multiple",
+    "question": "다음 중 파일 스트림을 사용할 때 반드시 포함해야 하는 헤더는?",
+    "options": [
+      "#include <iostream>",
+      "#include <cstdio>",
+      "#include <fstream>",
+      "#include <sstream>",
+      "#include <fileio>"
+    ],
+    "answer": 2,
+    "explanation": "ifstream, ofstream, fstream은 모두 <fstream> 헤더에 정의되어 있다."
+  },
+  {
+    "id": "cppx_162",
+    "chapter": "CH09 파일입출력",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "파일을 추가(append) 모드로 열 때 사용하는 플래그를 채우시오.",
+    "code": "ofstream fout(\"log.txt\", ios::___);",
+    "answer": "app",
+    "explanation": "ios::app 플래그는 파일 끝에 이어쓰기 모드로 열어 기존 내용을 보존한다."
+  },
+  {
+    "id": "cppx_163",
+    "chapter": "CH09 파일입출력",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "파일 열기 성공 여부를 확인하는 멤버 함수를 채우시오.",
+    "code": "ifstream fin(\"data.txt\");\nif (!fin.___()) {\n    cerr << \"파일 열기 실패\" << endl;\n}",
+    "answer": "is_open",
+    "explanation": "is_open() 멤버 함수는 파일이 성공적으로 열렸으면 true, 그렇지 않으면 false를 반환한다."
+  },
+  {
+    "id": "cppx_164",
+    "chapter": "CH09 파일입출력",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "파일에서 한 줄씩 읽어 출력하는 코드의 빈칸을 채우시오.",
+    "code": "ifstream fin(\"data.txt\");\nstring line;\nwhile (___(fin, line)) {\n    cout << line << \"\\n\";\n}",
+    "answer": "getline",
+    "explanation": "getline(istream&, string&)은 개행까지 한 줄을 읽고, 읽기 성공 시 스트림 참조(bool로 true)를 반환하므로 while 조건에 사용할 수 있다."
+  },
+  {
+    "id": "cppx_165",
+    "chapter": "CH09 파일입출력",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "파일을 읽기/쓰기 바이너리 모드로 열기 위한 플래그 조합의 빈칸을 채우시오.",
+    "code": "fstream f(\"data.bin\", ios::in | ios::out | ios::___);",
+    "answer": "binary",
+    "explanation": "ios::binary 플래그는 파일을 텍스트 모드가 아닌 바이너리 모드로 열어 개행 변환 등의 처리를 하지 않도록 한다."
+  },
+  {
+    "id": "cppx_166",
+    "chapter": "CH09 파일입출력",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "파일에서 구조체 데이터를 바이너리로 읽는 코드의 빈칸을 채우시오.",
+    "code": "struct Point { int x, y; };\nPoint p;\nifstream fin(\"pts.bin\", ios::binary);\nfin.___(reinterpret_cast<char*>(&p), sizeof(p));",
+    "answer": "read",
+    "explanation": "read(char* buffer, streamsize n)은 스트림에서 n바이트를 buffer에 읽어 들인다. 구조체를 char*로 캐스팅하여 크기만큼 읽는다."
+  },
+  {
+    "id": "cppx_167",
+    "chapter": "CH09 파일입출력",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "파일의 현재 읽기 위치를 파일 끝에서 4바이트 앞으로 이동시키는 코드의 빈칸을 채우시오.",
+    "code": "ifstream fin(\"data.bin\", ios::binary);\nfin.seekg(-4, ios::___);",
+    "answer": "end",
+    "explanation": "ios::end는 파일 끝을 기준으로 한다. seekg(-4, ios::end)는 파일 끝에서 4바이트 앞으로 읽기 위치를 이동시킨다."
+  },
+  {
+    "id": "cppx_168",
+    "chapter": "CH09 파일입출력",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 실행 결과를 쓰시오. (파일 \"test.txt\"에는 \"Hello\\nWorld\\n\"이 저장되어 있다고 가정한다.)",
+    "code": "#include <iostream>\n#include <fstream>\n#include <string>\nusing namespace std;\nint main() {\n    ofstream fout(\"test.txt\");\n    fout << \"Hello\" << endl;\n    fout << \"World\" << endl;\n    fout.close();\n    ifstream fin(\"test.txt\");\n    string line;\n    while (getline(fin, line)) {\n        cout << line << \"\\n\";\n    }\n    return 0;\n}",
+    "answer": "Hello\nWorld",
+    "explanation": "ofstream으로 \"Hello\"와 \"World\"를 각 줄에 쓴 뒤, ifstream으로 getline을 통해 한 줄씩 읽어 출력한다. 결과는 Hello 줄바꿈 World이다."
+  },
+  {
+    "id": "cppx_169",
+    "chapter": "CH09 파일입출력",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 실행 결과를 쓰시오.",
+    "code": "#include <iostream>\n#include <fstream>\nusing namespace std;\nint main() {\n    ofstream fout(\"num.txt\");\n    fout << 10 << \" \" << 20 << \" \" << 30;\n    fout.close();\n    ifstream fin(\"num.txt\");\n    int a, b, c;\n    fin >> a >> b >> c;\n    cout << a + b + c << \"\\n\";\n    return 0;\n}",
+    "answer": "60",
+    "explanation": "파일에 \"10 20 30\"을 쓰고, >> 연산자로 세 정수를 읽어 합산하면 10+20+30=60이 출력된다."
+  },
+  {
+    "id": "cppx_170",
+    "chapter": "CH09 파일입출력",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 실행 결과를 쓰시오.",
+    "code": "#include <iostream>\n#include <fstream>\nusing namespace std;\nint main() {\n    ofstream fout(\"app.txt\");\n    fout << \"Line1\";\n    fout.close();\n    ofstream fapp(\"app.txt\", ios::app);\n    fapp << \"\\nLine2\";\n    fapp.close();\n    ifstream fin(\"app.txt\");\n    string s;\n    while (getline(fin, s)) cout << s << \"\\n\";\n    return 0;\n}",
+    "answer": "Line1\nLine2",
+    "explanation": "첫 번째 ofstream이 \"Line1\"을 쓰고 닫은 뒤, ios::app 모드로 다시 열어 \"\\nLine2\"를 이어쓴다. 결과적으로 파일에는 \"Line1\\nLine2\"가 저장되어 두 줄이 출력된다."
+  },
+  {
+    "id": "cppx_171",
+    "chapter": "CH09 파일입출력",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 실행 결과를 쓰시오.",
+    "code": "#include <iostream>\n#include <fstream>\nusing namespace std;\nint main() {\n    fstream f(\"size.bin\", ios::out | ios::binary);\n    int arr[3] = {1, 2, 3};\n    f.write(reinterpret_cast<char*>(arr), sizeof(arr));\n    f.close();\n    ifstream fin(\"size.bin\", ios::binary);\n    fin.seekg(0, ios::end);\n    long long sz = fin.tellg();\n    cout << sz << \"\\n\";\n    return 0;\n}",
+    "answer": "12",
+    "explanation": "int 배열 3개를 바이너리로 쓰면 sizeof(int)*3=4*3=12바이트가 저장된다. seekg(0, ios::end) 후 tellg()는 파일 크기 12를 반환한다."
+  },
+  {
+    "id": "cppx_172",
+    "chapter": "CH09 파일입출력",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 실행 결과를 쓰시오.",
+    "code": "#include <iostream>\n#include <fstream>\nusing namespace std;\nint main() {\n    ofstream fout(\"data.txt\");\n    for (int i = 1; i <= 3; i++)\n        fout << i << \"\\n\";\n    fout.close();\n    ifstream fin(\"data.txt\");\n    int x, sum = 0;\n    while (fin >> x) sum += x;\n    cout << sum << \"\\n\";\n    return 0;\n}",
+    "answer": "6",
+    "explanation": "1, 2, 3을 파일에 쓰고, while(fin >> x)로 읽으면서 합산하면 1+2+3=6이 출력된다. while(fin >> x) 패턴은 eof()보다 안전한 파일 읽기 방법이다."
+  },
+  {
+    "id": "cppx_173",
+    "chapter": "CH10 템플릿",
+    "type": "ox",
+    "question": "함수 템플릿에서 template<typename T>와 template<class T>는 동일한 의미로 사용된다.",
+    "answer": true,
+    "explanation": "템플릿 매개변수 선언 시 typename과 class 키워드는 완전히 동일한 의미이다. 단, 중첩 의존 타입 접근 시에는 typename이 필요한 경우가 있다."
+  },
+  {
+    "id": "cppx_174",
+    "chapter": "CH10 템플릿",
+    "type": "ox",
+    "question": "함수 템플릿은 부분 특수화(partial specialization)를 지원한다.",
+    "answer": false,
+    "explanation": "함수 템플릿은 완전 특수화(full specialization)만 지원하며 부분 특수화는 지원하지 않는다. 부분 특수화는 클래스 템플릿에서만 가능하다."
+  },
+  {
+    "id": "cppx_175",
+    "chapter": "CH10 템플릿",
+    "type": "ox",
+    "question": "template<int N>처럼 타입이 아닌 정수 상수를 템플릿 매개변수로 사용할 수 있다.",
+    "answer": true,
+    "explanation": "비타입 템플릿 매개변수(non-type template parameter)로 정수, 포인터, 참조 등을 사용할 수 있다. 배열 크기를 컴파일 타임에 고정하는 등의 용도로 활용된다."
+  },
+  {
+    "id": "cppx_176",
+    "chapter": "CH10 템플릿",
+    "type": "ox",
+    "question": "클래스 템플릿의 멤버 함수를 클래스 외부에 정의할 때는 template<typename T> 선언을 반복해야 한다.",
+    "answer": true,
+    "explanation": "클래스 외부에서 템플릿 멤버 함수를 정의할 때는 template<typename T>를 다시 명시하고 클래스명도 MyClass<T>::함수명 형태로 작성해야 한다."
+  },
+  {
+    "id": "cppx_177",
+    "chapter": "CH10 템플릿",
+    "type": "ox",
+    "question": "템플릿은 컴파일 타임에 인스턴스화되므로 런타임 오버헤드가 없다.",
+    "answer": true,
+    "explanation": "템플릿 인스턴스화는 컴파일 단계에서 이루어지며, 각 타입에 맞는 코드가 생성된다. 따라서 런타임에 타입 결정 비용이 없다."
+  },
+  {
+    "id": "cppx_178",
+    "chapter": "CH10 템플릿",
+    "type": "ox",
+    "question": "완전 특수화된 템플릿(template<>)은 일반 템플릿보다 우선 선택된다.",
+    "answer": true,
+    "explanation": "컴파일러는 특수화가 일반 템플릿보다 더 구체적이므로 완전 특수화된 버전을 우선 선택한다."
+  },
+  {
+    "id": "cppx_179",
+    "chapter": "CH10 템플릿",
+    "type": "multiple",
+    "question": "다음 코드에서 add<double>(1, 2)를 호출했을 때 T의 타입은?\n\ntemplate<typename T>\nT add(T a, T b) { return a + b; }",
+    "options": [
+      "int",
+      "float",
+      "double",
+      "long",
+      "컴파일 에러"
+    ],
+    "answer": 2,
+    "explanation": "add<double>(1, 2)는 명시적 타입 지정으로 T를 double로 강제한다. 인자 1, 2는 double로 암묵적 변환되어 전달된다."
+  },
+  {
+    "id": "cppx_180",
+    "chapter": "CH10 템플릿",
+    "type": "multiple",
+    "question": "다음 중 클래스 템플릿에서만 가능하고 함수 템플릿에서는 불가능한 것은?",
+    "options": [
+      "완전 특수화(full specialization)",
+      "다중 타입 매개변수",
+      "비타입 매개변수",
+      "부분 특수화(partial specialization)",
+      "기본 타입 매개변수"
+    ],
+    "answer": 3,
+    "explanation": "부분 특수화는 일부 타입 매개변수만 특수화하는 것으로 클래스 템플릿에서만 지원된다. 함수 템플릿은 완전 특수화만 지원한다."
+  },
+  {
+    "id": "cppx_181",
+    "chapter": "CH10 템플릿",
+    "type": "multiple",
+    "question": "다음 함수 템플릿을 char* 타입에 대해 완전 특수화하는 올바른 선언은?\n\ntemplate<typename T>\nbool isEqual(T a, T b) { return a == b; }",
+    "options": [
+      "template<char*> bool isEqual(char* a, char* b) { return strcmp(a,b)==0; }",
+      "template<> bool isEqual<char*>(char* a, char* b) { return strcmp(a,b)==0; }",
+      "bool isEqual(char* a, char* b) { return strcmp(a,b)==0; }",
+      "template<typename char*> bool isEqual(char* a, char* b) { return strcmp(a,b)==0; }",
+      "template bool isEqual<char*>(char* a, char* b) { return strcmp(a,b)==0; }"
+    ],
+    "answer": 1,
+    "explanation": "완전 특수화는 template<>로 빈 매개변수 목록을 선언하고, 함수명 뒤에 <char*>로 특수화 타입을 명시한다."
+  },
+  {
+    "id": "cppx_182",
+    "chapter": "CH10 템플릿",
+    "type": "multiple",
+    "question": "다음 코드에서 출력 결과는?\n\ntemplate<int N>\nstruct Factorial {\n    static const int value = N * Factorial<N-1>::value;\n};\ntemplate<>\nstruct Factorial<0> {\n    static const int value = 1;\n};\ncout << Factorial<4>::value;",
+    "options": [
+      "4",
+      "12",
+      "16",
+      "24",
+      "컴파일 에러"
+    ],
+    "answer": 3,
+    "explanation": "템플릿 메타프로그래밍으로 컴파일 타임에 4!=4*3*2*1=24를 계산한다. Factorial<4>::value = 4*Factorial<3>::value = 4*6 = 24."
+  },
+  {
+    "id": "cppx_183",
+    "chapter": "CH10 템플릿",
+    "type": "multiple",
+    "question": "다음 클래스 템플릿의 기본 타입 매개변수에 대한 설명으로 옳은 것은?\n\ntemplate<typename T, typename U = int>\nclass Pair { T first; U second; };",
+    "options": [
+      "Pair<double>는 컴파일 에러이다.",
+      "Pair<double>에서 U는 double로 추론된다.",
+      "Pair<double>에서 U는 int로 기본값이 사용된다.",
+      "기본 타입 매개변수는 함수 템플릿에서만 사용 가능하다.",
+      "두 번째 인자는 반드시 명시해야 한다."
+    ],
+    "answer": 2,
+    "explanation": "템플릿 기본 타입 매개변수는 함수의 기본 인수처럼 동작한다. Pair<double>는 U에 기본값 int가 사용되므로 Pair<double, int>와 동일하다."
+  },
+  {
+    "id": "cppx_184",
+    "chapter": "CH10 템플릿",
+    "type": "multiple",
+    "question": "다음 중 템플릿 타입 추론(type deduction)이 실패하는 경우는?",
+    "options": [
+      "max(3, 5)에서 T=int 추론",
+      "max(3.0, 5.0)에서 T=double 추론",
+      "max(3, 5.0)에서 T 추론 (int vs double)",
+      "max('a', 'b')에서 T=char 추론",
+      "max(3, 3)에서 T=int 추론"
+    ],
+    "answer": 2,
+    "explanation": "max(3, 5.0)에서 첫 번째 인자는 int(T=int), 두 번째는 double(T=double)이 되어 T가 모호해지므로 컴파일러가 추론에 실패한다. 이때는 max<double>(3, 5.0)처럼 명시적으로 지정해야 한다."
+  },
+  {
+    "id": "cppx_185",
+    "chapter": "CH10 템플릿",
+    "type": "multiple",
+    "question": "다음 코드에서 MyArray<int, 5>의 멤버 arr의 타입은?\n\ntemplate<typename T, int N>\nstruct MyArray {\n    T arr[N];\n};",
+    "options": [
+      "int*",
+      "int[N] (N은 런타임 결정)",
+      "int[5]",
+      "T*",
+      "컴파일 에러"
+    ],
+    "answer": 2,
+    "explanation": "비타입 템플릿 매개변수 N=5는 컴파일 타임 상수이므로, MyArray<int, 5>의 arr은 int[5] 타입 고정 배열이 된다."
+  },
+  {
+    "id": "cppx_186",
+    "chapter": "CH10 템플릿",
+    "type": "multiple",
+    "question": "다음 중 템플릿 코드(구현부)를 헤더 파일에 작성해야 하는 이유로 가장 적절한 것은?",
+    "options": [
+      "템플릿은 런타임에 컴파일되기 때문이다.",
+      "인스턴스화 시 컴파일러가 구현부를 볼 수 있어야 하기 때문이다.",
+      "헤더에 작성하면 실행 속도가 빨라지기 때문이다.",
+      "링커(linker)가 템플릿 파일을 직접 처리하기 때문이다.",
+      "static 멤버 변수 초기화가 헤더에서만 가능하기 때문이다."
+    ],
+    "answer": 1,
+    "explanation": "템플릿은 사용된 타입으로 인스턴스화될 때 컴파일러가 전체 구현부를 확인해야 코드를 생성할 수 있다. 구현부가 .cpp에 있으면 다른 번역 단위에서 인스턴스화할 때 링크 오류가 발생한다."
+  },
+  {
+    "id": "cppx_187",
+    "chapter": "CH10 템플릿",
+    "type": "multiple",
+    "question": "다음 코드에서 swap 함수 호출 후 a, b의 값은?\n\ntemplate<typename T>\nvoid swap(T& a, T& b) {\n    T tmp = a; a = b; b = tmp;\n}\nint a = 3, b = 7;\nswap(a, b);\ncout << a << \" \" << b;",
+    "options": [
+      "3 7",
+      "7 3",
+      "3 3",
+      "7 7",
+      "컴파일 에러"
+    ],
+    "answer": 1,
+    "explanation": "템플릿 swap 함수는 참조자 매개변수로 원본을 받아 값을 교환한다. a=3, b=7이 교환되어 a=7, b=3이 된다."
+  },
+  {
+    "id": "cppx_188",
+    "chapter": "CH10 템플릿",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 실행 결과를 쓰시오.",
+    "code": "#include <iostream>\nusing namespace std;\ntemplate<typename T>\nT myMax(T a, T b) {\n    return (a > b) ? a : b;\n}\nint main() {\n    cout << myMax(3, 7) << \"\\n\";\n    cout << myMax(3.14, 2.72) << \"\\n\";\n    cout << myMax('z', 'a') << \"\\n\";\n    return 0;\n}",
+    "answer": "7\n3.14\nz",
+    "explanation": "myMax(3,7)은 T=int로 7을 반환, myMax(3.14,2.72)는 T=double로 3.14를 반환, myMax('z','a')는 T=char로 ASCII 값이 큰 'z'를 반환한다."
+  },
+  {
+    "id": "cppx_189",
+    "chapter": "CH10 템플릿",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 실행 결과를 쓰시오.",
+    "code": "#include <iostream>\nusing namespace std;\ntemplate<typename T>\nclass Stack {\n    T data[10];\n    int top = 0;\npublic:\n    void push(T v) { data[top++] = v; }\n    T pop() { return data[--top]; }\n};\nint main() {\n    Stack<int> s;\n    s.push(10);\n    s.push(20);\n    s.push(30);\n    cout << s.pop() << \"\\n\";\n    cout << s.pop() << \"\\n\";\n    return 0;\n}",
+    "answer": "30\n20",
+    "explanation": "클래스 템플릿 Stack<int>는 정수형 스택이다. push 순서는 10→20→30이고, pop은 후입선출(LIFO)로 30, 20 순서로 반환된다."
+  },
+  {
+    "id": "cppx_190",
+    "chapter": "CH10 템플릿",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 실행 결과를 쓰시오.",
+    "code": "#include <iostream>\nusing namespace std;\ntemplate<typename T>\nvoid print(T val) {\n    cout << \"generic: \" << val << \"\\n\";\n}\ntemplate<>\nvoid print<int>(int val) {\n    cout << \"int: \" << val << \"\\n\";\n}\nint main() {\n    print(3.14);\n    print(42);\n    print('A');\n    return 0;\n}",
+    "answer": "generic: 3.14\nint: 42\ngeneric: A",
+    "explanation": "print(3.14)는 T=double이므로 일반 템플릿 호출, print(42)는 int 완전 특수화 버전 호출, print('A')는 T=char이므로 일반 템플릿 호출이다."
+  },
+  {
+    "id": "cppx_191",
+    "chapter": "CH10 템플릿",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 실행 결과를 쓰시오.",
+    "code": "#include <iostream>\nusing namespace std;\ntemplate<int N>\nstruct Square {\n    static const int value = N * N;\n};\nint main() {\n    cout << Square<3>::value << \"\\n\";\n    cout << Square<7>::value << \"\\n\";\n    return 0;\n}",
+    "answer": "9\n49",
+    "explanation": "비타입 템플릿 매개변수 N을 사용한 메타프로그래밍이다. Square<3>::value = 3*3=9, Square<7>::value = 7*7=49로 컴파일 타임에 계산된다."
+  },
+  {
+    "id": "cppx_192",
+    "chapter": "CH10 템플릿",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 실행 결과를 쓰시오.",
+    "code": "#include <iostream>\nusing namespace std;\ntemplate<typename T, typename U>\nauto add(T a, U b) -> decltype(a + b) {\n    return a + b;\n}\nint main() {\n    cout << add(3, 4) << \"\\n\";\n    cout << add(1, 2.5) << \"\\n\";\n    return 0;\n}",
+    "answer": "7\n3.5",
+    "explanation": "add(3,4)는 T=int, U=int로 결과가 int 7. add(1,2.5)는 T=int, U=double이고 int+double=double이므로 3.5가 출력된다."
+  },
+  {
+    "id": "cppx_193",
+    "chapter": "CH10 템플릿",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "함수 템플릿을 선언하는 키워드를 채우시오.",
+    "code": "___<typename T>\nT square(T x) { return x * x; }",
+    "answer": "template",
+    "explanation": "함수 템플릿 선언은 template<typename T> 또는 template<class T>로 시작한다. template 키워드가 필수이다."
+  },
+  {
+    "id": "cppx_194",
+    "chapter": "CH10 템플릿",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "클래스 템플릿의 완전 특수화 선언에서 빈칸을 채우시오.",
+    "code": "template<typename T>\nclass Wrapper { T val; };\n\n___<>\nclass Wrapper<bool> {\n    unsigned char val : 1;\n};",
+    "answer": "template",
+    "explanation": "완전 특수화는 template<>로 빈 매개변수 목록을 선언하고 클래스명에 특수화 타입을 명시한다."
+  },
+  {
+    "id": "cppx_195",
+    "chapter": "CH10 템플릿",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "두 타입 매개변수를 가지는 함수 템플릿의 빈칸을 채우시오.",
+    "code": "template<typename T, ___ U>\nvoid printPair(T a, U b) {\n    cout << a << \", \" << b << \"\\n\";\n}",
+    "answer": "typename",
+    "explanation": "다중 타입 매개변수 선언 시 각 매개변수마다 typename(또는 class)을 붙여야 한다."
+  },
+  {
+    "id": "cppx_196",
+    "chapter": "CH10 템플릿",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "클래스 템플릿 외부에서 멤버 함수를 정의하는 코드의 빈칸을 채우시오.",
+    "code": "template<typename T>\nclass Box {\n    T val;\npublic:\n    Box(T v);\n    T get() const;\n};\n\ntemplate<typename T>\nBox<T>::Box(T v) : val(v) {}\n\ntemplate<typename T>\nT ___::get() const { return val; }",
+    "answer": "Box<T>",
+    "explanation": "클래스 템플릿 외부에서 멤버 함수를 정의할 때는 반환타입 다음에 ClassName<T>::함수명 형태로 작성해야 한다."
+  }
+]

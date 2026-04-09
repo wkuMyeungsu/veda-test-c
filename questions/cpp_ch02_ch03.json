@@ -1,0 +1,417 @@
+[
+  {
+    "id": "cppx_001",
+    "chapter": "CH02 예외처리",
+    "type": "ox",
+    "question": "try 블록 안에서 throw가 실행되면 해당 try 블록 이후의 코드는 실행되지 않고 즉시 catch 블록으로 이동한다.",
+    "answer": true,
+    "explanation": "throw가 실행되는 순간 제어 흐름은 try 블록을 벗어나 일치하는 catch 블록으로 이동한다. throw 이후의 try 블록 코드는 실행되지 않는다."
+  },
+  {
+    "id": "cppx_002",
+    "chapter": "CH02 예외처리",
+    "type": "ox",
+    "question": "catch 블록에서 인자 없이 bare throw; 를 사용하면 현재 처리 중인 예외를 다시 상위 호출자로 전파(rethrow)한다.",
+    "answer": true,
+    "explanation": "catch 블록 내에서 throw; (피연산자 없음)를 사용하면 현재 catch가 잡은 예외 객체를 그대로 다시 던진다. 이를 rethrow라 한다."
+  },
+  {
+    "id": "cppx_003",
+    "chapter": "CH02 예외처리",
+    "type": "ox",
+    "question": "catch(...) 는 어떤 타입의 예외도 잡을 수 있으므로, 다른 catch 블록보다 먼저 배치해야 모든 예외를 처리할 수 있다.",
+    "answer": false,
+    "explanation": "catch(...) 를 먼저 배치하면 그 뒤에 오는 특정 타입의 catch 블록은 절대 실행되지 않는다. catch 블록은 위에서 아래로 순서대로 매칭되므로 catch(...) 는 가장 마지막에 배치해야 한다."
+  },
+  {
+    "id": "cppx_004",
+    "chapter": "CH02 예외처리",
+    "type": "ox",
+    "question": "noexcept로 선언된 함수 안에서 예외가 throw되면 std::terminate()가 호출되어 프로그램이 종료된다.",
+    "answer": true,
+    "explanation": "noexcept 함수 내에서 예외가 전파되려 하면 컴파일러는 std::terminate()를 호출하여 프로그램을 즉시 종료시킨다."
+  },
+  {
+    "id": "cppx_005",
+    "chapter": "CH02 예외처리",
+    "type": "ox",
+    "question": "스택 풀기(Stack Unwinding) 중에 소멸자가 호출될 때, 소멸자 내부에서 예외가 발생하면 std::terminate()가 호출된다.",
+    "answer": true,
+    "explanation": "예외 처리 도중 스택 풀기가 진행되는 상황에서 소멸자가 또 다른 예외를 던지면, 두 예외가 동시에 활성화되어 C++ 표준에 따라 std::terminate()가 호출된다."
+  },
+  {
+    "id": "cppx_006",
+    "chapter": "CH02 예외처리",
+    "type": "ox",
+    "question": "std::runtime_error는 std::logic_error의 파생 클래스이다.",
+    "answer": false,
+    "explanation": "std::runtime_error와 std::logic_error는 모두 std::exception의 직접 파생 클래스이며, 서로 상속 관계가 없는 형제(sibling) 관계이다."
+  },
+  {
+    "id": "cppx_007",
+    "chapter": "CH02 예외처리",
+    "type": "multiple",
+    "question": "다음 코드에서 catch 블록의 실행 순서로 올바른 것은?\n\ntry {\n    throw std::runtime_error(\"오류\");\n} catch (std::exception& e) {\n    // A\n} catch (std::runtime_error& e) {\n    // B\n}",
+    "options": [
+      "B만 실행된다.",
+      "A만 실행된다.",
+      "A와 B 모두 실행된다.",
+      "컴파일 에러가 발생한다.",
+      "어떤 catch도 실행되지 않는다."
+    ],
+    "answer": 1,
+    "explanation": "catch 블록은 위에서 아래로 순서대로 매칭된다. std::runtime_error는 std::exception의 파생 클래스이므로 첫 번째 catch (std::exception&)에 먼저 매칭되어 A가 실행된다. B는 실행되지 않는다. 이 때문에 파생 클래스를 먼저, 기반 클래스를 나중에 배치해야 한다."
+  },
+  {
+    "id": "cppx_008",
+    "chapter": "CH02 예외처리",
+    "type": "multiple",
+    "question": "예외를 catch할 때 참조(reference)로 받는 것이 값으로 받는 것보다 권장되는 이유로 가장 적절한 것은?",
+    "options": [
+      "값으로 받으면 컴파일 에러가 발생하기 때문이다.",
+      "참조로 받으면 예외 객체의 복사를 피하고, 파생 클래스 예외를 기반 클래스 타입으로 받을 때 객체 슬라이싱(slicing)을 방지할 수 있다.",
+      "참조로 받아야만 what() 멤버 함수를 호출할 수 있기 때문이다.",
+      "값으로 받으면 예외 객체가 자동으로 소멸되지 않기 때문이다.",
+      "참조로 받으면 catch 블록 이후에도 예외 객체를 사용할 수 있기 때문이다."
+    ],
+    "answer": 1,
+    "explanation": "예외를 값으로 받으면 객체가 복사되어 오버헤드가 발생하고, 기반 클래스 타입으로 받을 때 파생 클래스 고유 멤버가 잘려나가는 객체 슬라이싱이 발생할 수 있다. 참조로 받으면 이를 모두 방지할 수 있다."
+  },
+  {
+    "id": "cppx_009",
+    "chapter": "CH02 예외처리",
+    "type": "multiple",
+    "question": "다음 중 스택 풀기(Stack Unwinding)에 대한 설명으로 올바른 것은?",
+    "options": [
+      "스택 풀기는 예외가 발생했을 때 힙 메모리를 자동으로 해제하는 과정이다.",
+      "스택 풀기 중 지역 객체의 소멸자는 생성 순서와 같은 순서로 호출된다.",
+      "예외가 throw된 시점부터 일치하는 catch 블록까지, 중간에 있는 스택 프레임의 지역 객체 소멸자가 역순으로 호출된다.",
+      "스택 풀기는 catch 블록이 없을 때만 발생한다.",
+      "noexcept 함수 내에서도 스택 풀기는 정상적으로 수행된다."
+    ],
+    "answer": 2,
+    "explanation": "스택 풀기는 예외가 발생한 지점에서 일치하는 catch 블록을 찾는 동안, 그 사이에 쌓인 스택 프레임의 지역 객체 소멸자를 생성의 역순으로 호출하는 과정이다."
+  },
+  {
+    "id": "cppx_010",
+    "chapter": "CH02 예외처리",
+    "type": "multiple",
+    "question": "new 연산자로 메모리 할당에 실패했을 때 발생하는 표준 예외 클래스는?",
+    "options": [
+      "std::overflow_error",
+      "std::bad_cast",
+      "std::bad_alloc",
+      "std::runtime_error",
+      "std::length_error"
+    ],
+    "answer": 2,
+    "explanation": "new 연산자는 메모리 할당 실패 시 std::bad_alloc 예외를 던진다. std::bad_alloc은 std::exception의 파생 클래스이다."
+  },
+  {
+    "id": "cppx_011",
+    "chapter": "CH02 예외처리",
+    "type": "multiple",
+    "question": "다음 중 생성자(constructor)에서 예외를 던졌을 때의 동작으로 올바른 것은?",
+    "options": [
+      "소멸자가 호출된 후 예외가 전파된다.",
+      "객체 생성이 완료된 후 예외가 전파된다.",
+      "소멸자는 호출되지 않으며, 생성자 실행 중 완전히 생성된 멤버 객체의 소멸자는 호출된다.",
+      "컴파일 에러가 발생한다.",
+      "예외는 무시되고 객체가 불완전한 상태로 생성된다."
+    ],
+    "answer": 2,
+    "explanation": "생성자에서 예외가 발생하면 해당 객체의 소멸자는 호출되지 않는다. 단, 생성자 실행 중에 이미 완전히 초기화된 멤버 객체들의 소멸자는 역순으로 호출된다."
+  },
+  {
+    "id": "cppx_012",
+    "chapter": "CH02 예외처리",
+    "type": "multiple",
+    "question": "다음 코드의 출력 결과로 올바른 것은?\n\n#include <iostream>\n#include <stdexcept>\nvoid f() { throw std::runtime_error(\"에러\"); }\nvoid g() {\n    try { f(); }\n    catch (std::runtime_error& e) {\n        std::cout << \"g: \" << e.what() << std::endl;\n        throw;\n    }\n}\nint main() {\n    try { g(); }\n    catch (std::exception& e) {\n        std::cout << \"main: \" << e.what() << std::endl;\n    }\n}",
+    "options": [
+      "main: 에러",
+      "g: 에러",
+      "g: 에러\nmain: 에러",
+      "g: 에러\ng: 에러",
+      "컴파일 에러"
+    ],
+    "answer": 2,
+    "explanation": "g()의 catch에서 예외를 잡아 출력 후 bare throw;로 재전파(rethrow)한다. 재전파된 예외는 main()의 catch (std::exception&)에서 잡혀 다시 출력된다. 따라서 두 줄이 모두 출력된다."
+  },
+  {
+    "id": "cppx_013",
+    "chapter": "CH02 예외처리",
+    "type": "multiple",
+    "question": "noexcept 지정자에 대한 설명으로 틀린 것은?",
+    "options": [
+      "noexcept 함수는 컴파일러 최적화에 도움을 줄 수 있다.",
+      "noexcept(false)는 예외를 던질 수 있음을 명시한다.",
+      "소멸자는 C++11부터 기본적으로 noexcept로 간주된다.",
+      "noexcept 함수 내에서 예외가 전파되면 catch 블록으로 이동한다.",
+      "std::vector의 move 연산은 noexcept 여부에 따라 동작이 달라질 수 있다."
+    ],
+    "answer": 3,
+    "explanation": "noexcept 함수 내에서 예외가 전파되려 하면 catch 블록으로 이동하는 것이 아니라 std::terminate()가 즉시 호출되어 프로그램이 종료된다."
+  },
+  {
+    "id": "cppx_014",
+    "chapter": "CH02 예외처리",
+    "type": "multiple",
+    "question": "다음 중 std::exception 계층 구조에서 std::logic_error의 파생 클래스에 해당하는 것을 모두 고르면?\n① std::invalid_argument  ② std::runtime_error  ③ std::out_of_range  ④ std::overflow_error",
+    "options": [
+      "①③",
+      "①②③",
+      "②④",
+      "①②③④",
+      "③④"
+    ],
+    "answer": 0,
+    "explanation": "std::logic_error의 파생 클래스에는 std::invalid_argument, std::out_of_range, std::domain_error, std::length_error 등이 있다. std::runtime_error와 std::overflow_error는 std::runtime_error 계열이므로 틀렸다. 따라서 ①③이 맞다."
+  },
+  {
+    "id": "cppx_015",
+    "chapter": "CH02 예외처리",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 출력 결과를 쓰시오.",
+    "code": "#include <iostream>\n#include <stdexcept>\n\nstruct RAII {\n    RAII()  { std::cout << \"생성\" << std::endl; }\n    ~RAII() { std::cout << \"소멸\" << std::endl; }\n};\n\nvoid func() {\n    RAII r;\n    throw std::runtime_error(\"예외 발생\");\n}\n\nint main() {\n    try {\n        func();\n    } catch (std::runtime_error& e) {\n        std::cout << e.what() << std::endl;\n    }\n    return 0;\n}",
+    "answer": "생성\n소멸\n예외 발생",
+    "explanation": "func()에서 RAII 객체가 생성되어 '생성'이 출력된다. throw가 실행되면 스택 풀기가 시작되어 지역 객체 r의 소멸자가 호출되어 '소멸'이 출력된다. 이후 main의 catch 블록에서 e.what()으로 '예외 발생'이 출력된다."
+  },
+  {
+    "id": "cppx_016",
+    "chapter": "CH02 예외처리",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 출력 결과를 쓰시오.",
+    "code": "#include <iostream>\n#include <stdexcept>\n\nint main() {\n    try {\n        try {\n            throw std::runtime_error(\"내부\");\n        } catch (std::runtime_error& e) {\n            std::cout << \"내부 catch: \" << e.what() << std::endl;\n            throw;\n        }\n    } catch (std::exception& e) {\n        std::cout << \"외부 catch: \" << e.what() << std::endl;\n    }\n    return 0;\n}",
+    "answer": "내부 catch: 내부\n외부 catch: 내부",
+    "explanation": "내부 try에서 runtime_error를 던지면 내부 catch가 잡아 '내부 catch: 내부'를 출력하고 throw;로 재전파한다. 재전파된 예외는 외부 catch (std::exception&)가 잡아 '외부 catch: 내부'를 출력한다."
+  },
+  {
+    "id": "cppx_017",
+    "chapter": "CH02 예외처리",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 출력 결과를 쓰시오.",
+    "code": "#include <iostream>\n\nint main() {\n    try {\n        throw 42;\n    } catch (double d) {\n        std::cout << \"double: \" << d << std::endl;\n    } catch (int i) {\n        std::cout << \"int: \" << i << std::endl;\n    } catch (...) {\n        std::cout << \"unknown\" << std::endl;\n    }\n    return 0;\n}",
+    "answer": "int: 42",
+    "explanation": "throw 42는 int 타입 예외를 던진다. 첫 번째 catch (double)은 int와 매칭되지 않는다(catch에서는 암시적 변환이 일어나지 않는다). 두 번째 catch (int)가 매칭되어 'int: 42'가 출력된다."
+  },
+  {
+    "id": "cppx_018",
+    "chapter": "CH02 예외처리",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 출력 결과를 쓰시오.",
+    "code": "#include <iostream>\n#include <new>\n\nint main() {\n    try {\n        int* p = new int[1000000000000LL];\n        delete[] p;\n    } catch (std::bad_alloc& e) {\n        std::cout << \"메모리 할당 실패: \" << e.what() << std::endl;\n    }\n    return 0;\n}",
+    "answer": "메모리 할당 실패: std::bad_alloc",
+    "explanation": "매우 큰 크기의 메모리 할당에 실패하면 new는 std::bad_alloc 예외를 던진다. catch (std::bad_alloc&)가 이를 잡아 '메모리 할당 실패: std::bad_alloc'을 출력한다. (e.what()의 정확한 문자열은 구현마다 다를 수 있으나 일반적으로 'std::bad_alloc'이다.)"
+  },
+  {
+    "id": "cppx_019",
+    "chapter": "CH02 예외처리",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "아래 코드에서 예외를 다시 상위로 전파(rethrow)하려면 빈칸에 무엇을 써야 하는가?\n\ntry {\n    doSomething();\n} catch (std::exception& e) {\n    log(e.what());\n    ___;\n}",
+    "code": "try {\n    doSomething();\n} catch (std::exception& e) {\n    log(e.what());\n    ___;\n}",
+    "answer": "throw",
+    "explanation": "catch 블록 내에서 피연산자 없이 throw;만 쓰면 현재 처리 중인 예외를 그대로 다시 던진다(rethrow). 이를 통해 상위 호출자가 동일한 예외를 처리할 수 있다."
+  },
+  {
+    "id": "cppx_020",
+    "chapter": "CH02 예외처리",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "어떤 타입의 예외도 모두 잡는 catch 블록의 빈칸을 채우시오.\n\ntry {\n    riskyOp();\n} catch (___) {\n    std::cout << \"예외 발생\" << std::endl;\n}",
+    "code": "try {\n    riskyOp();\n} catch (___) {\n    std::cout << \"예외 발생\" << std::endl;\n}",
+    "answer": "...",
+    "explanation": "catch(...)는 타입에 상관없이 모든 예외를 잡는 '만능 catch'이다. 예외 객체에 이름을 붙일 수 없으므로 예외 내용을 직접 참조할 수는 없다."
+  },
+  {
+    "id": "cppx_021",
+    "chapter": "CH02 예외처리",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "이 함수가 예외를 절대 던지지 않음을 명시하려면 빈칸에 무엇을 써야 하는가?\n\nvoid safeFunc() ___ {\n    // 예외 없는 코드\n}",
+    "code": "void safeFunc() ___ {\n    // 예외 없는 코드\n}",
+    "answer": "noexcept",
+    "explanation": "noexcept 지정자를 함수 선언에 붙이면 이 함수가 예외를 던지지 않음을 명시한다. 이는 컴파일러 최적화에 활용되며, 위반 시 std::terminate()가 호출된다."
+  },
+  {
+    "id": "cppx_022",
+    "chapter": "CH02 예외처리",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "std::runtime_error 예외를 던지는 빈칸을 채우시오.\n\nvoid validate(int x) {\n    if (x < 0)\n        ___ std::runtime_error(\"음수 불가\");\n}",
+    "code": "void validate(int x) {\n    if (x < 0)\n        ___ std::runtime_error(\"음수 불가\");\n}",
+    "answer": "throw",
+    "explanation": "C++에서 예외를 던질 때는 throw 키워드를 사용한다. throw 뒤에 예외 객체를 작성하면 해당 객체가 예외로 전파된다."
+  },
+  {
+    "id": "cppx_023",
+    "chapter": "CH03 클래스와 객체",
+    "type": "ox",
+    "question": "C++에서 class로 선언된 멤버의 기본 접근 지정자는 private이고, struct로 선언된 멤버의 기본 접근 지정자는 public이다.",
+    "answer": true,
+    "explanation": "C++에서 class와 struct의 유일한 차이는 기본 접근 지정자이다. class는 명시하지 않으면 private, struct는 public이 기본이다."
+  },
+  {
+    "id": "cppx_024",
+    "chapter": "CH03 클래스와 객체",
+    "type": "ox",
+    "question": "C++ 클래스에서 소멸자(destructor)는 매개변수를 가질 수 있으며, 오버로딩도 가능하다.",
+    "answer": false,
+    "explanation": "소멸자는 매개변수를 가질 수 없고, 반환 타입도 없으며, 클래스당 하나만 정의할 수 있다. 따라서 오버로딩이 불가능하다."
+  },
+  {
+    "id": "cppx_025",
+    "chapter": "CH03 클래스와 객체",
+    "type": "ox",
+    "question": "멤버 초기화 리스트(member initializer list)는 const 멤버 변수나 참조 멤버 변수를 초기화할 때 반드시 사용해야 한다.",
+    "answer": true,
+    "explanation": "const 멤버와 참조 멤버는 선언 시점에 초기화되어야 하므로 생성자 본문에서 대입(=)으로 초기화할 수 없다. 멤버 초기화 리스트(콜론 뒤 Member(value) 형식)를 통해서만 초기화할 수 있다."
+  },
+  {
+    "id": "cppx_026",
+    "chapter": "CH03 클래스와 객체",
+    "type": "ox",
+    "question": "static 멤버 변수는 클래스 선언 내부에서 정의(메모리 할당)되므로, 클래스 외부에서 별도로 정의할 필요가 없다.",
+    "answer": false,
+    "explanation": "static 멤버 변수는 클래스 선언 내부에서는 선언만 되며, 실제 정의(메모리 할당)는 클래스 외부에서 Type ClassName::varName; 형식으로 반드시 해주어야 한다(C++17 inline static 변수 예외 있음)."
+  },
+  {
+    "id": "cppx_027",
+    "chapter": "CH03 클래스와 객체",
+    "type": "multiple",
+    "question": "다음 중 const 멤버 함수에 대한 설명으로 올바른 것은?",
+    "options": [
+      "const 멤버 함수 내에서는 멤버 변수의 값을 변경할 수 있다.",
+      "const 객체에서는 const 멤버 함수만 호출할 수 있다.",
+      "const 멤버 함수는 static 멤버 함수와 동일한 의미이다.",
+      "const 멤버 함수는 오버로딩이 불가능하다.",
+      "const 멤버 함수는 생성자에도 적용할 수 있다."
+    ],
+    "answer": 1,
+    "explanation": "const 객체는 멤버 변수를 변경하지 않겠다고 보장하는 const 멤버 함수만 호출할 수 있다. non-const 멤버 함수를 호출하면 컴파일 에러가 발생한다."
+  },
+  {
+    "id": "cppx_028",
+    "chapter": "CH03 클래스와 객체",
+    "type": "multiple",
+    "question": "다음 코드에서 컴파일 에러가 발생하는 줄은?\n\nclass Foo {\n    const int val;         // (A)\npublic:\n    Foo() { val = 10; }    // (B)\n    int get() const { return val; }  // (C)\n};",
+    "options": [
+      "(A)줄",
+      "(B)줄",
+      "(C)줄",
+      "(A)와 (C)줄",
+      "에러 없음"
+    ],
+    "answer": 1,
+    "explanation": "const 멤버 변수 val은 생성자 본문에서 대입으로 초기화할 수 없다. 반드시 멤버 초기화 리스트(Foo() : val(10) {})를 사용해야 한다. 따라서 (B)줄에서 컴파일 에러가 발생한다."
+  },
+  {
+    "id": "cppx_029",
+    "chapter": "CH03 클래스와 객체",
+    "type": "multiple",
+    "question": "다음 코드에서 static 멤버 변수 count의 값으로 올바른 것은?\n\nclass Counter {\npublic:\n    static int count;\n    Counter() { count++; }\n    ~Counter() { count--; }\n};\nint Counter::count = 0;\n\nint main() {\n    Counter a, b;\n    {\n        Counter c;\n    }\n    // 이 시점의 count 값은?\n}",
+    "options": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "컴파일 에러"
+    ],
+    "answer": 2,
+    "explanation": "Counter a, b가 생성되어 count=2. 블록 안에서 Counter c가 생성되어 count=3. 블록이 끝나면 c의 소멸자가 호출되어 count=2. 따라서 해당 시점에 count는 2이다."
+  },
+  {
+    "id": "cppx_030",
+    "chapter": "CH03 클래스와 객체",
+    "type": "multiple",
+    "question": "클래스 멤버 초기화 리스트(initializer list)에 대한 설명으로 틀린 것은?",
+    "options": [
+      "멤버 초기화 리스트는 생성자 본문보다 먼저 실행된다.",
+      "멤버 초기화 리스트의 실행 순서는 리스트에 나열된 순서가 아닌 클래스 내 멤버 선언 순서를 따른다.",
+      "참조 멤버는 멤버 초기화 리스트로만 초기화할 수 있다.",
+      "멤버 초기화 리스트를 사용하면 대입 연산보다 성능이 나쁠 수 있다.",
+      "기반 클래스 생성자 호출도 멤버 초기화 리스트에서 할 수 있다."
+    ],
+    "answer": 3,
+    "explanation": "멤버 초기화 리스트는 객체를 직접 초기화하므로 생성자 본문에서 기본 생성 후 대입하는 방식보다 성능이 좋거나 동일하다. 특히 클래스 타입 멤버에서는 불필요한 기본 생성자 호출을 피할 수 있다."
+  },
+  {
+    "id": "cppx_031",
+    "chapter": "CH03 클래스와 객체",
+    "type": "multiple",
+    "question": "다음 중 클래스의 생성자와 소멸자 호출 순서로 올바른 것은?\n\n전역 객체 G, main()에서 지역 객체 A, B 순서로 생성될 때",
+    "options": [
+      "생성: G→A→B, 소멸: G→B→A",
+      "생성: A→B→G, 소멸: G→B→A",
+      "생성: G→A→B, 소멸: B→A→G",
+      "생성: A→B→G, 소멸: A→B→G",
+      "생성: G→A→B, 소멸: A→B→G"
+    ],
+    "answer": 2,
+    "explanation": "전역 객체는 프로그램 시작 시 가장 먼저 생성된다. 지역 객체는 선언 순서대로 생성된다. 소멸은 생성의 역순이므로 B→A가 먼저 소멸되고, 전역 객체 G는 프로그램 종료 시 마지막으로 소멸된다."
+  },
+  {
+    "id": "cppx_032",
+    "chapter": "CH03 클래스와 객체",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 출력 결과를 쓰시오.",
+    "code": "#include <iostream>\n\nclass MyClass {\npublic:\n    int x;\n    MyClass(int v) : x(v) {\n        std::cout << \"생성: \" << x << std::endl;\n    }\n    ~MyClass() {\n        std::cout << \"소멸: \" << x << std::endl;\n    }\n};\n\nint main() {\n    MyClass a(1);\n    MyClass b(2);\n    MyClass c(3);\n    return 0;\n}",
+    "answer": "생성: 1\n생성: 2\n생성: 3\n소멸: 3\n소멸: 2\n소멸: 1",
+    "explanation": "지역 객체는 선언 순서대로 생성되어 '생성: 1', '생성: 2', '생성: 3'이 출력된다. main이 반환될 때 소멸자는 생성의 역순으로 호출되어 '소멸: 3', '소멸: 2', '소멸: 1'이 출력된다."
+  },
+  {
+    "id": "cppx_033",
+    "chapter": "CH03 클래스와 객체",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 출력 결과를 쓰시오.",
+    "code": "#include <iostream>\n\nclass Box {\n    int val;\npublic:\n    Box(int v) : val(v) {}\n    int getVal() const { return val; }\n    void setVal(int v) { val = v; }\n};\n\nint main() {\n    const Box b(10);\n    std::cout << b.getVal() << std::endl;\n    // b.setVal(20);  // 이 줄은 주석 처리됨\n    return 0;\n}",
+    "answer": "10",
+    "explanation": "const 객체 b는 const 멤버 함수만 호출할 수 있다. getVal()은 const로 선언되어 있으므로 정상 호출되어 10이 출력된다. 주석 처리된 setVal(20) 호출은 non-const 함수이므로 주석 해제 시 컴파일 에러가 발생했을 것이다."
+  },
+  {
+    "id": "cppx_034",
+    "chapter": "CH03 클래스와 객체",
+    "type": "subjective",
+    "subtype": "code_result",
+    "question": "다음 코드의 출력 결과를 쓰시오.",
+    "code": "#include <iostream>\n\nclass Shared {\npublic:\n    static int count;\n    Shared()  { ++count; }\n    ~Shared() { --count; }\n    static int getCount() { return count; }\n};\nint Shared::count = 0;\n\nint main() {\n    Shared a;\n    std::cout << Shared::getCount() << std::endl;\n    {\n        Shared b, c;\n        std::cout << Shared::getCount() << std::endl;\n    }\n    std::cout << Shared::getCount() << std::endl;\n    return 0;\n}",
+    "answer": "1\n3\n1",
+    "explanation": "a 생성 후 count=1, 출력 '1'. 블록에서 b,c 생성 후 count=3, 출력 '3'. 블록 종료 시 c,b 소멸(역순)되어 count=1, 출력 '1'."
+  },
+  {
+    "id": "cppx_035",
+    "chapter": "CH03 클래스와 객체",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "멤버 초기화 리스트를 사용하여 const 멤버 변수 id를 초기화하는 생성자의 빈칸을 채우시오.\n\nclass Student {\n    const int id;\npublic:\n    Student(int n) ___ {\n        // 본문 비어 있음\n    }\n};",
+    "code": "class Student {\n    const int id;\npublic:\n    Student(int n) ___ {\n        // 본문 비어 있음\n    }\n};",
+    "answer": ": id(n)",
+    "explanation": "const 멤버 변수는 생성자 본문 내에서 대입으로 초기화할 수 없다. 생성자 매개변수 목록 뒤에 콜론(:)을 쓰고 id(n) 형식의 멤버 초기화 리스트를 사용해야 한다."
+  },
+  {
+    "id": "cppx_036",
+    "chapter": "CH03 클래스와 객체",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "아래 코드에서 static 멤버 변수 total을 클래스 외부에서 정의하는 빈칸을 채우시오.\n\nclass Bank {\npublic:\n    static int total;\n};\n___ = 0;",
+    "code": "class Bank {\npublic:\n    static int total;\n};\n___ = 0;",
+    "answer": "int Bank::total",
+    "explanation": "static 멤버 변수는 클래스 외부에서 '타입 클래스명::변수명' 형식으로 정의(메모리 할당)해야 한다. int Bank::total = 0; 처럼 작성한다."
+  },
+  {
+    "id": "cppx_037",
+    "chapter": "CH03 클래스와 객체",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "멤버 함수를 클래스 내부에 정의하면 자동으로 inline 처리된다. 아래 코드에서 getValue()가 const 멤버 함수가 되도록 빈칸을 채우시오.\n\nclass Item {\n    int value;\npublic:\n    int getValue() ___ { return value; }\n};",
+    "code": "class Item {\n    int value;\npublic:\n    int getValue() ___ { return value; }\n};",
+    "answer": "const",
+    "explanation": "함수 매개변수 목록 뒤에 const 키워드를 붙이면 const 멤버 함수가 된다. 이 함수는 멤버 변수를 수정하지 않겠다고 컴파일러에게 알리며, const 객체에서도 호출 가능해진다."
+  }
+]
