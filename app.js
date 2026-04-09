@@ -973,8 +973,19 @@ function renderHistoryItems(container, items) {
   container.innerHTML = items.map(r => {
     const scoreLabel = r.mode === 'chapter' ? `${r.totalScore}%` : `${r.totalScore}점`;
     const correctLabel = `${r.totalCorrect}/${r.totalQ}`;
-    const chapterTagsHtml = (r.mode === 'chapter' && r.chapters.length > 0)
-      ? `<div class="history-chapter-tags">${r.chapters.map(ch => `<span class="history-ch-tag">${escapeHtml(ch)}</span>`).join('')}</div>`
+    const sortedChapters = (r.chapters || []).slice().sort((a, b) => {
+      const isCLangA = a.startsWith('C언어');
+      const isCLangB = b.startsWith('C언어');
+      if (isCLangA !== isCLangB) return isCLangA ? -1 : 1;  // C언어 먼저
+      const numA = parseInt(a.match(/CH(\d+)/)?.[1] || '0', 10);
+      const numB = parseInt(b.match(/CH(\d+)/)?.[1] || '0', 10);
+      return numA - numB;
+    });
+    const chapterTagsHtml = (r.mode === 'chapter' && sortedChapters.length > 0)
+      ? `<div class="history-chapter-tags">${sortedChapters.map(ch => {
+          const isCLang = ch.startsWith('C언어');
+          return `<span class="history-ch-tag ${isCLang ? 'tag-c' : 'tag-cpp'}">${escapeHtml(ch)}</span>`;
+        }).join('')}</div>`
       : '';
     return `
     <div class="history-item">
