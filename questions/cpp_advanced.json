@@ -1,0 +1,1146 @@
+[
+  {
+    "id": "adv_ch02_ox_001",
+    "type": "ox",
+    "chapter": "CH02 예외처리",
+    "question": "catch 블록은 try 블록에서 발생한 예외 중 가장 먼저 선언된 순서대로 매칭을 시도한다.",
+    "answer": true,
+    "explanation": "catch 블록은 위에서 아래로 순서대로 매칭을 시도한다. 따라서 파생 클래스 예외는 기반 클래스 catch보다 먼저 작성해야 한다."
+  },
+  {
+    "id": "adv_ch02_ox_002",
+    "type": "ox",
+    "chapter": "CH02 예외처리",
+    "question": "catch 블록에서 인수 없이 throw;를 작성하면 현재 처리 중인 예외를 다시 던진다.",
+    "answer": true,
+    "explanation": "throw;(재던지기)는 catch가 받은 예외 객체 그대로를 상위 호출자에게 전파한다. 새로운 예외 객체를 생성하지 않는다."
+  },
+  {
+    "id": "adv_ch02_ox_003",
+    "type": "ox",
+    "chapter": "CH02 예외처리",
+    "question": "noexcept로 선언된 함수 내부에서 예외가 발생하면 해당 예외는 catch 블록에서 처리된다.",
+    "answer": false,
+    "explanation": "noexcept 함수 내에서 예외가 전파되면 catch로 가지 않고 std::terminate()가 즉시 호출된다."
+  },
+  {
+    "id": "adv_ch02_ox_004",
+    "type": "ox",
+    "chapter": "CH02 예외처리",
+    "question": "생성자에서 예외가 발생해 객체 생성이 실패하면, 그 객체의 소멸자는 호출되지 않는다.",
+    "answer": true,
+    "explanation": "객체가 완전히 생성(생성자 완료)되지 않으면 소멸자는 호출되지 않는다. 이미 생성된 멤버 객체의 소멸자는 호출된다."
+  },
+  {
+    "id": "adv_ch02_mc_001",
+    "type": "multiple",
+    "chapter": "CH02 예외처리",
+    "question": "다음 코드에서 catch 블록 중 실행되는 것은?\n\nstruct Base{};\nstruct Derived : Base {};\ntry {\n    throw Derived();\n} catch (Base& e) {\n    // A\n} catch (Derived& e) {\n    // B\n}",
+    "options": [
+      "A 블록",
+      "B 블록",
+      "A, B 모두",
+      "어느 것도 실행 안 됨"
+    ],
+    "answer": 0,
+    "explanation": "catch는 위에서 아래로 매칭한다. Derived는 Base의 파생 클래스이므로 먼저 선언된 catch(Base&)에 매칭된다. 파생 클래스 catch를 먼저 작성해야 한다."
+  },
+  {
+    "id": "adv_ch02_mc_002",
+    "type": "multiple",
+    "chapter": "CH02 예외처리",
+    "question": "std::bad_alloc 예외가 발생하는 상황은?",
+    "options": [
+      "new 연산자로 메모리 할당 실패",
+      "nullptr 역참조",
+      "배열 범위 초과",
+      "0으로 나누기"
+    ],
+    "answer": 0,
+    "explanation": "new 연산자가 메모리 할당에 실패하면 std::bad_alloc 예외를 던진다. new(nothrow)를 사용하면 대신 nullptr을 반환한다."
+  },
+  {
+    "id": "adv_ch02_mc_003",
+    "type": "multiple",
+    "chapter": "CH02 예외처리",
+    "question": "다음 중 catch(...)에 대한 설명으로 옳은 것은?",
+    "options": [
+      "어떤 타입의 예외든 처리할 수 있다",
+      "int 타입 예외만 처리한다",
+      "반드시 첫 번째 catch여야 한다",
+      "catch(...)에서는 예외 객체에 접근할 수 없다"
+    ],
+    "answer": 0,
+    "explanation": "catch(...)는 모든 타입의 예외를 처리한다. 단, 예외 객체에 접근할 수 없으므로 보통 마지막 catch로 작성한다."
+  },
+  {
+    "id": "adv_ch02_mc_004",
+    "type": "multiple",
+    "chapter": "CH02 예외처리",
+    "question": "스택 풀기(Stack Unwinding)에 대한 설명으로 옳은 것은?",
+    "options": [
+      "예외 전파 중 스코프를 벗어난 지역 객체의 소멸자가 자동 호출된다",
+      "예외가 발생하면 스택에 있는 모든 메모리가 즉시 해제된다",
+      "catch 블록에서만 발생한다",
+      "소멸자는 호출되지 않는다"
+    ],
+    "answer": 0,
+    "explanation": "예외가 catch를 찾아 스택을 거슬러 올라가는 동안, 각 스코프의 지역 객체 소멸자가 자동 호출된다. 이를 스택 풀기라 한다."
+  },
+  {
+    "id": "adv_ch02_sh_001",
+    "type": "short",
+    "chapter": "CH02 예외처리",
+    "question": "예외를 클래스의 const 참조로 받는(catch(const MyEx& e)) 이유를 한 문장으로 설명하시오.",
+    "answer": "값으로 받으면 파생 클래스 예외가 기반 클래스로 슬라이싱되는데, const 참조로 받으면 슬라이싱 없이 다형성이 유지된다.",
+    "explanation": "catch(MyEx e)처럼 값으로 받으면 복사 과정에서 파생 클래스 정보가 잘린다(슬라이싱). const 참조로 받으면 원본 예외 객체를 그대로 참조해 다형성이 유지된다."
+  },
+  {
+    "id": "adv_ch02_sh_002",
+    "type": "short",
+    "chapter": "CH02 예외처리",
+    "question": "소멸자에서 예외를 던지면 안 되는 이유를 설명하시오.",
+    "answer": "스택 풀기 중 소멸자에서 예외가 발생하면 이미 처리 중인 예외와 충돌해 std::terminate()가 호출된다.",
+    "explanation": "C++은 동시에 두 개의 예외를 처리할 수 없다. 스택 풀기 중 소멸자가 예외를 던지면 terminate()가 호출되어 프로그램이 비정상 종료된다."
+  },
+  {
+    "id": "adv_ch03_ox_001",
+    "type": "ox",
+    "chapter": "CH03 클래스와 객체",
+    "question": "멤버 초기화 리스트에서 초기화 순서는 리스트에 작성한 순서가 아니라 클래스 내 선언 순서에 따른다.",
+    "answer": true,
+    "explanation": "C++ 표준은 멤버 초기화 순서를 클래스 내 선언 순서로 정의한다. 리스트 작성 순서에 의존하면 버그가 생길 수 있다."
+  },
+  {
+    "id": "adv_ch03_ox_002",
+    "type": "ox",
+    "chapter": "CH03 클래스와 객체",
+    "question": "const 멤버 변수는 생성자 본체(중괄호 안)에서 대입으로 초기화할 수 있다.",
+    "answer": false,
+    "explanation": "const 멤버 변수는 반드시 멤버 초기화 리스트에서만 초기화할 수 있다. 생성자 본체에서는 대입 불가."
+  },
+  {
+    "id": "adv_ch03_ox_003",
+    "type": "ox",
+    "chapter": "CH03 클래스와 객체",
+    "question": "사용자가 매개변수 있는 생성자를 정의하면 컴파일러는 기본 생성자를 자동으로 생성하지 않는다.",
+    "answer": true,
+    "explanation": "사용자 정의 생성자가 하나라도 있으면 컴파일러는 기본 생성자를 자동 생성하지 않는다. 기본 생성자도 필요하면 명시적으로 정의해야 한다."
+  },
+  {
+    "id": "adv_ch03_ox_004",
+    "type": "ox",
+    "chapter": "CH03 클래스와 객체",
+    "question": "mutable 키워드로 선언된 멤버 변수는 const 멤버 함수 내에서도 값을 변경할 수 있다.",
+    "answer": true,
+    "explanation": "mutable 멤버는 const 함수의 제약을 받지 않는다. 주로 캐싱, 참조 카운트 등 논리적으로 객체 상태와 무관한 내부 데이터에 사용한다."
+  },
+  {
+    "id": "adv_ch03_ox_005",
+    "type": "ox",
+    "chapter": "CH03 클래스와 객체",
+    "question": "static 멤버 변수는 클래스 내부 선언만으로 메모리가 할당되므로 외부 정의가 필요 없다.",
+    "answer": false,
+    "explanation": "static 멤버 변수는 클래스 외부에서 별도로 정의해야 메모리가 할당된다(inline static 예외). 클래스 내부는 선언에 불과하다."
+  },
+  {
+    "id": "adv_ch03_mc_001",
+    "type": "multiple",
+    "chapter": "CH03 클래스와 객체",
+    "question": "다음 클래스에서 객체 obj의 sizeof는?\n\nclass A {\n    int x;      // 4바이트\n    double y;   // 8바이트\n    void foo();\n    static int cnt;\n};",
+    "options": [
+      "4",
+      "12 또는 16(패딩 포함)",
+      "20",
+      "24"
+    ],
+    "answer": 1,
+    "explanation": "sizeof는 데이터 멤버만 포함한다. 멤버 함수와 static 멤버는 포함하지 않는다. int(4)+패딩(4)+double(8)=16 또는 정렬에 따라 달라질 수 있다."
+  },
+  {
+    "id": "adv_ch03_mc_002",
+    "type": "multiple",
+    "chapter": "CH03 클래스와 객체",
+    "question": "explicit 키워드에 대한 설명으로 옳은 것은?",
+    "options": [
+      "생성자의 묵시적(implicit) 형변환을 금지한다",
+      "소멸자에도 사용할 수 있다",
+      "복사 생성자에는 효과가 없다",
+      "함수의 인라인 처리를 명시한다"
+    ],
+    "answer": 0,
+    "explanation": "explicit는 단일 인수 생성자에서 묵시적 형변환을 방지한다. MyClass obj = 5; 같은 코드를 막을 때 사용한다."
+  },
+  {
+    "id": "adv_ch03_mc_003",
+    "type": "multiple",
+    "chapter": "CH03 클래스와 객체",
+    "question": "복사 대입 연산자(operator=)에서 반드시 확인해야 할 것은?",
+    "options": [
+      "자기 자신에 대한 대입(self-assignment) 여부",
+      "매개변수가 const인지 여부",
+      "반환 타입이 void인지 여부",
+      "기반 클래스 여부"
+    ],
+    "answer": 0,
+    "explanation": "a = a; 같은 자기 대입 시 기존 메모리를 먼저 해제하면 자신을 읽는 도중 오류가 발생한다. if(this != &other) 검사가 필수다."
+  },
+  {
+    "id": "adv_ch03_mc_004",
+    "type": "multiple",
+    "chapter": "CH03 클래스와 객체",
+    "question": "friend 선언에 대해 옳은 것은?",
+    "options": [
+      "friend 선언은 상속되지 않는다",
+      "friend 함수는 자동으로 멤버 함수가 된다",
+      "friend 클래스의 파생 클래스도 자동으로 friend가 된다",
+      "friend는 public 멤버에만 접근 가능하다"
+    ],
+    "answer": 0,
+    "explanation": "friend는 상속되지 않는다. 파생 클래스가 friend 권한을 가지려면 별도로 friend 선언해야 한다."
+  },
+  {
+    "id": "adv_ch03_sh_001",
+    "type": "short",
+    "chapter": "CH03 클래스와 객체",
+    "question": "다음 코드의 출력 결과를 쓰시오.\n\nclass A {\npublic:\n    int x, y;\n    A() : y(1), x(y+1) {}\n};\nA a;\ncout << a.x << ' ' << a.y;",
+    "answer": "쓰레기값 1 (또는 미정의 동작)",
+    "explanation": "초기화 순서는 선언 순서(x, y)를 따른다. x가 먼저 초기화되는데 이때 y는 아직 초기화 전이므로 y+1은 미정의 동작이다. y는 그 다음 1로 초기화된다."
+  },
+  {
+    "id": "adv_ch03_sh_002",
+    "type": "short",
+    "chapter": "CH03 클래스와 객체",
+    "question": "= default와 = delete를 각각 어떤 상황에 사용하는지 설명하시오.",
+    "answer": "= default: 컴파일러 기본 구현을 명시적으로 요청할 때, = delete: 해당 함수 호출을 금지할 때 사용한다.",
+    "explanation": "= default는 사용자 정의 생성자가 있어도 기본 생성자를 살리고 싶을 때 사용. = delete는 복사 금지 클래스 등에서 사용."
+  },
+  {
+    "id": "adv_ch03_mc_005",
+    "type": "multiple",
+    "chapter": "CH03 클래스와 객체",
+    "question": "위임 생성자(delegating constructor)에 대한 설명으로 옳은 것은?",
+    "options": [
+      "한 생성자가 같은 클래스의 다른 생성자를 호출하는 것이다",
+      "부모 클래스의 생성자를 호출하는 것이다",
+      "virtual로 선언된 생성자를 말한다",
+      "정적 팩토리 메서드 패턴을 말한다"
+    ],
+    "answer": 0,
+    "explanation": "위임 생성자는 초기화 리스트에서 같은 클래스의 다른 생성자를 호출한다. 코드 중복을 줄이는 데 효과적이다."
+  },
+  {
+    "id": "adv_ch04_ox_001",
+    "type": "ox",
+    "chapter": "CH04 객체포인터와 객체배열",
+    "question": "this 포인터는 static 멤버 함수 내에서 사용할 수 있다.",
+    "answer": false,
+    "explanation": "static 멤버 함수는 특정 객체에 속하지 않으므로 this 포인터가 없다."
+  },
+  {
+    "id": "adv_ch04_ox_002",
+    "type": "ox",
+    "chapter": "CH04 객체포인터와 객체배열",
+    "question": "객체 배열을 new[]로 생성하면 각 원소의 기본 생성자가 호출된다.",
+    "answer": true,
+    "explanation": "new T[n]은 각 T 객체에 대해 기본 생성자를 호출한다. 따라서 기본 생성자가 없는 클래스는 new[]를 바로 쓸 수 없다."
+  },
+  {
+    "id": "adv_ch04_ox_003",
+    "type": "ox",
+    "chapter": "CH04 객체포인터와 객체배열",
+    "question": "포인터로 객체 멤버에 접근할 때 (*p).member와 p->member는 동일하다.",
+    "answer": true,
+    "explanation": "두 표현은 완전히 동일하다. p->member는 (*p).member의 편의 문법이다."
+  },
+  {
+    "id": "adv_ch04_mc_001",
+    "type": "multiple",
+    "chapter": "CH04 객체포인터와 객체배열",
+    "question": "다음 코드에서 this 포인터의 반환이 의미하는 것은?\n\nMyClass& MyClass::setValue(int v) {\n    x = v;\n    return *this;\n}",
+    "options": [
+      "메서드 체이닝(chaining)이 가능하도록 자기 자신을 반환",
+      "새 복사본을 만들어 반환",
+      "함수 재귀 호출",
+      "포인터 연산"
+    ],
+    "answer": 0,
+    "explanation": "*this 참조를 반환하면 obj.setValue(1).setValue(2); 처럼 메서드 체이닝이 가능하다."
+  },
+  {
+    "id": "adv_ch04_mc_002",
+    "type": "multiple",
+    "chapter": "CH04 객체포인터와 객체배열",
+    "question": "객체 배열 A arr[3];을 delete로 해제할 때 올바른 방법은?",
+    "options": [
+      "delete arr;",
+      "delete[] arr;",
+      "free(arr);",
+      "for 루프로 각 원소 delete"
+    ],
+    "answer": 1,
+    "explanation": "new[]로 생성한 배열은 반드시 delete[]로 해제해야 각 원소의 소멸자가 호출되고 메모리가 올바르게 해제된다."
+  },
+  {
+    "id": "adv_ch04_mc_003",
+    "type": "multiple",
+    "chapter": "CH04 객체포인터와 객체배열",
+    "question": "객체 포인터 Base* p = new Derived(); 에서 p->func()를 호출할 때, func가 가상 함수라면?",
+    "options": [
+      "Derived::func()가 호출된다",
+      "Base::func()가 호출된다",
+      "컴파일 에러가 발생한다",
+      "런타임 에러가 발생한다"
+    ],
+    "answer": 0,
+    "explanation": "가상 함수는 동적 바인딩으로 실제 객체 타입(Derived)의 함수가 호출된다."
+  },
+  {
+    "id": "adv_ch04_sh_001",
+    "type": "short",
+    "chapter": "CH04 객체포인터와 객체배열",
+    "question": "this 포인터란 무엇인지 한 문장으로 설명하시오.",
+    "answer": "this는 멤버 함수 내에서 자기 자신 객체의 주소를 가리키는 포인터이다.",
+    "explanation": "컴파일러가 멤버 함수에 암시적으로 전달하는 포인터로, 현재 객체를 가리킨다."
+  },
+  {
+    "id": "adv_ch04_sh_002",
+    "type": "short",
+    "chapter": "CH04 객체포인터와 객체배열",
+    "question": "int* arr = new int[5]; 선언 후 arr[2]에 접근하는 두 가지 동일한 방법을 쓰시오.",
+    "answer": "arr[2] 또는 *(arr+2)",
+    "explanation": "배열 인덱스 표기와 포인터 산술 표기는 동일하다."
+  },
+  {
+    "id": "adv_ch05_ox_001",
+    "type": "ox",
+    "chapter": "CH05 참조와 복사생성자",
+    "question": "int& ref = 10; 처럼 정수 리터럴을 비const 참조에 바인딩하는 것은 허용된다.",
+    "answer": false,
+    "explanation": "비const 참조는 lvalue에만 바인딩된다. 리터럴은 rvalue이므로 int& ref = 10;은 컴파일 에러다. const int& ref = 10;은 가능하다."
+  },
+  {
+    "id": "adv_ch05_ox_002",
+    "type": "ox",
+    "chapter": "CH05 참조와 복사생성자",
+    "question": "int& r = a; r = b; 는 r을 b에 재바인딩한다.",
+    "answer": false,
+    "explanation": "참조는 한 번 바인딩되면 재바인딩이 불가능하다. r = b;는 a = b;와 동일하게 a의 값을 b의 값으로 변경한다."
+  },
+  {
+    "id": "adv_ch05_ox_003",
+    "type": "ox",
+    "chapter": "CH05 참조와 복사생성자",
+    "question": "복사 생성자는 같은 타입의 객체를 값으로 전달할 때, 함수에서 값으로 반환할 때 호출된다.",
+    "answer": true,
+    "explanation": "복사 생성자 호출 시점: ①같은 타입 객체로 초기화 ②함수에 값으로 전달 ③함수에서 값으로 반환(RVO 없을 때)"
+  },
+  {
+    "id": "adv_ch05_ox_004",
+    "type": "ox",
+    "chapter": "CH05 참조와 복사생성자",
+    "question": "std::move(obj)를 호출하면 obj의 리소스가 즉시 다른 곳으로 이동된다.",
+    "answer": false,
+    "explanation": "std::move는 단순히 lvalue를 rvalue 참조(&&)로 캐스팅하는 함수다. 실제 이동은 이동 생성자나 이동 대입 연산자가 호출될 때 일어난다."
+  },
+  {
+    "id": "adv_ch05_ox_005",
+    "type": "ox",
+    "chapter": "CH05 참조와 복사생성자",
+    "question": "const 참조 매개변수(const T&)는 lvalue와 rvalue 모두를 인수로 받을 수 있다.",
+    "answer": true,
+    "explanation": "const& 매개변수는 lvalue(변수), rvalue(임시 객체, 리터럴) 모두 바인딩 가능하다. 임시 객체의 수명도 참조 수명까지 연장된다."
+  },
+  {
+    "id": "adv_ch05_mc_001",
+    "type": "multiple",
+    "chapter": "CH05 참조와 복사생성자",
+    "question": "다음 중 복사 생성자가 호출되는 상황이 아닌 것은?",
+    "options": [
+      "A a2 = a1;",
+      "func(a1); // A를 값으로 전달",
+      "a2 = a1; // 이미 생성된 a2에 대입",
+      "A a3(a1);"
+    ],
+    "answer": 2,
+    "explanation": "a2 = a1;은 이미 생성된 a2에 대한 대입이므로 복사 대입 연산자(operator=)가 호출된다. 나머지는 모두 복사 생성자 호출이다."
+  },
+  {
+    "id": "adv_ch05_mc_002",
+    "type": "multiple",
+    "chapter": "CH05 참조와 복사생성자",
+    "question": "지역 변수를 참조로 반환하면 어떤 문제가 발생하는가?",
+    "options": [
+      "함수 종료 후 지역 변수가 소멸되어 댕글링 참조가 된다",
+      "반환 타입이 달라 컴파일 에러가 된다",
+      "복사 생성자가 호출되어 느려진다",
+      "아무 문제 없다"
+    ],
+    "answer": 0,
+    "explanation": "지역 변수는 함수 종료 시 소멸된다. 그 주소/참조를 반환하면 해제된 메모리를 가리키는 댕글링 참조가 된다."
+  },
+  {
+    "id": "adv_ch05_mc_003",
+    "type": "multiple",
+    "chapter": "CH05 참조와 복사생성자",
+    "question": "이동 생성자를 noexcept로 선언하는 이유로 가장 적절한 것은?",
+    "options": [
+      "std::vector 등의 컨테이너가 재할당 시 이동 생성자를 안전하게 사용하도록",
+      "속도가 빨라지도록",
+      "컴파일러 최적화를 위해",
+      "예외 발생을 막기 위해"
+    ],
+    "answer": 0,
+    "explanation": "std::vector는 재할당 시 이동 연산이 noexcept가 아니면 예외 안전성을 위해 복사를 사용한다. noexcept 이동 생성자를 선언하면 이동 최적화가 적용된다."
+  },
+  {
+    "id": "adv_ch05_sh_001",
+    "type": "short",
+    "chapter": "CH05 참조와 복사생성자",
+    "question": "복사 생성자를 직접 정의해야 하는 상황을 설명하시오.",
+    "answer": "포인터 멤버가 있는 클래스에서, 기본 복사 생성자는 포인터 값(주소)만 복사하는 얕은 복사를 하므로 두 객체가 같은 메모리를 공유해 double free가 발생한다.",
+    "explanation": "동적 할당 멤버가 있는 경우 깊은 복사(deep copy)를 수행하는 복사 생성자를 직접 구현해야 한다."
+  },
+  {
+    "id": "adv_ch05_sh_002",
+    "type": "short",
+    "chapter": "CH05 참조와 복사생성자",
+    "question": "다음 코드의 출력 결과를 쓰시오.\n\nint a = 5, b = 10;\nint& r = a;\nr = b;\ncout << a << ' ' << b << ' ' << r;",
+    "answer": "10 10 10",
+    "explanation": "r = b는 r을 b로 재바인딩하는 것이 아니라 a(r이 참조하는 변수)에 b의 값 10을 대입한다. 따라서 a=10, b=10, r=10이다."
+  },
+  {
+    "id": "adv_ch06_ox_001",
+    "type": "ox",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "반환 타입만 다르고 매개변수가 동일한 함수는 오버로딩이 성립한다.",
+    "answer": false,
+    "explanation": "오버로딩은 매개변수 타입/개수/순서로 구분한다. 반환 타입만 다른 경우는 컴파일 에러다."
+  },
+  {
+    "id": "adv_ch06_ox_002",
+    "type": "ox",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "const 멤버 함수 내에서 비const 멤버 함수를 호출하면 컴파일 에러가 발생한다.",
+    "answer": true,
+    "explanation": "const 함수는 객체 상태를 변경하지 않겠다는 약속이다. 비const 함수를 호출하면 이 약속이 깨질 수 있으므로 컴파일 에러가 된다."
+  },
+  {
+    "id": "adv_ch06_ox_003",
+    "type": "ox",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "void func(const int x)와 void func(int x)는 오버로딩이 성립한다.",
+    "answer": false,
+    "explanation": "매개변수의 최상위 const(top-level const)는 오버로딩 구분 기준이 아니다. 두 함수는 동일한 시그니처로 간주되어 재정의 에러가 발생한다."
+  },
+  {
+    "id": "adv_ch06_mc_001",
+    "type": "multiple",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "static 멤버 함수에 대한 설명으로 옳지 않은 것은?",
+    "options": [
+      "객체 없이 클래스 이름으로 호출 가능",
+      "this 포인터가 존재한다",
+      "non-static 멤버 변수에 접근 불가",
+      "virtual로 선언할 수 없다"
+    ],
+    "answer": 1,
+    "explanation": "static 멤버 함수는 특정 객체에 귀속되지 않으므로 this 포인터가 없다."
+  },
+  {
+    "id": "adv_ch06_mc_002",
+    "type": "multiple",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "기본 인수(default argument)에 대한 설명으로 옳은 것은?",
+    "options": [
+      "오른쪽 매개변수부터 순서대로 지정해야 한다",
+      "왼쪽부터 지정해도 된다",
+      "기본 인수가 있는 매개변수 오른쪽에 기본값 없는 매개변수가 있어도 된다",
+      "기본 인수는 함수 정의(본체)에서만 지정 가능하다"
+    ],
+    "answer": 0,
+    "explanation": "기본 인수는 반드시 오른쪽 매개변수부터 지정해야 한다. f(int a, int b=0, int c)는 컴파일 에러다."
+  },
+  {
+    "id": "adv_ch06_mc_003",
+    "type": "multiple",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "const 객체에서 호출할 수 있는 멤버 함수는?",
+    "options": [
+      "const로 선언된 멤버 함수만",
+      "public 멤버 함수 전체",
+      "static 멤버 함수만",
+      "모든 멤버 함수"
+    ],
+    "answer": 0,
+    "explanation": "const 객체는 객체 상태를 변경할 수 없다. 따라서 const로 선언된 멤버 함수만 호출 가능하다(static 함수도 가능)."
+  },
+  {
+    "id": "adv_ch06_sh_001",
+    "type": "short",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "다음 두 함수 선언이 오버로딩으로 성립하는지 여부와 그 이유를 쓰시오.\n\nvoid print(int x);\nvoid print(const int x);",
+    "answer": "성립하지 않는다. 매개변수의 최상위 const는 오버로딩 구분 기준이 아니기 때문이다.",
+    "explanation": "top-level const는 함수 시그니처 구분에 사용되지 않아 중복 정의 에러가 발생한다."
+  },
+  {
+    "id": "adv_ch06_sh_002",
+    "type": "short",
+    "chapter": "CH06 함수중복과 const 정적함수",
+    "question": "static 멤버 변수를 클래스 선언 외부에서 정의해야 하는 이유를 설명하시오.",
+    "answer": "클래스 내부의 static 멤버 변수는 선언만 되며 실제 메모리가 없다. 외부에서 정의(int MyClass::count = 0;)해야 링커가 메모리를 할당한다.",
+    "explanation": "클래스 선언은 보통 헤더 파일에 있고 여러 번 포함되므로, static 정의는 .cpp 파일에 한 번만 작성해야 중복 정의 에러를 막을 수 있다."
+  },
+  {
+    "id": "adv_ch07_ox_001",
+    "type": "ox",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "::, ., .*, ?:, sizeof 연산자는 오버로딩할 수 없다.",
+    "answer": true,
+    "explanation": "이 5개 연산자는 C++ 표준에 의해 오버로딩이 금지되어 있다."
+  },
+  {
+    "id": "adv_ch07_ox_002",
+    "type": "ox",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "후위 증가 연산자(++)는 전위 ++와 구분하기 위해 int 타입의 더미 매개변수를 사용한다.",
+    "answer": true,
+    "explanation": "전위: T& operator++(); 후위: T operator++(int); — int 더미 매개변수로 두 연산자를 구분한다."
+  },
+  {
+    "id": "adv_ch07_ox_003",
+    "type": "ox",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "오버로딩한 연산자의 우선순위는 사용자가 변경할 수 있다.",
+    "answer": false,
+    "explanation": "연산자 오버로딩으로는 의미(동작)만 바꿀 수 있고, 우선순위나 결합성은 변경할 수 없다."
+  },
+  {
+    "id": "adv_ch07_mc_001",
+    "type": "multiple",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "cout << obj; 처럼 ostream에 << 연산자를 오버로딩할 때 friend로 선언하는 이유는?",
+    "options": [
+      "왼쪽 피연산자가 ostream이므로 멤버 함수로 구현 불가",
+      "friend가 더 빠르기 때문",
+      "멤버 함수로 구현 시 컴파일 에러가 아닌 경고가 발생하므로",
+      "ostream의 private 멤버에 접근하기 위해"
+    ],
+    "answer": 0,
+    "explanation": "operator<<의 왼쪽 피연산자는 ostream 객체다. 멤버 함수는 왼쪽 피연산자가 자기 클래스여야 하므로, ostream을 왼쪽에 두려면 비멤버(friend) 함수로 구현해야 한다."
+  },
+  {
+    "id": "adv_ch07_mc_002",
+    "type": "multiple",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "대입 연산자(operator=)의 반환 타입을 T&로 권장하는 이유는?",
+    "options": [
+      "a = b = c; 처럼 연쇄 대입이 가능하도록",
+      "복사를 줄이기 위해",
+      "C++ 표준 요구 사항이기 때문에",
+      "소멸자 호출을 막기 위해"
+    ],
+    "answer": 0,
+    "explanation": "*this 참조를 반환하면 a = b = c; 같은 연쇄 대입이 가능하다. void 반환이면 연쇄 대입이 불가능하다."
+  },
+  {
+    "id": "adv_ch07_mc_003",
+    "type": "multiple",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "전위 ++ 와 후위 ++ 의 반환 타입 차이로 옳은 것은?",
+    "options": [
+      "전위: 참조 반환, 후위: 값 반환",
+      "전위: 값 반환, 후위: 참조 반환",
+      "둘 다 참조 반환",
+      "둘 다 값 반환"
+    ],
+    "answer": 0,
+    "explanation": "전위(++x)는 증가된 자신을 참조로 반환(T&), 후위(x++)는 증가 전 복사본을 값으로 반환(T)하므로 후위가 더 비용이 크다."
+  },
+  {
+    "id": "adv_ch07_sh_001",
+    "type": "short",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "operator[]를 오버로딩할 때 반환 타입을 참조(T&)로 해야 하는 이유를 설명하시오.",
+    "answer": "참조를 반환해야 arr[i] = 5; 처럼 l-value로 사용(읽기·쓰기)할 수 있기 때문이다.",
+    "explanation": "값 반환이면 임시 복사본에 대입하는 꼴이 되어 원본이 변경되지 않는다."
+  },
+  {
+    "id": "adv_ch07_sh_002",
+    "type": "short",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
+    "question": "함수 객체(functor)란 무엇인지 설명하시오.",
+    "answer": "operator()를 오버로딩하여 함수처럼 호출할 수 있는 객체를 말한다.",
+    "explanation": "예: MyFunc obj; obj(3); — 클래스 인스턴스를 함수처럼 사용. STL 알고리즘의 비교 함수 등에 활용된다."
+  },
+  {
+    "id": "adv_ch08_ox_001",
+    "type": "ox",
+    "chapter": "CH08 상속과 다형성",
+    "question": "파생 클래스 생성 시 기반 클래스 생성자가 먼저 호출되고, 소멸 시에는 역순으로 소멸자가 호출된다.",
+    "answer": true,
+    "explanation": "생성: 기반 → 파생, 소멸: 파생 → 기반 순서. 소멸은 생성의 역순이다."
+  },
+  {
+    "id": "adv_ch08_ox_002",
+    "type": "ox",
+    "chapter": "CH08 상속과 다형성",
+    "question": "override 키워드를 사용하면 기반 클래스에 동일한 가상 함수가 없을 경우 컴파일 에러가 발생한다.",
+    "answer": true,
+    "explanation": "override는 컴파일러에게 이 함수가 기반 클래스 가상 함수를 재정의함을 명시한다. 기반에 해당 가상 함수가 없으면 컴파일 에러로 오타 등의 실수를 방지할 수 있다."
+  },
+  {
+    "id": "adv_ch08_ox_003",
+    "type": "ox",
+    "chapter": "CH08 상속과 다형성",
+    "question": "추상 클래스(순수 가상 함수 포함)는 생성자를 가질 수 없다.",
+    "answer": false,
+    "explanation": "추상 클래스도 생성자를 가질 수 있다. 직접 인스턴스화는 불가능하지만 파생 클래스 생성 시 기반 생성자가 호출된다."
+  },
+  {
+    "id": "adv_ch08_ox_004",
+    "type": "ox",
+    "chapter": "CH08 상속과 다형성",
+    "question": "가상 함수가 아닌 함수를 파생 클래스에서 재정의하면 정적 바인딩(컴파일 타임)으로 동작한다.",
+    "answer": true,
+    "explanation": "비가상 함수 재정의는 이름 가리기(name hiding)이며, Base* 포인터로 호출하면 항상 Base::func()가 호출된다(정적 바인딩)."
+  },
+  {
+    "id": "adv_ch08_ox_005",
+    "type": "ox",
+    "chapter": "CH08 상속과 다형성",
+    "question": "다이아몬드 상속 문제는 virtual 키워드를 사용한 가상 상속으로 해결할 수 있다.",
+    "answer": true,
+    "explanation": "virtual 상속을 사용하면 공통 기반 클래스의 인스턴스가 하나만 생성되어 다이아몬드 중복 문제를 해결한다."
+  },
+  {
+    "id": "adv_ch08_mc_001",
+    "type": "multiple",
+    "chapter": "CH08 상속과 다형성",
+    "question": "dynamic_cast 실패 시 포인터와 참조 각각의 결과는?",
+    "options": [
+      "포인터: nullptr 반환, 참조: std::bad_cast 예외",
+      "포인터: 예외, 참조: nullptr",
+      "둘 다 nullptr",
+      "둘 다 예외"
+    ],
+    "answer": 0,
+    "explanation": "dynamic_cast 실패 시 포인터 타입은 nullptr을, 참조 타입은 std::bad_cast 예외를 발생시킨다."
+  },
+  {
+    "id": "adv_ch08_mc_002",
+    "type": "multiple",
+    "chapter": "CH08 상속과 다형성",
+    "question": "다음 중 순수 가상 함수(pure virtual function)에 대한 설명으로 옳지 않은 것은?",
+    "options": [
+      "= 0으로 선언한다",
+      "선언만 되고 구현은 불가능하다",
+      "포함한 클래스는 추상 클래스가 된다",
+      "파생 클래스에서 반드시 구현해야 인스턴스화 가능"
+    ],
+    "answer": 1,
+    "explanation": "순수 가상 함수도 본체를 제공할 수 있다(구현 가능). 단, 파생 클래스에서 재정의를 강제하는 의미가 있다."
+  },
+  {
+    "id": "adv_ch08_mc_003",
+    "type": "multiple",
+    "chapter": "CH08 상속과 다형성",
+    "question": "가상 함수 테이블(vtable)에 대한 설명으로 옳은 것은?",
+    "options": [
+      "가상 함수 포인터 목록을 담은 테이블로, 각 객체는 vptr로 이를 가리킨다",
+      "모든 함수의 주소를 저장한다",
+      "프로그램 시작 시 동적으로 생성된다",
+      "함수 호출 시 스택에 생성된다"
+    ],
+    "answer": 0,
+    "explanation": "vtable은 클래스마다 하나 존재하며 가상 함수 주소를 저장한다. 각 객체는 vptr(가상 함수 포인터)로 자신의 클래스 vtable을 참조한다."
+  },
+  {
+    "id": "adv_ch08_mc_004",
+    "type": "multiple",
+    "chapter": "CH08 상속과 다형성",
+    "question": "업캐스팅과 다운캐스팅에 대한 설명으로 옳은 것은?",
+    "options": [
+      "업캐스팅은 암시적으로 가능하고, 다운캐스팅은 명시적 캐스팅이 필요하다",
+      "다운캐스팅이 더 안전하다",
+      "업캐스팅 시 데이터가 잘린다",
+      "둘 다 명시적 캐스팅이 필요하다"
+    ],
+    "answer": 0,
+    "explanation": "파생→기반(업캐스팅)은 안전하므로 암시적으로 된다. 기반→파생(다운캐스팅)은 잘못된 경우 정의되지 않은 동작이므로 명시적 캐스팅과 타입 확인이 필요하다."
+  },
+  {
+    "id": "adv_ch08_mc_005",
+    "type": "multiple",
+    "chapter": "CH08 상속과 다형성",
+    "question": "다음 중 final 키워드에 대한 설명으로 옳은 것은?",
+    "options": [
+      "클래스 또는 가상 함수에 사용해 더 이상 상속/오버라이드를 금지한다",
+      "함수 반환값을 고정한다",
+      "상수 변수를 선언한다",
+      "C++03부터 지원된다"
+    ],
+    "answer": 0,
+    "explanation": "final은 C++11부터 도입. class A final {}; 또는 virtual void f() final;로 사용. 더 이상 상속/오버라이드를 금지한다."
+  },
+  {
+    "id": "adv_ch08_sh_001",
+    "type": "short",
+    "chapter": "CH08 상속과 다형성",
+    "question": "다음 코드의 출력 결과를 쓰시오.\n\nstruct A {\n    virtual ~A() { cout << 'A'; }\n};\nstruct B : A {\n    ~B() { cout << 'B'; }\n};\nA* p = new B();\ndelete p;",
+    "answer": "BA",
+    "explanation": "가상 소멸자이므로 동적 바인딩으로 B의 소멸자가 먼저 호출(B 출력), 그다음 기반 A의 소멸자 호출(A 출력)."
+  },
+  {
+    "id": "adv_ch08_sh_002",
+    "type": "short",
+    "chapter": "CH08 상속과 다형성",
+    "question": "인터페이스(interface) 클래스와 추상 클래스의 차이를 설명하시오.",
+    "answer": "인터페이스는 순수 가상 함수만 포함하고 데이터 멤버가 없는 클래스이며, 추상 클래스는 순수 가상 함수 외에 일반 멤버 함수나 데이터도 포함할 수 있다.",
+    "explanation": "C++에는 interface 키워드가 없지만, 순수 가상 함수만 있는 클래스를 관례상 인터페이스라 부른다."
+  },
+  {
+    "id": "adv_ch08_sh_003",
+    "type": "short",
+    "chapter": "CH08 상속과 다형성",
+    "question": "static_cast와 dynamic_cast의 차이를 설명하시오.",
+    "answer": "static_cast는 컴파일 타임 타입 변환으로 RTTI 비용 없이 빠르지만 안전성 보장이 없다. dynamic_cast는 런타임에 RTTI로 타입을 확인해 안전하지만 비용이 있다.",
+    "explanation": "잘못된 다운캐스팅에서 static_cast는 정의되지 않은 동작을, dynamic_cast는 nullptr(포인터) 또는 bad_cast(참조)를 반환한다."
+  },
+  {
+    "id": "adv_ch09_ox_001",
+    "type": "ox",
+    "chapter": "CH09 파일입출력",
+    "question": "ifstream 객체로 파일을 열었을 때 파일이 존재하지 않으면 새 파일이 자동으로 생성된다.",
+    "answer": false,
+    "explanation": "ifstream(읽기용)은 파일이 없으면 실패한다. 자동 생성되는 것은 ofstream(쓰기용)이다."
+  },
+  {
+    "id": "adv_ch09_ox_002",
+    "type": "ox",
+    "chapter": "CH09 파일입출력",
+    "question": "ios::app 모드로 파일을 열면 기존 내용을 지우지 않고 파일 끝에 추가한다.",
+    "answer": true,
+    "explanation": "ios::app은 append 모드. ios::trunc(또는 out 단독)는 기존 내용을 지운다."
+  },
+  {
+    "id": "adv_ch09_mc_001",
+    "type": "multiple",
+    "chapter": "CH09 파일입출력",
+    "question": "다음 중 파일의 읽기/쓰기를 모두 할 수 있는 스트림 클래스는?",
+    "options": [
+      "fstream",
+      "ifstream",
+      "ofstream",
+      "stringstream"
+    ],
+    "answer": 0,
+    "explanation": "fstream = 읽기+쓰기, ifstream = 읽기 전용, ofstream = 쓰기 전용."
+  },
+  {
+    "id": "adv_ch09_mc_002",
+    "type": "multiple",
+    "chapter": "CH09 파일입출력",
+    "question": "파일 스트림에서 현재 파일 위치(포인터)를 변경하는 함수는?",
+    "options": [
+      "seekg()/seekp()",
+      "tellg()/tellp()",
+      "read()/write()",
+      "open()/close()"
+    ],
+    "answer": 0,
+    "explanation": "seekg(읽기 위치), seekp(쓰기 위치)로 파일 포인터를 이동한다. tellg/tellp는 현재 위치를 반환한다."
+  },
+  {
+    "id": "adv_ch09_sh_001",
+    "type": "short",
+    "chapter": "CH09 파일입출력",
+    "question": "ifstream fin(\"data.txt\"); 후 파일 열기 성공 여부를 확인하는 방법을 코드로 쓰시오.",
+    "answer": "if(!fin) 또는 if(fin.fail()) 또는 if(!fin.is_open())",
+    "explanation": "스트림 객체는 bool로 변환되며, 파일 열기 실패 시 false가 된다."
+  },
+  {
+    "id": "adv_ch09_sh_002",
+    "type": "short",
+    "chapter": "CH09 파일입출력",
+    "question": "ios::binary 모드와 텍스트 모드의 차이를 설명하시오.",
+    "answer": "텍스트 모드는 줄바꿈(\\n)을 OS 형식으로 변환하지만, 바이너리 모드는 변환 없이 데이터를 그대로 읽고 쓴다.",
+    "explanation": "Windows에서 텍스트 모드는 \\n을 \\r\\n으로 변환한다. 이미지·구조체 등 이진 데이터는 반드시 바이너리 모드를 써야 한다."
+  },
+  {
+    "id": "adv_ch10_ox_001",
+    "type": "ox",
+    "chapter": "CH10 템플릿",
+    "question": "함수 템플릿은 부분 특수화(partial specialization)가 가능하다.",
+    "answer": false,
+    "explanation": "클래스 템플릿은 부분 특수화가 가능하지만, 함수 템플릿은 부분 특수화가 불가능하다. 함수는 오버로딩으로 대체한다."
+  },
+  {
+    "id": "adv_ch10_ox_002",
+    "type": "ox",
+    "chapter": "CH10 템플릿",
+    "question": "템플릿 코드(구현부)는 일반적으로 헤더 파일에 작성한다.",
+    "answer": true,
+    "explanation": "템플릿은 컴파일 시점에 인스턴스화되므로 구현부가 보여야 한다. .cpp에 분리하면 링크 에러가 발생한다."
+  },
+  {
+    "id": "adv_ch10_ox_003",
+    "type": "ox",
+    "chapter": "CH10 템플릿",
+    "question": "template<int N>처럼 타입이 아닌 정수를 템플릿 매개변수로 사용할 수 있다.",
+    "answer": true,
+    "explanation": "비타입 템플릿 매개변수(non-type template parameter). 정수, 포인터, 열거형 등을 사용할 수 있다. std::array<int,5>가 대표적인 예다."
+  },
+  {
+    "id": "adv_ch10_mc_001",
+    "type": "multiple",
+    "chapter": "CH10 템플릿",
+    "question": "다음 중 템플릿 특수화가 일반 템플릿보다 우선 선택되는 조건은?",
+    "options": [
+      "호출 인수 타입이 특수화의 타입과 정확히 일치할 때",
+      "항상 일반 템플릿이 우선이다",
+      "컴파일러 설정에 따라 다르다",
+      "링크 순서에 따라 다르다"
+    ],
+    "answer": 0,
+    "explanation": "완전 특수화(explicit/full specialization)는 해당 타입으로 호출할 때 일반 템플릿보다 우선 선택된다."
+  },
+  {
+    "id": "adv_ch10_mc_002",
+    "type": "multiple",
+    "chapter": "CH10 템플릿",
+    "question": "클래스 템플릿 정의 시 typename과 class 키워드에 대한 설명으로 옳은 것은?",
+    "options": [
+      "타입 매개변수 선언 시 둘은 동일한 의미로 사용 가능하다",
+      "typename은 기본 타입에만, class는 클래스 타입에만 사용된다",
+      "class가 더 일반적이다",
+      "typename만 허용된다"
+    ],
+    "answer": 0,
+    "explanation": "template<typename T>와 template<class T>는 타입 매개변수 선언에서 동일하다. 단, 의존 타입 지정(typename T::type)에는 반드시 typename을 써야 한다."
+  },
+  {
+    "id": "adv_ch10_mc_003",
+    "type": "multiple",
+    "chapter": "CH10 템플릿",
+    "question": "다음 코드에서 컴파일 에러가 발생하는 이유는?\n\ntemplate<typename T>\nvoid foo() {\n    T::value_type x; // 에러\n}",
+    "options": [
+      "T::value_type이 타입임을 알리는 typename이 없기 때문",
+      "T가 클래스가 아니기 때문",
+      "void 반환 함수이기 때문",
+      "매개변수가 없기 때문"
+    ],
+    "answer": 0,
+    "explanation": "T에 의존하는 이름(dependent name)이 타입인지 값인지 컴파일러가 모른다. typename T::value_type x;처럼 typename을 붙여야 한다."
+  },
+  {
+    "id": "adv_ch10_sh_001",
+    "type": "short",
+    "chapter": "CH10 템플릿",
+    "question": "다음 함수 템플릿의 완전 특수화 선언을 char* 타입에 대해 작성하시오.\n\ntemplate<typename T>\nbool equal(T a, T b) { return a == b; }",
+    "answer": "template<> bool equal<char*>(char* a, char* b) { return strcmp(a, b) == 0; }",
+    "explanation": "char* 비교는 == 가 주소 비교이므로 strcmp를 쓰는 특수화가 필요하다."
+  },
+  {
+    "id": "adv_ch10_sh_002",
+    "type": "short",
+    "chapter": "CH10 템플릿",
+    "question": "가변 인수 템플릿(variadic template)이란 무엇인지 간략히 설명하시오.",
+    "answer": "template<typename... Args>처럼 임의 개수·타입의 템플릿 인수를 받을 수 있는 템플릿이다.",
+    "explanation": "C++11 도입. printf처럼 가변 인수를 타입 안전하게 처리할 수 있다. std::tuple, std::make_unique 등에 활용된다."
+  },
+  {
+    "id": "adv_clang06_ox_001",
+    "type": "ox",
+    "chapter": "C언어 CH06 함수",
+    "question": "C 언어에서 함수 원형(prototype)은 선언 시 매개변수 이름을 생략해도 된다.",
+    "answer": true,
+    "explanation": "함수 원형은 타입 정보만 있으면 된다. int add(int, int);처럼 이름을 생략해도 컴파일된다."
+  },
+  {
+    "id": "adv_clang06_ox_002",
+    "type": "ox",
+    "chapter": "C언어 CH06 함수",
+    "question": "C 언어에서 재귀 함수는 반드시 종료 조건(base case)이 있어야 무한 루프를 방지할 수 있다.",
+    "answer": true,
+    "explanation": "종료 조건 없는 재귀 함수는 스택 오버플로(stack overflow)를 일으킨다."
+  },
+  {
+    "id": "adv_clang06_mc_001",
+    "type": "multiple",
+    "chapter": "C언어 CH06 함수",
+    "question": "C 언어에서 함수로 배열을 전달했을 때 일어나는 일은?",
+    "options": [
+      "배열 첫 원소의 주소(포인터)가 전달된다",
+      "배열 전체가 복사된다",
+      "배열 크기 정보가 함께 전달된다",
+      "2D 배열도 동일하게 1D 포인터로 전달된다"
+    ],
+    "answer": 0,
+    "explanation": "배열은 함수 인수로 전달될 때 첫 원소의 포인터로 decay된다. 크기 정보는 전달되지 않는다."
+  },
+  {
+    "id": "adv_clang06_sh_001",
+    "type": "short",
+    "chapter": "C언어 CH06 함수",
+    "question": "두 변수의 값을 서로 바꾸는 swap 함수를 포인터 매개변수를 사용해 작성하시오.",
+    "answer": "void swap(int *a, int *b) { int tmp = *a; *a = *b; *b = tmp; }",
+    "explanation": "C는 참조가 없으므로 포인터로 주소를 전달해 원본을 수정해야 한다."
+  },
+  {
+    "id": "adv_clang06_sh_002",
+    "type": "short",
+    "chapter": "C언어 CH06 함수",
+    "question": "C 언어에서 함수가 여러 값을 반환할 수 없는 이유와 해결 방법을 설명하시오.",
+    "answer": "return문은 값 하나만 반환할 수 있다. 해결: 포인터 매개변수로 출력값을 전달하거나, 구조체로 묶어 반환한다.",
+    "explanation": "포인터 또는 구조체 반환이 C에서의 다중 반환 방법이다."
+  },
+  {
+    "id": "adv_clang07_ox_001",
+    "type": "ox",
+    "chapter": "C언어 CH07 기억 클래스",
+    "question": "static 전역 변수는 extern 키워드로 다른 파일에서 참조할 수 없다.",
+    "answer": true,
+    "explanation": "static 전역 변수의 범위는 해당 파일(translation unit)로 제한된다. extern으로 외부 참조가 불가능하다."
+  },
+  {
+    "id": "adv_clang07_ox_002",
+    "type": "ox",
+    "chapter": "C언어 CH07 기억 클래스",
+    "question": "전역 변수와 static 지역 변수는 명시적 초기화 없이도 0으로 초기화된다.",
+    "answer": true,
+    "explanation": "전역/static 변수는 프로그램 시작 전에 BSS 또는 데이터 영역에서 0으로 초기화된다."
+  },
+  {
+    "id": "adv_clang07_mc_001",
+    "type": "multiple",
+    "chapter": "C언어 CH07 기억 클래스",
+    "question": "다음 코드를 3번 호출했을 때 출력 결과는?\n\nvoid counter() {\n    static int cnt = 0;\n    cnt++;\n    printf(\"%d \", cnt);\n}",
+    "options": [
+      "1 2 3",
+      "0 1 2",
+      "1 1 1",
+      "0 0 0"
+    ],
+    "answer": 0,
+    "explanation": "static 지역변수는 최초 한 번만 초기화되고 함수 종료 후에도 값이 유지된다. 호출마다 cnt가 1씩 증가한다."
+  },
+  {
+    "id": "adv_clang07_mc_002",
+    "type": "multiple",
+    "chapter": "C언어 CH07 기억 클래스",
+    "question": "extern 키워드의 올바른 사용 목적은?",
+    "options": [
+      "다른 파일에 정의된 전역 변수를 현재 파일에서 참조하기 위해",
+      "변수를 외부 메모리(레지스터)에 저장하기 위해",
+      "변수의 수명을 프로그램 실행 내내 유지하기 위해",
+      "변수를 상수로 만들기 위해"
+    ],
+    "answer": 0,
+    "explanation": "extern은 변수가 다른 파일에 정의되어 있음을 컴파일러에 알린다. 선언이지 정의가 아니므로 메모리를 할당하지 않는다."
+  },
+  {
+    "id": "adv_clang07_sh_001",
+    "type": "short",
+    "chapter": "C언어 CH07 기억 클래스",
+    "question": "지역 변수의 기억 클래스(수명)와 static 지역 변수의 차이를 설명하시오.",
+    "answer": "지역 변수는 함수 호출 시 스택에 생성되고 반환 시 소멸한다. static 지역 변수는 최초 한 번 초기화되어 프로그램 종료까지 유지된다.",
+    "explanation": "범위(scope)는 동일하지만 수명(lifetime)이 다르다."
+  },
+  {
+    "id": "adv_clang07_sh_002",
+    "type": "short",
+    "chapter": "C언어 CH07 기억 클래스",
+    "question": "변수의 범위(scope)와 수명(lifetime)의 차이를 설명하시오.",
+    "answer": "범위는 변수에 접근할 수 있는 코드 영역이고, 수명은 변수가 메모리에 존재하는 기간이다.",
+    "explanation": "예: static 지역변수는 범위는 함수 내부이지만 수명은 프로그램 전체이다."
+  },
+  {
+    "id": "adv_clang08_ox_001",
+    "type": "ox",
+    "chapter": "C언어 CH08 배열과 문자열",
+    "question": "char str[5] = \"Hello\";는 null 종료 문자('\\0')까지 저장할 공간이 부족하다.",
+    "answer": true,
+    "explanation": "\"Hello\"는 5글자 + '\\0' = 6바이트가 필요하다. str[5]는 5바이트뿐이므로 null 종료 문자가 들어갈 자리가 없어 위험하다."
+  },
+  {
+    "id": "adv_clang08_ox_002",
+    "type": "ox",
+    "chapter": "C언어 CH08 배열과 문자열",
+    "question": "strlen은 null 종료 문자('\\0')를 길이에 포함하지 않는다.",
+    "answer": true,
+    "explanation": "strlen은 '\\0' 전까지의 문자 수를 반환한다. '\\0'은 포함하지 않으므로 sizeof(배열) != strlen(문자열)+1은 보통 거짓이다."
+  },
+  {
+    "id": "adv_clang08_ox_003",
+    "type": "ox",
+    "chapter": "C언어 CH08 배열과 문자열",
+    "question": "strcmp 함수는 두 문자열이 동일할 때 1을 반환한다.",
+    "answer": false,
+    "explanation": "strcmp는 두 문자열이 동일하면 0을 반환한다. 양수는 str1 > str2, 음수는 str1 < str2이다."
+  },
+  {
+    "id": "adv_clang08_mc_001",
+    "type": "multiple",
+    "chapter": "C언어 CH08 배열과 문자열",
+    "question": "char s[] = \"ABC\";에서 sizeof(s)와 strlen(s)의 값은?",
+    "options": [
+      "sizeof=4, strlen=3",
+      "sizeof=3, strlen=3",
+      "sizeof=4, strlen=4",
+      "sizeof=3, strlen=4"
+    ],
+    "answer": 0,
+    "explanation": "'A','B','C','\\0' = 4바이트. sizeof(s)=4, strlen은 null 제외 3이다."
+  },
+  {
+    "id": "adv_clang08_mc_002",
+    "type": "multiple",
+    "chapter": "C언어 CH08 배열과 문자열",
+    "question": "gets() 함수 사용이 권장되지 않는 이유는?",
+    "options": [
+      "입력 길이를 제한하지 않아 버퍼 오버플로 취약점이 있다",
+      "int를 반환하지 않아서",
+      "scanf보다 느리기 때문에",
+      "헤더 파일이 다르기 때문에"
+    ],
+    "answer": 0,
+    "explanation": "gets()는 입력 길이 제한이 없어 버퍼를 초과할 수 있다. C11에서 표준에서 제거됐다. fgets()를 대신 사용한다."
+  },
+  {
+    "id": "adv_clang08_sh_001",
+    "type": "short",
+    "chapter": "C언어 CH08 배열과 문자열",
+    "question": "strcpy와 strncpy의 차이를 안전성 측면에서 설명하시오.",
+    "answer": "strcpy는 복사할 길이를 제한하지 않아 목적 버퍼가 작으면 오버플로가 발생한다. strncpy는 복사 크기 n을 지정해 더 안전하다.",
+    "explanation": "단, strncpy는 n 내에 null 종료가 없으면 자동으로 null을 추가하지 않으므로 수동으로 처리해야 한다."
+  },
+  {
+    "id": "adv_clang08_sh_002",
+    "type": "short",
+    "chapter": "C언어 CH08 배열과 문자열",
+    "question": "2차원 배열 int arr[3][4]에서 arr[1][2]의 메모리 오프셋(arr[0][0]으로부터 몇 번째 int)을 구하시오.",
+    "answer": "6번째 (오프셋 = 1*4 + 2 = 6)",
+    "explanation": "2차원 배열은 행 우선(row-major)으로 저장된다. 오프셋 = 행번호 * 열수 + 열번호 = 1*4+2 = 6."
+  },
+  {
+    "id": "adv_clang11_ox_001",
+    "type": "ox",
+    "chapter": "C언어 CH11 구조체",
+    "question": "C 언어에서 구조체 대입(=)은 멤버 전체를 복사한다.",
+    "answer": true,
+    "explanation": "C에서 구조체 대입은 멤버 값 전체를 복사한다. 포인터 멤버가 있다면 주소만 복사되는 얕은 복사가 된다."
+  },
+  {
+    "id": "adv_clang11_ox_002",
+    "type": "ox",
+    "chapter": "C언어 CH11 구조체",
+    "question": "구조체를 함수에 값으로 전달하면 전체 구조체가 복사된다.",
+    "answer": true,
+    "explanation": "구조체를 값 전달하면 모든 멤버가 스택에 복사된다. 큰 구조체는 포인터로 전달하는 것이 효율적이다."
+  },
+  {
+    "id": "adv_clang11_mc_001",
+    "type": "multiple",
+    "chapter": "C언어 CH11 구조체",
+    "question": "구조체 포인터 p로 멤버 x에 접근하는 올바른 방법은?",
+    "options": [
+      "p->x",
+      "p.x",
+      "*p.x",
+      "(*p)->x"
+    ],
+    "answer": 0,
+    "explanation": "포인터로 구조체 멤버에 접근할 때는 -> 연산자를 사용한다. (*p).x와 동일하다."
+  },
+  {
+    "id": "adv_clang11_mc_002",
+    "type": "multiple",
+    "chapter": "C언어 CH11 구조체",
+    "question": "구조체 패딩(padding)에 대한 설명으로 옳은 것은?",
+    "options": [
+      "컴파일러가 정렬을 위해 멤버 사이에 빈 바이트를 삽입한다",
+      "멤버 변수를 추가 선언하는 것이다",
+      "포인터 멤버에만 해당한다",
+      "sizeof가 항상 멤버 크기의 합이 아닐 수 있다"
+    ],
+    "answer": 0,
+    "explanation": "CPU 접근 효율을 위해 컴파일러는 멤버를 정렬된 주소에 배치하며 빈 공간(padding)이 생길 수 있다. sizeof(struct)가 멤버 합보다 클 수 있다."
+  },
+  {
+    "id": "adv_clang11_sh_001",
+    "type": "short",
+    "chapter": "C언어 CH11 구조체",
+    "question": "typedef struct를 사용하는 이유를 설명하시오.",
+    "answer": "typedef를 사용하면 struct 키워드를 생략하고 타입 이름만으로 변수를 선언할 수 있어 코드가 간결해진다.",
+    "explanation": "C에서는 struct Point p;처럼 struct를 반드시 붙여야 하지만, typedef struct Point Point;로 정의하면 Point p;만으로 선언 가능하다."
+  },
+  {
+    "id": "adv_clang11_sh_002",
+    "type": "short",
+    "chapter": "C언어 CH11 구조체",
+    "question": "다음 구조체의 sizeof 결과가 8바이트가 아닌 12바이트인 이유를 설명하시오.\n\nstruct A { char c; int x; char d; };",
+    "answer": "정렬(alignment) 때문에 c(1)+패딩(3)+x(4)+d(1)+패딩(3) = 12바이트가 된다.",
+    "explanation": "int는 4바이트 정렬이 필요해 c 뒤에 3바이트 패딩, d 뒤에도 3바이트 패딩이 생긴다. 멤버 순서를 char, char, int로 바꾸면 8바이트로 줄일 수 있다."
+  },
+  {
+    "id": "adv_clang12_ox_001",
+    "type": "ox",
+    "chapter": "C언어 CH12 파일입출력",
+    "question": "fopen 실패 시 NULL을 반환하므로 반환값 확인은 필수적이다.",
+    "answer": true,
+    "explanation": "fopen이 NULL을 반환한 상태에서 파일 작업을 하면 프로그램이 비정상 종료된다."
+  },
+  {
+    "id": "adv_clang12_ox_002",
+    "type": "ox",
+    "chapter": "C언어 CH12 파일입출력",
+    "question": "\"r+\" 모드는 파일이 없으면 새로 생성한다.",
+    "answer": false,
+    "explanation": "\"r+\"는 읽기+쓰기 모드이며 파일이 반드시 존재해야 한다. 파일이 없으면 fopen이 실패한다."
+  },
+  {
+    "id": "adv_clang12_mc_001",
+    "type": "multiple",
+    "chapter": "C언어 CH12 파일입출력",
+    "question": "구조체 데이터를 파일에 그대로 저장하기에 적합한 함수는?",
+    "options": [
+      "fwrite/fread",
+      "fprintf/fscanf",
+      "fputs/fgets",
+      "fputc/fgetc"
+    ],
+    "answer": 0,
+    "explanation": "fwrite/fread는 이진(binary) 데이터를 그대로 읽고 쓴다. 구조체처럼 형식이 정해진 이진 데이터에 적합하다."
+  },
+  {
+    "id": "adv_clang12_mc_002",
+    "type": "multiple",
+    "chapter": "C언어 CH12 파일입출력",
+    "question": "파일의 끝(EOF)을 fgetc 반환값으로 확인하는 올바른 방법은?",
+    "options": [
+      "ch == EOF",
+      "ch == '\\0'",
+      "ch == -1",
+      "ch == 0"
+    ],
+    "answer": 0,
+    "explanation": "fgetc는 파일 끝이거나 에러 시 EOF(보통 -1)를 반환한다. 반환 타입은 int여야 한다(char에 저장하면 EOF 구분 불가)."
+  },
+  {
+    "id": "adv_clang12_sh_001",
+    "type": "short",
+    "chapter": "C언어 CH12 파일입출력",
+    "question": "fgetc 반환 타입을 char가 아닌 int로 받아야 하는 이유를 설명하시오.",
+    "answer": "char는 EOF(-1)를 표현할 수 없거나 유효한 문자와 구분이 불가능할 수 있다. int로 받아야 EOF와 일반 문자를 올바르게 구분할 수 있다.",
+    "explanation": "unsigned char에서 255(0xFF)는 EOF(-1)와 혼동될 수 있다. fgetc 반환값은 int 타입으로 처리해야 한다."
+  },
+  {
+    "id": "adv_clang12_sh_002",
+    "type": "short",
+    "chapter": "C언어 CH12 파일입출력",
+    "question": "fopen 모드 \"w\"와 \"a\"의 차이를 설명하시오.",
+    "answer": "\"w\"는 파일이 없으면 생성하고, 있으면 기존 내용을 지운다. \"a\"는 파일이 없으면 생성하고, 있으면 끝에 추가한다.",
+    "explanation": "실수로 \"w\"를 쓰면 중요 데이터가 지워질 수 있으므로 주의해야 한다."
+  }
+]
