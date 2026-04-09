@@ -213,7 +213,6 @@
     "answer": "① int *arr[5]: int형 포인터를 5개 저장하는 포인터 배열(원소가 포인터). ② int (*arr)[5]: int형 원소 5개짜리 배열을 가리키는 배열 포인터(포인터 하나).",
     "explanation": "[] 연산자가 * 연산자보다 우선순위가 높다. 괄호 없이 쓰면 arr이 먼저 배열이 되어 포인터 배열, 괄호로 묶으면 arr이 먼저 포인터가 되어 배열 포인터가 된다."
   },
-
   {
     "id": "ptr_ox_007",
     "chapter": "C언어 CH10 포인터",
@@ -334,7 +333,6 @@
     "answer": true,
     "explanation": "포인터 변수는 주소를 저장하는 공간으로, 1단 포인터든 2단 포인터든 크기는 동일하다(32비트: 4바이트, 64비트: 8바이트)."
   },
-
   {
     "id": "ptr_mc_007",
     "chapter": "C언어 CH10 포인터",
@@ -560,7 +558,6 @@
     "answer": 2,
     "explanation": "addTen에 &x(주소)를 전달하므로 *p += 10은 x += 10과 동일하다. x = 5 + 10 = 15 출력."
   },
-
   {
     "id": "ptr_sh_001",
     "chapter": "C언어 CH10 포인터",
@@ -640,5 +637,325 @@
     "question": "동적 메모리 관리 함수 malloc, calloc, realloc, free 각각의 역할을 간단히 서술하시오.",
     "answer": "malloc: 지정 크기(바이트)의 메모리 할당(초기화 없음). calloc: 지정 개수×크기 메모리 할당 후 0으로 초기화. realloc: 기존 할당 메모리 크기 변경. free: 동적 할당 메모리 해제.",
     "explanation": "malloc(n)은 n바이트, calloc(n, size)는 n×size 바이트를 할당한다. realloc(p, new_size)는 p가 가리키는 메모리를 new_size로 재조정한다. 모두 실패 시 NULL 반환, 사용 후 반드시 free()로 해제해야 한다."
+  },
+  {
+    "id": "ptr_ox_022",
+    "chapter": "C언어 CH10 포인터",
+    "type": "ox",
+    "question": "int *p, q; 선언에서 q는 int형 포인터이다.",
+    "answer": false,
+    "explanation": "* 는 변수 하나에만 적용된다. p만 포인터이고 q는 일반 int이다. 둘 다 포인터로 선언하려면 int *p, *q; 로 써야 한다."
+  },
+  {
+    "id": "ptr_ox_023",
+    "chapter": "C언어 CH10 포인터",
+    "type": "ox",
+    "question": "i[arr] 와 arr[i] 는 완전히 동일한 표현이다.",
+    "answer": true,
+    "explanation": "a[b]는 *(a+b)로 정의된다. 덧셈은 교환법칙이 성립하므로 *(a+b)==*(b+a), 즉 arr[i]==i[arr]이 항상 성립한다."
+  },
+  {
+    "id": "ptr_ox_024",
+    "chapter": "C언어 CH10 포인터",
+    "type": "ox",
+    "question": "int arr[5]; int *p = arr; 일 때 sizeof(arr) == sizeof(p) 이다.",
+    "answer": false,
+    "explanation": "sizeof(arr)은 배열 전체 크기(20바이트), sizeof(p)는 포인터 변수 크기(4 또는 8바이트)이다. 배열 이름과 포인터 변수는 sizeof에서 전혀 다른 결과를 낸다."
+  },
+  {
+    "id": "ptr_ox_025",
+    "chapter": "C언어 CH10 포인터",
+    "type": "ox",
+    "question": "free(NULL) 을 호출하면 오류 없이 안전하게 동작한다.",
+    "answer": true,
+    "explanation": "C 표준에 따르면 free(NULL)은 아무 동작도 하지 않고 안전하게 반환된다. 따라서 free 전에 별도로 NULL 체크를 하지 않아도 된다."
+  },
+  {
+    "id": "ptr_ox_026",
+    "chapter": "C언어 CH10 포인터",
+    "type": "ox",
+    "question": "(*p)++ 와 *p++ 는 동일한 동작을 한다.",
+    "answer": false,
+    "explanation": "(*p)++는 p가 가리키는 값을 1 증가시킨다. *p++는 *(p++)와 같으며, 현재 *p 값을 읽은 뒤 포인터 p 자체를 1 증가시킨다. 전혀 다른 동작이다."
+  },
+  {
+    "id": "ptr_ox_027",
+    "chapter": "C언어 CH10 포인터",
+    "type": "ox",
+    "question": "void func(int arr[10]) 에서 10은 컴파일러가 배열 크기를 검사하는 데 사용된다.",
+    "answer": false,
+    "explanation": "함수 매개변수의 배열 크기 표기는 무시된다. 컴파일러는 이를 int *arr과 동일하게 처리하며, 10은 프로그래머 힌트일 뿐 범위 검사에 사용되지 않는다."
+  },
+  {
+    "id": "ptr_ox_028",
+    "chapter": "C언어 CH10 포인터",
+    "type": "ox",
+    "question": "int arr[5]; 에서 &arr 와 arr 은 같은 주소값을 출력하지만 타입이 서로 다르다.",
+    "answer": true,
+    "explanation": "arr은 int* 타입(첫 원소 주소), &arr은 int(*)[5] 타입(배열 전체 포인터)이다. 값은 같지만 &arr+1은 배열 전체 크기(20바이트)만큼 이동한다."
+  },
+  {
+    "id": "ptr_ox_029",
+    "chapter": "C언어 CH10 포인터",
+    "type": "ox",
+    "question": "realloc() 실패 시 원래 포인터가 가리키던 메모리는 자동으로 해제된다.",
+    "answer": false,
+    "explanation": "realloc() 실패 시 NULL을 반환하며 원래 포인터는 여전히 유효하고 메모리는 해제되지 않는다. p = realloc(p, size); 패턴은 실패 시 원래 주소를 잃는 메모리 누수가 발생한다."
+  },
+  {
+    "id": "ptr_ox_030",
+    "chapter": "C언어 CH10 포인터",
+    "type": "ox",
+    "question": "const char * const p 에서는 p(주소)도 *p(값)도 모두 변경할 수 없다.",
+    "answer": true,
+    "explanation": "첫 번째 const(* 앞)는 가리키는 값을 상수로, 두 번째 const(* 뒤)는 포인터 자체를 상수로 만든다. 둘 다 변경 불가이다."
+  },
+  {
+    "id": "ptr_ox_031",
+    "chapter": "C언어 CH10 포인터",
+    "type": "ox",
+    "question": "함수 내에서 선언한 지역 변수의 주소를 반환하면 호출한 쪽에서 안전하게 사용할 수 있다.",
+    "answer": false,
+    "explanation": "지역 변수는 함수 반환 시 스택에서 제거된다. 반환된 주소는 댕글링 포인터가 되어 역참조 시 undefined behavior가 발생한다. static 또는 동적 할당을 사용해야 한다."
+  },
+  {
+    "id": "ptr_mc_022",
+    "chapter": "C언어 CH10 포인터",
+    "type": "multiple",
+    "question": "int *p, *q, r; 선언에서 포인터 변수는 몇 개인가?",
+    "options": [
+      "0개",
+      "1개",
+      "2개",
+      "3개",
+      "컴파일 오류"
+    ],
+    "answer": 2,
+    "explanation": "p와 q는 int형 포인터, r은 일반 int 변수이다. * 는 각 변수마다 따로 써야 한다."
+  },
+  {
+    "id": "ptr_mc_023",
+    "chapter": "C언어 CH10 포인터",
+    "type": "multiple",
+    "question": "다음 코드에서 출력 결과는?\n\nint arr[5] = {1,2,3,4,5};\nprintf(\"%d\", sizeof(arr) / sizeof(arr[0]));",
+    "options": [
+      "1",
+      "4",
+      "5",
+      "20",
+      "포인터 크기"
+    ],
+    "answer": 2,
+    "explanation": "sizeof(arr)=20, sizeof(arr[0])=4. 20/4=5. 이 방법은 배열 원소 수를 구하는 관용 표현이다."
+  },
+  {
+    "id": "ptr_mc_024",
+    "chapter": "C언어 CH10 포인터",
+    "type": "multiple",
+    "question": "int x = 5; int *p = &x; 일 때 x의 값을 6으로 만드는 표현은?",
+    "options": [
+      "p++",
+      "*p++",
+      "(*p)++",
+      "p + 1",
+      "&p++"
+    ],
+    "answer": 2,
+    "explanation": "(*p)++는 p가 가리키는 값(*p=x)을 1 증가시켜 x=6이 된다. *p++는 현재 *p를 읽은 후 포인터 p를 증가시켜 x는 변하지 않는다."
+  },
+  {
+    "id": "ptr_mc_025",
+    "chapter": "C언어 CH10 포인터",
+    "type": "multiple",
+    "question": "다음 코드에서 sizeof(a)의 출력 결과는? (64비트 환경)\n\nvoid func(int a[10]) {\n    printf(\"%zu\", sizeof(a));\n}\nint main() { int arr[10]; func(arr); }",
+    "options": [
+      "4",
+      "8",
+      "10",
+      "40",
+      "컴파일 오류"
+    ],
+    "answer": 1,
+    "explanation": "함수 매개변수 int a[10]은 int *a로 처리된다. sizeof(a)는 배열 크기(40)가 아닌 포인터 크기인 8(64비트)이 출력된다."
+  },
+  {
+    "id": "ptr_mc_026",
+    "chapter": "C언어 CH10 포인터",
+    "type": "multiple",
+    "question": "다음 중 realloc()을 안전하게 사용하는 올바른 패턴은?",
+    "options": [
+      "p = realloc(p, new_size);",
+      "int *tmp = realloc(p, new_size); if (tmp) p = tmp;",
+      "realloc(p, new_size);",
+      "free(p); p = malloc(new_size);",
+      "p = realloc(NULL, new_size);"
+    ],
+    "answer": 1,
+    "explanation": "p = realloc(p, new_size);는 실패 시 p=NULL이 되어 원래 메모리 주소를 잃는다. 임시 포인터 tmp에 받아 NULL 여부 확인 후 대입해야 원래 메모리를 보존할 수 있다."
+  },
+  {
+    "id": "ptr_mc_027",
+    "chapter": "C언어 CH10 포인터",
+    "type": "multiple",
+    "question": "같은 메모리를 두 번 free(double free)하면 어떻게 되는가?",
+    "options": [
+      "두 번째 free는 자동으로 무시된다.",
+      "메모리만 두 번 해제되어 0으로 초기화된다.",
+      "정의되지 않은 동작(undefined behavior)이 발생한다.",
+      "컴파일 오류가 발생한다.",
+      "두 번째 free는 free(NULL)과 동일하게 처리된다."
+    ],
+    "answer": 2,
+    "explanation": "double free는 undefined behavior로 힙 구조를 손상시켜 프로그램 충돌, 보안 취약점, 데이터 손상 등을 일으킬 수 있다."
+  },
+  {
+    "id": "ptr_mc_028",
+    "chapter": "C언어 CH10 포인터",
+    "type": "multiple",
+    "question": "int arr[5]; 일 때 &arr[0], arr, &arr 에 대한 설명으로 옳은 것은?",
+    "options": [
+      "셋 다 타입과 값이 동일하다.",
+      "&arr[0]와 arr은 타입과 값이 같고, &arr은 값은 같지만 타입이 다르다.",
+      "arr과 &arr은 타입과 값이 같고, &arr[0]만 타입이 다르다.",
+      "셋 다 값은 다르지만 타입은 같다.",
+      "셋 모두 타입과 값이 다르다."
+    ],
+    "answer": 1,
+    "explanation": "&arr[0]과 arr은 모두 int* 타입. &arr은 int(*)[5] 타입으로 값은 같지만 타입이 다르다. &arr+1은 배열 끝 다음(20바이트 이동)을 가리킨다."
+  },
+  {
+    "id": "ptr_mc_029",
+    "chapter": "C언어 CH10 포인터",
+    "type": "multiple",
+    "question": "다음 코드의 출력 결과는?\n\nint arr[] = {10, 20, 30};\nint *p = arr;\nprintf(\"%d \", *p++);\nprintf(\"%d \", ++*p);\nprintf(\"%d\", *p);",
+    "options": [
+      "10 21 21",
+      "10 20 20",
+      "11 21 21",
+      "10 21 20",
+      "11 20 20"
+    ],
+    "answer": 0,
+    "explanation": "*p++: arr[0]=10 출력 후 p가 arr[1]을 가리킴. ++*p: arr[1]의 값(20)을 먼저 1 증가시켜 21로 만들고 출력. *p: arr[1]은 이미 21이므로 21 출력. 결과: 10 21 21."
+  },
+  {
+    "id": "ptr_mc_030",
+    "chapter": "C언어 CH10 포인터",
+    "type": "multiple",
+    "question": "다음 함수의 반환값을 사용할 때 발생하는 문제는?\n\nint* func() {\n    int x = 10;\n    return &x;\n}",
+    "options": [
+      "컴파일 오류 — 포인터를 반환할 수 없다.",
+      "x가 static이 아니므로 항상 0을 반환한다.",
+      "함수 종료 후 x가 스택에서 제거되어 댕글링 포인터가 된다.",
+      "정상 동작 — 반환된 포인터로 안전하게 값을 읽을 수 있다.",
+      "x의 복사본을 만들어 반환하므로 안전하다."
+    ],
+    "answer": 2,
+    "explanation": "지역 변수 x는 함수 반환 시 스택에서 제거된다. &x를 반환하면 댕글링 포인터가 되어 역참조 시 undefined behavior가 발생한다."
+  },
+  {
+    "id": "ptr_mc_031",
+    "chapter": "C언어 CH10 포인터",
+    "type": "multiple",
+    "question": "다음 코드의 출력 결과는?\n\nint a = 3, b = 7;\nint *p = &a, *q = &b;\nprintf(\"%d \", *p + *q);\nprintf(\"%d\", *(p) + *(q));",
+    "options": [
+      "10 10",
+      "37 37",
+      "주소값 출력",
+      "10 37",
+      "컴파일 오류"
+    ],
+    "answer": 0,
+    "explanation": "*p=3, *q=7. *p+*q=10, *(p)+*(q)도 동일하게 10. 괄호는 의미를 바꾸지 않는다. 출력: 10 10."
+  },
+  {
+    "id": "ptr_sub_009",
+    "chapter": "C언어 CH10 포인터",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "아래 선언에서 p와 q 모두 int형 포인터가 되도록 빈칸을 채우시오.",
+    "code": "int ___, ___;",
+    "answer": "*p, *q",
+    "explanation": "* 연산자는 선언하는 각 변수에 개별적으로 붙여야 한다. int *p, *q; 로 선언해야 p와 q 모두 int형 포인터가 된다."
+  },
+  {
+    "id": "ptr_sub_010",
+    "chapter": "C언어 CH10 포인터",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "realloc 실패 시 원래 메모리를 보존하는 안전한 패턴의 빈칸을 채우시오.",
+    "code": "int *tmp = realloc(p, new_size);\nif (tmp ___ NULL) {\n    p = tmp;\n}",
+    "answer": "!=",
+    "explanation": "realloc 실패 시 NULL을 반환한다. tmp != NULL 일 때만 p를 교체해야 원래 메모리 주소를 보존할 수 있다."
+  },
+  {
+    "id": "ptr_sub_011",
+    "chapter": "C언어 CH10 포인터",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "포인터로 배열을 순회하며 합산하는 코드의 빈칸을 채우시오.",
+    "code": "int arr[] = {1, 2, 3, 4, 5};\nint *p = arr, sum = 0;\nwhile (p < arr + ___) {\n    sum += ___p++;\n}",
+    "answer": "5 / *",
+    "explanation": "arr+5는 배열 끝 다음의 주소(경계값)이다. p < arr+5 조건으로 5번 반복하며, *p++는 현재 원소 값을 읽고 포인터를 다음으로 이동시킨다."
+  },
+  {
+    "id": "ptr_sub_012",
+    "chapter": "C언어 CH10 포인터",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "값도 주소도 모두 변경 불가능한 포인터 p를 선언하는 빈칸을 채우시오.",
+    "code": "int x = 10;\n___ p = &x;",
+    "answer": "const int * const",
+    "explanation": "* 앞의 const는 가리키는 값(*p)을, * 뒤의 const는 포인터 자체(p)를 상수로 만든다. 선언 시 반드시 초기화해야 한다."
+  },
+  {
+    "id": "ptr_sub_013",
+    "chapter": "C언어 CH10 포인터",
+    "type": "subjective",
+    "subtype": "code_blank",
+    "question": "int 두 개를 받아 int를 반환하는 함수 포인터 2개를 담는 배열 fp를 선언하는 빈칸을 채우시오.",
+    "code": "___ = {add, mul};\nprintf(\"%d\", fp[0](3, 4));",
+    "answer": "int (*fp[2])(int, int)",
+    "explanation": "함수 포인터 배열: 반환타입 (*배열명[크기])(매개변수타입). int (*fp[2])(int, int)는 int를 반환하고 int 두 개를 받는 함수 포인터 2개짜리 배열이다."
+  },
+  {
+    "id": "ptr_sh_011",
+    "chapter": "C언어 CH10 포인터",
+    "type": "short",
+    "question": "i[arr]가 arr[i]와 동일한 이유를 설명하시오.",
+    "answer": "C언어에서 a[b]는 *(a+b)로 정의된다. 덧셈은 교환법칙이 성립하므로 *(a+b)==*(b+a), 즉 arr[i]==i[arr]이 성립한다.",
+    "explanation": "실제로 i[arr]를 쓰는 일은 없지만 포인터와 배열의 관계를 이해하는 핵심 개념이다."
+  },
+  {
+    "id": "ptr_sh_012",
+    "chapter": "C언어 CH10 포인터",
+    "type": "short",
+    "question": "int arr[5]; int *p = arr; 일 때 sizeof(arr)과 sizeof(p)가 다른 이유를 설명하시오.",
+    "answer": "sizeof(arr)은 배열 전체 크기(20바이트)를 반환하지만, sizeof(p)는 포인터 변수 자체의 크기(4 또는 8바이트)를 반환한다. p는 첫 원소 주소만 저장하므로 배열 크기 정보를 잃는다(array decay).",
+    "explanation": "이 때문에 함수로 배열을 전달하면 sizeof로 크기를 알 수 없어 크기를 별도 매개변수로 전달해야 한다."
+  },
+  {
+    "id": "ptr_sh_013",
+    "chapter": "C언어 CH10 포인터",
+    "type": "short",
+    "question": "p = realloc(p, new_size); 패턴이 위험한 이유와 올바른 대안을 설명하시오.",
+    "answer": "realloc 실패 시 NULL을 반환하므로 p=NULL이 되어 기존 메모리 주소를 잃고 누수가 발생한다. 올바른 방법: int *tmp = realloc(p, new_size); if (tmp) p = tmp;",
+    "explanation": "realloc은 성공 시 새 주소를 반환하고, 실패 시 NULL을 반환하며 원본은 건드리지 않는다."
+  },
+  {
+    "id": "ptr_sh_014",
+    "chapter": "C언어 CH10 포인터",
+    "type": "short",
+    "question": "int arr[5]; 에서 arr+1과 &arr+1의 이동 거리가 다른 이유를 설명하시오.",
+    "answer": "arr은 int* 타입이므로 arr+1은 sizeof(int)=4바이트 이동(다음 원소). &arr은 int(*)[5] 타입이므로 &arr+1은 sizeof(int[5])=20바이트 이동(배열 하나 건너뜀).",
+    "explanation": "포인터 산술은 가리키는 타입 크기 단위로 이동하므로 타입이 다르면 이동 거리가 달라진다."
+  },
+  {
+    "id": "ptr_sh_015",
+    "chapter": "C언어 CH10 포인터",
+    "type": "short",
+    "question": "*p++, (*p)++, ++*p, *++p 를 각각 구분하여 설명하시오.",
+    "answer": "*p++: 현재 *p 값을 읽고 p(주소)를 1 증가. (*p)++: *p 값을 읽고 그 값을 1 증가(후위). ++*p: *p 값을 먼저 1 증가시키고 사용(전위). *++p: p(주소)를 먼저 1 증가시키고 새 위치의 값을 읽음.",
+    "explanation": "후위 ++는 현재 값 사용 후 증가, 전위 ++는 먼저 증가 후 사용. * 와 ++의 우선순위에 따라 동작이 완전히 달라진다."
   }
 ]

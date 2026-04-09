@@ -293,3 +293,33 @@ ptr_sh_007 | 단답형      | 배열을 함수에 전달 시 실제 전달 = 첫
 ptr_sh_008 | 단답형      | p++ 증가 바이트 = sizeof(가리키는 타입)          | 2026-04-09
 ptr_sh_009 | 단답형      | char s[] vs char *s 차이 (수정 가능 여부)        | 2026-04-09
 ptr_sh_010 | 단답형      | malloc/calloc/realloc/free 각 역할               | 2026-04-09
+ptr_ox_022 | OX          | int *p, q; 에서 q는 포인터가 아닌 int            | 2026-04-09
+ptr_ox_023 | OX          | i[arr] == arr[i] 교환법칙                        | 2026-04-09
+ptr_ox_024 | OX          | sizeof(arr) != sizeof(p) — array decay           | 2026-04-09
+ptr_ox_025 | OX          | free(NULL) 안전                                  | 2026-04-09
+ptr_ox_026 | OX          | (*p)++ vs *p++ 다른 동작                         | 2026-04-09
+ptr_ox_027 | OX          | func(int arr[10]) 에서 10 무시됨                 | 2026-04-09
+ptr_ox_028 | OX          | &arr vs arr 값 같고 타입 다름                    | 2026-04-09
+ptr_ox_029 | OX          | realloc 실패 시 원본 자동 해제 안 됨             | 2026-04-09
+ptr_ox_030 | OX          | const char * const p — 값·주소 모두 상수        | 2026-04-09
+ptr_ox_031 | OX          | 지역 변수 주소 반환 → 댕글링 포인터              | 2026-04-09
+ptr_mc_022 | 객관식      | int *p, *q, r; 포인터 변수 개수 = 2             | 2026-04-09
+ptr_mc_023 | 객관식      | sizeof(arr)/sizeof(arr[0]) = 원소 수 5          | 2026-04-09
+ptr_mc_024 | 객관식      | (*p)++ 가 x 값을 6으로 만듦                     | 2026-04-09
+ptr_mc_025 | 객관식      | func(int a[10]) 내부 sizeof(a) = 8(포인터)      | 2026-04-09
+ptr_mc_026 | 객관식      | realloc 안전 패턴 tmp + NULL 체크               | 2026-04-09
+ptr_mc_027 | 객관식      | double free → undefined behavior                | 2026-04-09
+ptr_mc_028 | 객관식      | &arr[0]=arr=int*, &arr=int(*)[5] 타입 차이      | 2026-04-09
+ptr_mc_029 | 객관식      | *p++ / ++*p 혼합 결과 10 21 21                  | 2026-04-09
+ptr_mc_030 | 객관식      | 지역 변수 주소 반환 → 댕글링 포인터              | 2026-04-09
+ptr_mc_031 | 객관식      | *p + *q == *(p) + *(q) = 10 10                 | 2026-04-09
+ptr_sub_009 | 빈칸       | int *p, *q 두 변수 포인터 선언                  | 2026-04-09
+ptr_sub_010 | 빈칸       | realloc 안전 패턴 != NULL                       | 2026-04-09
+ptr_sub_011 | 빈칸       | 포인터 배열 순회 while(p < arr+5) *p++          | 2026-04-09
+ptr_sub_012 | 빈칸       | const int * const 선언                          | 2026-04-09
+ptr_sub_013 | 빈칸       | 함수 포인터 배열 int (*fp[2])(int, int)         | 2026-04-09
+ptr_sh_011 | 단답형      | i[arr] == arr[i] 이유 (교환법칙)                | 2026-04-09
+ptr_sh_012 | 단답형      | sizeof(arr) vs sizeof(p) 차이 (array decay)     | 2026-04-09
+ptr_sh_013 | 단답형      | p = realloc(p,n) 위험한 이유와 올바른 패턴      | 2026-04-09
+ptr_sh_014 | 단답형      | arr+1 vs &arr+1 이동 거리 차이                  | 2026-04-09
+ptr_sh_015 | 단답형      | *p++ / (*p)++ / ++*p / *++p 네 가지 구분        | 2026-04-09
