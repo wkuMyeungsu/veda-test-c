@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>챕터 연습 · C/C++ 이론 시험</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="chapter-select">
+  <div class="container">
+
+    <div class="header-card">
+      <h1>챕터 연습 모드</h1>
+      <p class="header-desc">풀고 싶은 챕터를 선택하고 문제 수를 지정하세요</p>
+    </div>
+
+    <div id="chapter-loading" class="card" style="text-align:center;padding:32px;color:#5F6368">
+      문제 불러오는 중...
+    </div>
+
+    <div id="chapter-content" style="display:none">
+
+      <div class="card chapter-group-card">
+        <div class="chapter-group-header">
+          <strong>C++</strong>
+          <label class="chapter-check-all">
+            <input type="checkbox" id="check-all-cpp"> 전체 선택
+          </label>
+        </div>
+        <div id="chapter-list-cpp" class="chapter-list"></div>
+      </div>
+
+      <div class="card chapter-group-card">
+        <div class="chapter-group-header">
+          <strong>C언어</strong>
+          <label class="chapter-check-all">
+            <input type="checkbox" id="check-all-c"> 전체 선택
+          </label>
+        </div>
+        <div id="chapter-list-c" class="chapter-list"></div>
+      </div>
+
+      <div class="card chapter-option-card">
+        <div class="chapter-option-row">
+          <label for="q-count" class="chapter-option-label">문제 수</label>
+          <input type="number" id="q-count" class="chapter-q-input" min="1" max="100" value="20">
+          <span class="chapter-option-desc" id="pool-desc"></span>
+        </div>
+      </div>
+
+      <div id="chapter-error" class="error-msg" style="display:none"></div>
+
+      <div class="action-row">
+        <button class="btn-primary btn-large" id="btn-chapter-start">연습 시작</button>
+        <a href="index.html" class="btn-secondary" style="text-decoration:none;text-align:center">돌아가기</a>
+      </div>
+
+    </div>
+
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

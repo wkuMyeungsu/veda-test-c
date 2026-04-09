@@ -1586,3 +1586,115 @@ body[data-page="manage"] .pagination {
   .toolbar-filters { flex-direction: column; }
   .modal-body { max-height: calc(70vh - 140px); }
 }
+
+/* ============================================================
+   챕터 선택 페이지
+   ============================================================ */
+.chapter-group-card {
+  margin-bottom: 16px;
+}
+
+.chapter-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 15px;
+  color: #202124;
+}
+
+.chapter-check-all {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #5F6368;
+  cursor: pointer;
+  font-weight: normal;
+}
+
+.chapter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chapter-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.chapter-item:hover {
+  background: #F8F9FA;
+}
+
+.chapter-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #1A73E8;
+  flex-shrink: 0;
+}
+
+.chapter-item.selected {
+  border-color: #1A73E8;
+  background: #E8F0FE;
+}
+
+.chapter-item-name {
+  flex: 1;
+  font-size: 14px;
+  color: #202124;
+}
+
+.chapter-item-count {
+  font-size: 12px;
+  color: #5F6368;
+  background: #F1F3F4;
+  padding: 2px 8px;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.chapter-option-card {
+  margin-bottom: 16px;
+}
+
+.chapter-option-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chapter-option-label {
+  font-size: 14px;
+  color: #202124;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.chapter-q-input {
+  width: 80px;
+  padding: 8px 10px;
+  border: 1px solid #E0E0E0;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #202124;
+  text-align: center;
+}
+
+.chapter-q-input:focus {
+  outline: none;
+  border-color: #1A73E8;
+}
+
+.chapter-option-desc {
+  font-size: 13px;
+  color: #5F6368;
+}

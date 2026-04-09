@@ -140,10 +140,13 @@ function scoreExam(examData) {
   });
 
   const totalCorrect = oxCorrect + mcCorrect + subCorrect;
-  const totalScore   = totalCorrect * 5;
-  const pass         = totalCorrect >= 12;
+  const totalQ       = questions.length;
+  const totalScore   = Math.round((totalCorrect / totalQ) * 100);
+  const isChapterMode = examData.mode === 'chapter';
+  // 챕터 연습: 60% 이상 정답, 일반 시험: 12문제 이상
+  const pass = isChapterMode ? totalCorrect >= totalQ * 0.6 : totalCorrect >= 12;
 
-  return { results, oxCorrect, mcCorrect, subCorrect, totalCorrect, totalScore, pass };
+  return { results, oxCorrect, mcCorrect, subCorrect, totalCorrect, totalScore, pass, totalQ, isChapterMode };
 }
 
 // ============================================================
@@ -345,18 +348,27 @@ function buildChapterSummary(results) {
 // ============================================================
 
 function generateResultText(examData, scores, round) {
-  const { results, oxCorrect, mcCorrect, subCorrect, totalCorrect, totalScore, pass } = scores;
+  const { results, oxCorrect, mcCorrect, subCorrect, totalCorrect, totalScore, pass, totalQ, isChapterMode } = scores;
   const now  = formatDateTime(new Date());
   const lines = [];
 
-  lines.push(`===== C/C++ 이론 시험 결과 (${round}회차) =====`);
+  const modeLabel = isChapterMode ? '챕터 연습' : '이론 시험';
+  lines.push(`===== C/C++ ${modeLabel} 결과 (${round}회차) =====`);
   lines.push(`날짜: ${now}`);
-  lines.push(`총점: ${totalScore} / 100  |  판정: ${pass ? 'PASS ✔' : 'FAIL ✘'}  (합격 기준: 60점 / 12문제)`);
+  if (isChapterMode) {
+    lines.push(`선택 챕터: ${(examData.chapters || []).join(', ')}`);
+    lines.push(`총점: ${totalScore}%  |  판정: ${pass ? 'PASS ✔' : 'FAIL ✘'}  (합격 기준: 60% 이상)`);
+  } else {
+    lines.push(`총점: ${totalScore} / 100  |  판정: ${pass ? 'PASS ✔' : 'FAIL ✘'}  (합격 기준: 60점 / 12문제)`);
+  }
   lines.push('');
-  lines.push(`[O/X]    ${oxCorrect}/4 정답  (${oxCorrect * 5}점)`);
-  lines.push(`[객관식]  ${mcCorrect}/6 정답  (${mcCorrect * 5}점)`);
-  lines.push(`[주관식]  ${subCorrect}/10 정답  (${subCorrect * 5}점)`);
-  lines.push(`정답 문제: ${totalCorrect} / 20`);
+  const oxTotal  = results.filter(r => r.question.type === 'ox').length;
+  const mcTotal  = results.filter(r => r.question.type === 'multiple').length;
+  const subTotal = results.filter(r => r.question.type === 'subjective' || r.question.type === 'short').length;
+  lines.push(`[O/X]    ${oxCorrect}/${oxTotal} 정답`);
+  lines.push(`[객관식]  ${mcCorrect}/${mcTotal} 정답`);
+  lines.push(`[주관식]  ${subCorrect}/${subTotal} 정답`);
+  lines.push(`정답 문제: ${totalCorrect} / ${totalQ}`);
   lines.push('');
   lines.push('--- 문제별 상세 ---');
 
@@ -488,6 +500,12 @@ function initExamPage() {
         <a href="index.html" class="btn-primary" style="text-decoration:none;display:inline-block">처음으로 돌아가기</a>
       </div>`;
     return;
+  }
+
+  // 챕터 연습 모드 헤더 표시
+  if (examData.mode === 'chapter') {
+    const titleEl = document.getElementById('exam-title');
+    if (titleEl) titleEl.textContent = '📚 챕터 연습';
   }
 
   let currentIndex = parseInt(sessionStorage.getItem('examCurrentIndex') || '0', 10);
@@ -825,6 +843,19 @@ function initResultPage() {
 
   const scores = scoreExam(examData);
 
+  // 챕터 연습 모드 헤더 변경
+  if (examData.mode === 'chapter') {
+    const h1 = document.querySelector('.header-card h1');
+    const desc = document.querySelector('.header-card .header-desc');
+    if (h1) h1.textContent = '챕터 연습 결과';
+    if (desc) {
+      const chapters = examData.chapters || [];
+      desc.textContent = chapters.length <= 3
+        ? chapters.join(', ')
+        : `${chapters.slice(0, 3).join(', ')} 외 ${chapters.length - 3}챕터`;
+    }
+  }
+
   // 자동 저장 (새 시험 결과일 때만 1회)
   if (!sessionStorage.getItem('resultSaved')) {
     const round = useRound();
@@ -968,7 +999,7 @@ async function setupHistory() {
 }
 
 function renderResult(examData, scores, round) {
-  const { results, oxCorrect, mcCorrect, subCorrect, totalCorrect, totalScore, pass } = scores;
+  const { results, oxCorrect, mcCorrect, subCorrect, totalCorrect, totalScore, pass, totalQ, isChapterMode } = scores;
 
   // 점수 요약
   document.getElementById('score-big').textContent = totalScore;
@@ -976,10 +1007,27 @@ function renderResult(examData, scores, round) {
   chip.textContent = pass ? 'PASS' : 'FAIL';
   chip.className   = `pass-chip ${pass ? 'pass' : 'fail'}`;
 
-  document.getElementById('ox-row').textContent    = `${oxCorrect} / 4 정답  (${oxCorrect * 5}점)`;
-  document.getElementById('mc-row').textContent    = `${mcCorrect} / 6 정답  (${mcCorrect * 5}점)`;
-  document.getElementById('sub-row').textContent   = `${subCorrect} / 10 정답  (${subCorrect * 5}점)`;
-  document.getElementById('total-row').textContent = `${totalCorrect} / 20 문제`;
+  // 합격 기준 텍스트
+  const criteriaEl = document.querySelector('.pass-criteria');
+  if (criteriaEl) {
+    criteriaEl.textContent = isChapterMode
+      ? `합격 기준: 60% 이상 정답 (${Math.ceil(totalQ * 0.6)}문제 이상 / ${totalQ}문제)`
+      : '합격 기준: 12문제 이상 / 60점';
+  }
+
+  // 점수 분모
+  const denomEl = document.querySelector('.score-denom');
+  if (denomEl) denomEl.textContent = '/ 100점';
+
+  const oxTotal  = results.filter(r => r.question.type === 'ox').length;
+  const mcTotal  = results.filter(r => r.question.type === 'multiple').length;
+  const subTotal = results.filter(r => r.question.type === 'subjective' || r.question.type === 'short').length;
+
+  const pct = n => isChapterMode ? '' : `  (${n * 5}점)`;
+  document.getElementById('ox-row').textContent    = `${oxCorrect} / ${oxTotal} 정답${pct(oxCorrect)}`;
+  document.getElementById('mc-row').textContent    = `${mcCorrect} / ${mcTotal} 정답${pct(mcCorrect)}`;
+  document.getElementById('sub-row').textContent   = `${subCorrect} / ${subTotal} 정답${pct(subCorrect)}`;
+  document.getElementById('total-row').textContent = `${totalCorrect} / ${totalQ} 문제`;
 
   // 챕터별 요약
   const chMap     = buildChapterSummary(results);
@@ -1493,6 +1541,149 @@ async function initFavoritesPage() {
   });
 }
 
+// ============================================================
+// 챕터 연습 선택 페이지
+// ============================================================
+
+async function initChapterSelectPage() {
+  const loadingEl  = document.getElementById('chapter-loading');
+  const contentEl  = document.getElementById('chapter-content');
+  const cppListEl  = document.getElementById('chapter-list-cpp');
+  const cListEl    = document.getElementById('chapter-list-c');
+  const poolDescEl = document.getElementById('pool-desc');
+  const errorEl    = document.getElementById('chapter-error');
+  const qCountEl   = document.getElementById('q-count');
+  const startBtn   = document.getElementById('btn-chapter-start');
+  const checkAllCpp = document.getElementById('check-all-cpp');
+  const checkAllC   = document.getElementById('check-all-c');
+
+  // C++ 챕터 순서
+  const CPP_CHAPTERS = [
+    'CH01 C++ 기초', 'CH02 예외처리', 'CH03 클래스와 객체',
+    'CH04 객체포인터와 객체배열', 'CH05 참조와 복사생성자',
+    'CH06 함수중복과 const 정적함수', 'CH07 연산자 오버로딩과 입출력스트림',
+    'CH08 상속과 다형성', 'CH09 파일입출력', 'CH10 템플릿'
+  ];
+  const C_CHAPTERS = [
+    'C언어 CH01 C 언어 개요와 프로그램 작성', 'C언어 CH02 C 언어 시작하기',
+    'C언어 CH03 기본 자료형과 변수', 'C언어 CH04 콘솔 입출력과 연산자',
+    'C언어 CH05 제어문', 'C언어 CH06 함수', 'C언어 CH07 기억 클래스',
+    'C언어 CH08 배열과 문자열', 'C언어 CH09 문자열 처리함수와 다차원 배열',
+    'C언어 CH10 포인터', 'C언어 CH11 구조체', 'C언어 CH12 파일입출력'
+  ];
+
+  let allQuestions = [];
+  let chapterMap   = {};  // chapter → [questions]
+
+  try {
+    const pools = await loadAllQuestions();
+    allQuestions = [...pools.ox, ...pools.multiple, ...pools.subjective];
+    allQuestions.forEach(q => {
+      const ch = q.chapter || '기타';
+      if (!chapterMap[ch]) chapterMap[ch] = [];
+      chapterMap[ch].push(q);
+    });
+  } catch {
+    loadingEl.textContent = '⚠ 문제 파일을 불러올 수 없습니다.';
+    return;
+  }
+
+  loadingEl.style.display = 'none';
+  contentEl.style.display = 'block';
+
+  function renderChapterList(el, chapters) {
+    el.innerHTML = '';
+    chapters.forEach(ch => {
+      const count = (chapterMap[ch] || []).length;
+      const item = document.createElement('label');
+      item.className = 'chapter-item';
+      item.innerHTML = `
+        <input type="checkbox" value="${escapeHtml(ch)}" ${count === 0 ? 'disabled' : ''}>
+        <span class="chapter-item-name">${escapeHtml(ch)}</span>
+        <span class="chapter-item-count">${count}문제</span>`;
+      item.addEventListener('change', () => {
+        item.classList.toggle('selected', item.querySelector('input').checked);
+        updatePoolDesc();
+      });
+      if (count === 0) item.style.opacity = '0.4';
+      el.appendChild(item);
+    });
+  }
+
+  renderChapterList(cppListEl, CPP_CHAPTERS);
+  renderChapterList(cListEl,   C_CHAPTERS);
+
+  function getSelectedChapters() {
+    return [...document.querySelectorAll('.chapter-list input[type="checkbox"]:checked')]
+      .map(cb => cb.value);
+  }
+
+  function getPoolSize() {
+    return getSelectedChapters().reduce((sum, ch) => sum + (chapterMap[ch] || []).length, 0);
+  }
+
+  function updatePoolDesc() {
+    const total = getPoolSize();
+    const selected = getSelectedChapters().length;
+    if (selected === 0) {
+      poolDescEl.textContent = '챕터를 선택하세요';
+    } else {
+      poolDescEl.textContent = `선택 ${selected}챕터 · ${total}문제 풀`;
+      if (qCountEl.value > total) qCountEl.value = total;
+      qCountEl.max = total;
+    }
+  }
+  updatePoolDesc();
+
+  // 전체 선택 체크박스
+  function setupSelectAll(checkAllEl, listEl) {
+    checkAllEl.addEventListener('change', () => {
+      listEl.querySelectorAll('input[type="checkbox"]:not(:disabled)').forEach(cb => {
+        cb.checked = checkAllEl.checked;
+        cb.closest('.chapter-item').classList.toggle('selected', checkAllEl.checked);
+      });
+      updatePoolDesc();
+    });
+  }
+  setupSelectAll(checkAllCpp, cppListEl);
+  setupSelectAll(checkAllC,   cListEl);
+
+  qCountEl.addEventListener('input', updatePoolDesc);
+
+  startBtn.addEventListener('click', () => {
+    errorEl.style.display = 'none';
+    const selected = getSelectedChapters();
+    if (selected.length === 0) {
+      errorEl.textContent = '⚠ 챕터를 하나 이상 선택하세요.';
+      errorEl.style.display = 'block';
+      return;
+    }
+    const n = parseInt(qCountEl.value, 10);
+    if (!n || n < 1) {
+      errorEl.textContent = '⚠ 문제 수를 1 이상으로 입력하세요.';
+      errorEl.style.display = 'block';
+      return;
+    }
+    const pool = selected.flatMap(ch => chapterMap[ch] || []);
+    if (pool.length === 0) {
+      errorEl.textContent = '⚠ 선택한 챕터에 문제가 없습니다.';
+      errorEl.style.display = 'block';
+      return;
+    }
+    const questions = shuffleArray(pool).slice(0, Math.min(n, pool.length));
+    clearExamData();
+    saveExamData({
+      questions,
+      answers:   {},
+      overrides: {},
+      startTime: Date.now(),
+      mode:      'chapter',
+      chapters:  selected
+    });
+    window.location.href = 'exam.html';
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   // 이전 버전 localStorage 결과 데이터 정리
   Object.keys(localStorage)
@@ -1500,9 +1691,10 @@ document.addEventListener('DOMContentLoaded', () => {
     .forEach(k => localStorage.removeItem(k));
 
   const page = document.body.dataset.page;
-  if (page === 'index')     initIndexPage();
-  else if (page === 'exam')      initExamPage();
-  else if (page === 'result')    initResultPage();
-  else if (page === 'manage')    initManagePage();
-  else if (page === 'favorites') initFavoritesPage();
+  if (page === 'index')          initIndexPage();
+  else if (page === 'exam')           initExamPage();
+  else if (page === 'result')         initResultPage();
+  else if (page === 'manage')         initManagePage();
+  else if (page === 'favorites')      initFavoritesPage();
+  else if (page === 'chapter-select') initChapterSelectPage();
 });
