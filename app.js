@@ -287,6 +287,8 @@ function loadNotes(qId) {
 function saveNotes(qId, notes) { localStorage.setItem(`notes_${qId}`, JSON.stringify(notes)); }
 function loadQEdit(qId)        { return localStorage.getItem(`qEdit_${qId}`) || null; }
 function saveQEdit(qId, text)  { localStorage.setItem(`qEdit_${qId}`, text); }
+function loadCodeEdit(qId)     { return localStorage.getItem(`codeEdit_${qId}`) ?? null; }
+function saveCodeEdit(qId, t)  { localStorage.setItem(`codeEdit_${qId}`, t); }
 
 // 사용자 추가 문제
 function loadUserQuestions() {
@@ -509,10 +511,13 @@ function initExamPage() {
     return;
   }
 
-  // 챕터 연습 모드 헤더 표시
+  // 모드별 헤더 표시
   if (examData.mode === 'chapter') {
     const titleEl = document.getElementById('exam-title');
     if (titleEl) titleEl.textContent = '📚 챕터 연습';
+  } else if (examData.mode === 'favorites') {
+    const titleEl = document.getElementById('exam-title');
+    if (titleEl) titleEl.textContent = '★ 즐겨찾기 시험';
   }
 
   let currentIndex = parseInt(sessionStorage.getItem('examCurrentIndex') || '0', 10);
@@ -601,7 +606,8 @@ function initExamPage() {
         <textarea class="subjective-area" id="subj-input" placeholder="답을 입력하세요...">${saved}</textarea>`;
     }
 
-    const codeHtml   = q.code ? `<pre class="code-block">${escapeHtml(q.code)}</pre>` : '';
+    const displayCode = loadCodeEdit(q.id) ?? q.code ?? null;
+    const codeHtml   = displayCode ? `<pre class="code-block">${escapeHtml(displayCode)}</pre>` : '';
     const corrActive = ov === true  ? 'active' : '';
     const wronActive = ov === false ? 'active' : '';
     const nextDis    = canGoNext(idx) ? '' : 'disabled';
@@ -619,10 +625,14 @@ function initExamPage() {
 
         <div class="q-text-wrap">
           <div class="q-text" id="q-text-display">${escapeHtml(displayQuestion)}</div>
-          <button class="btn-text btn-edit-q" id="btn-edit-q" title="문제 텍스트 수정">✏ 수정</button>
+          <div class="q-action-btns">
+            <button class="btn-text btn-edit-q" id="btn-edit-q" title="문제 텍스트 수정">✏ 수정</button>
+            <button class="btn-text btn-del-q" id="btn-del-q" title="이 문제 삭제 후 대체 문제로 교체">🗑 삭제</button>
+          </div>
         </div>
         <div class="q-edit-wrap" id="q-edit-wrap" style="display:none">
           <textarea class="q-edit-area" id="q-edit-area">${escapeHtml(displayQuestion)}</textarea>
+          ${q.code ? `<label class="q-edit-label">코드 블록</label><textarea class="q-edit-area q-edit-code" id="q-edit-code" style="font-family:monospace;white-space:pre">${escapeHtml(loadCodeEdit(q.id) ?? q.code)}</textarea>` : ''}
           <div class="q-edit-actions">
             <button class="btn-primary btn-sm" id="btn-edit-save">저장</button>
             <button class="btn-secondary btn-sm" id="btn-edit-cancel">취소</button>
@@ -749,6 +759,8 @@ function initExamPage() {
     const qEditWrap    = document.getElementById('q-edit-wrap');
     const qEditArea    = document.getElementById('q-edit-area');
 
+    const qCodeArea = document.getElementById('q-edit-code');
+
     document.getElementById('btn-edit-q').addEventListener('click', () => {
       qTextDisplay.parentElement.style.display = 'none';
       qEditWrap.style.display = 'block';
@@ -758,6 +770,7 @@ function initExamPage() {
 
     document.getElementById('btn-edit-cancel').addEventListener('click', () => {
       qEditArea.value = loadQEdit(q.id) || q.question;
+      if (qCodeArea) qCodeArea.value = loadCodeEdit(q.id) ?? q.code ?? '';
       qEditWrap.style.display = 'none';
       qTextDisplay.parentElement.style.display = '';
     });
@@ -768,6 +781,13 @@ function initExamPage() {
         saveQEdit(q.id, newText);
         qTextDisplay.textContent = newText;
       }
+      if (qCodeArea) {
+        const newCode = qCodeArea.value;
+        saveCodeEdit(q.id, newCode);
+        // 화면의 code-block 즉시 갱신
+        const codeBlock = container.querySelector('.code-block');
+        if (codeBlock) codeBlock.textContent = newCode;
+      }
       qEditWrap.style.display = 'none';
       qTextDisplay.parentElement.style.display = '';
     });
@@ -776,6 +796,49 @@ function initExamPage() {
     document.getElementById('btn-fav').addEventListener('click', function () {
       const now = toggleFavorite(q.id, q);
       this.classList.toggle('active', now);
+    });
+
+    // 이벤트: 문제 삭제 후 대체
+    document.getElementById('btn-del-q').addEventListener('click', async () => {
+      if (!window.confirm('삭제하시겠습니까?')) return;
+
+      const delBtn = document.getElementById('btn-del-q');
+      delBtn.disabled = true;
+      delBtn.textContent = '교체 중...';
+
+      try {
+        const pools = await loadAllQuestions(); // 이미 deletedIds 필터 적용됨
+        const currentIds = new Set(examData.questions.map(qq => qq.id));
+        const sameType = (q.type === 'subjective' || q.type === 'short') ? 'subjective' : q.type;
+        const poolKey  = sameType === 'subjective' ? 'subjective' : sameType; // 'ox' | 'multiple' | 'subjective'
+
+        // 현재 시험에 없고, 삭제 대상도 아닌 대체 후보
+        const candidates = pools[poolKey]?.filter(cq => !currentIds.has(cq.id) && cq.id !== q.id) || [];
+
+        if (candidates.length === 0) {
+          alert('같은 유형의 대체 문제가 없습니다. 문제 풀이 완료 후 삭제해 주세요.');
+          delBtn.disabled = false;
+          delBtn.textContent = '🗑 삭제';
+          return;
+        }
+
+        // 영구 삭제 등록
+        addDeletedId(q.id);
+
+        // 대체 문제 선택
+        const replacement = candidates[Math.floor(Math.random() * candidates.length)];
+        examData.questions[idx] = replacement;
+        delete examData.answers[idx];
+        delete examData.overrides[idx];
+        saveExamData(examData);
+
+        // 현재 번호 그대로 새 문제 렌더링
+        renderQ(idx);
+      } catch (e) {
+        alert('오류가 발생했습니다. 다시 시도해 주세요.');
+        delBtn.disabled = false;
+        delBtn.textContent = '🗑 삭제';
+      }
     });
 
     // 이벤트: 오버라이드
@@ -850,7 +913,7 @@ function initResultPage() {
 
   const scores = scoreExam(examData);
 
-  // 챕터 연습 모드 헤더 변경
+  // 모드별 결과 헤더 변경
   if (examData.mode === 'chapter') {
     const h1 = document.querySelector('.header-card h1');
     const desc = document.querySelector('.header-card .header-desc');
@@ -861,6 +924,11 @@ function initResultPage() {
         ? chapters.join(', ')
         : `${chapters.slice(0, 3).join(', ')} 외 ${chapters.length - 3}챕터`;
     }
+  } else if (examData.mode === 'favorites') {
+    const h1 = document.querySelector('.header-card h1');
+    const desc = document.querySelector('.header-card .header-desc');
+    if (h1) h1.textContent = '★ 즐겨찾기 시험 결과';
+    if (desc) desc.textContent = `즐겨찾기 문제 ${examData.questions.length}개`;
   }
 
   // 자동 저장 (새 시험 결과일 때만 1회)
@@ -1148,12 +1216,19 @@ async function initManagePage() {
   function getAllQuestions() {
     const deleted = loadDeletedIds();
     const processed = baseQuestions
-      .filter(q => !deleted.has(q.id))
-      .map(q => { const ov = loadQFull(q.id); return { ...(ov ? { ...q, ...ov, id: q.id } : q), _base: true }; });
+      .map(q => {
+        const ov = loadQFull(q.id);
+        const base = ov ? { ...q, ...ov, id: q.id } : q;
+        return { ...base, _base: true, _deleted: deleted.has(q.id) };
+      });
     const userQs = loadUserQuestions()
       .filter(q => !deleted.has(q.id))
       .map(q => ({ ...q, _user: true }));
     return [...processed, ...userQs];
+  }
+
+  function getActiveQuestions() {
+    return getAllQuestions().filter(q => !q._deleted);
   }
 
   function getFiltered() {
@@ -1178,7 +1253,8 @@ async function initManagePage() {
 
   // ── 렌더 ─────────────────────────────────────────────────
   function renderStats() {
-    const all  = getAllQuestions();
+    const all  = getActiveQuestions();
+    const del  = getAllQuestions().filter(q => q._deleted).length;
     const ox   = all.filter(q => q.type === 'ox').length;
     const mc   = all.filter(q => q.type === 'multiple').length;
     const subj = all.filter(q => q.type === 'subjective' || q.type === 'short').length;
@@ -1190,7 +1266,8 @@ async function initManagePage() {
       <span class="stat-sep">·</span>
       <span class="stat-item"><span class="type-badge type-multiple">객관식</span> <strong>${mc}</strong></span>
       <span class="stat-sep">·</span>
-      <span class="stat-item"><span class="type-badge type-subjective">주관식/단답</span> <strong>${subj}</strong></span>`;
+      <span class="stat-item"><span class="type-badge type-subjective">주관식/단답</span> <strong>${subj}</strong></span>
+      ${del > 0 ? `<span class="stat-sep">·</span><span class="stat-item"><span class="badge-deleted">삭제됨</span> <strong>${del}</strong></span>` : ''}`;
   }
 
   function populateChapterFilter() {
@@ -1234,8 +1311,9 @@ async function initManagePage() {
         </div>`;
     }
 
-    const codeHtml = q.code
-      ? `<pre class="code-block detail-code">${escapeHtml(q.code)}</pre>`
+    const detailCode = loadCodeEdit(q.id) ?? q.code ?? null;
+    const codeHtml = detailCode
+      ? `<pre class="code-block detail-code">${escapeHtml(detailCode)}</pre>`
       : '';
 
     const explHtml = q.explanation ? `
@@ -1289,13 +1367,17 @@ async function initManagePage() {
                 <span class="qmc-num">${globalIdx}</span>
                 <span class="type-badge type-${q.type}">${TYPE_LABELS[q.type] || q.type}</span>
                 ${q.chapter ? `<span class="qmc-chapter">${escapeHtml(q.chapter)}</span>` : ''}
-                ${q._user     ? '<span class="badge-user">사용자 추가</span>' : ''}
-                ${hasOverride ? '<span class="badge-edited">수정됨</span>'    : ''}
+                ${q._user     ? '<span class="badge-user">사용자 추가</span>'  : ''}
+                ${hasOverride ? '<span class="badge-edited">수정됨</span>'     : ''}
+                ${q._deleted  ? '<span class="badge-deleted">삭제됨</span>'   : ''}
               </div>
               <div class="qmc-actions">
                 <button class="btn-text qmc-detail-btn" data-id="${escapeHtml(q.id)}">▶ 상세</button>
-                <button class="btn-text qmc-edit-btn"   data-id="${escapeHtml(q.id)}">수정</button>
-                <button class="btn-text qmc-del-btn"    data-id="${escapeHtml(q.id)}" style="color:#D93025">삭제</button>
+                ${q._deleted
+                  ? `<button class="btn-text qmc-restore-btn" data-id="${escapeHtml(q.id)}" style="color:#2E7D32">복원</button>`
+                  : `<button class="btn-text qmc-edit-btn" data-id="${escapeHtml(q.id)}">수정</button>
+                     <button class="btn-text qmc-del-btn"  data-id="${escapeHtml(q.id)}" style="color:#D93025">삭제</button>`
+                }
               </div>
             </div>
             <p class="qmc-preview">${escapeHtml(preview)}</p>
@@ -1321,6 +1403,8 @@ async function initManagePage() {
       btn.addEventListener('click', () => openEditModal(btn.dataset.id)));
     container.querySelectorAll('.qmc-del-btn').forEach(btn =>
       btn.addEventListener('click', () => deleteQ(btn.dataset.id)));
+    container.querySelectorAll('.qmc-restore-btn').forEach(btn =>
+      btn.addEventListener('click', () => restoreQ(btn.dataset.id)));
   }
 
   function renderPagination(total, totalPages) {
@@ -1350,9 +1434,9 @@ async function initManagePage() {
       btn.addEventListener('click', () => { currentPage = parseInt(btn.dataset.p, 10); renderList(); window.scrollTo(0, 0); }));
   }
 
-  // ── 삭제 ──────────────────────────────────────────────────
+  // ── 삭제 / 복원 ───────────────────────────────────────────
   function deleteQ(id) {
-    if (!window.confirm('이 문제를 삭제하시겠습니까?\n(기본 문제는 숨김 처리되며 복구할 수 없습니다.)')) return;
+    if (!window.confirm('삭제하시겠습니까?')) return;
     const userQs = loadUserQuestions();
     if (userQs.some(q => q.id === id)) {
       saveUserQuestions(userQs.filter(q => q.id !== id));
@@ -1360,6 +1444,13 @@ async function initManagePage() {
       addDeletedId(id);
       clearQFull(id);
     }
+    renderList();
+  }
+
+  function restoreQ(id) {
+    if (!window.confirm('이 문제를 복원하시겠습니까?')) return;
+    const ids = JSON.parse(localStorage.getItem('deletedQIds') || '[]');
+    localStorage.setItem('deletedQIds', JSON.stringify(ids.filter(v => v !== id)));
     renderList();
   }
 
@@ -1552,8 +1643,30 @@ async function initManagePage() {
 async function initFavoritesPage() {
   const listEl  = document.getElementById('fav-list');
   const emptyEl = document.getElementById('fav-empty');
+  const favExamBtn = document.getElementById('btn-fav-exam');
 
   const favs = loadFavoriteQuestions();
+
+  if (favExamBtn) {
+    if (favs.length === 0) {
+      favExamBtn.disabled = true;
+      favExamBtn.title = '즐겨찾기 문제가 없습니다';
+    } else {
+      favExamBtn.addEventListener('click', () => {
+        const questions = shuffleArray([...favs]);
+        clearExamData();
+        saveExamData({
+          questions,
+          answers:   {},
+          overrides: {},
+          startTime: Date.now(),
+          mode:      'favorites'
+        });
+        window.location.href = 'exam.html';
+      });
+    }
+  }
+
   if (favs.length === 0) {
     emptyEl.style.display = 'block';
     return;
@@ -1567,7 +1680,8 @@ async function initFavoritesPage() {
 
   listEl.innerHTML = favs.map(q => {
     const displayQ = loadQEdit(q.id) || q.question;
-    const codeHtml = q.code ? `<pre class="code-block">${escapeHtml(q.code)}</pre>` : '';
+    const favCode  = loadCodeEdit(q.id) ?? q.code ?? null;
+    const codeHtml = favCode ? `<pre class="code-block">${escapeHtml(favCode)}</pre>` : '';
     return `
       <div class="card fav-card" data-id="${escapeHtml(q.id)}">
         <button class="btn-fav active fav-remove-btn" data-id="${escapeHtml(q.id)}" title="즐겨찾기 해제">★</button>

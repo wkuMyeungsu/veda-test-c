@@ -482,16 +482,23 @@ body {
   flex: 1;
   margin-bottom: 0;
 }
-.btn-edit-q {
+.q-action-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.btn-edit-q, .btn-del-q {
   flex-shrink: 0;
   font-size: 11px;
   padding: 3px 8px;
   color: #BDBDBD;
   border-radius: 4px;
-  margin-top: 3px;
   transition: color 0.15s, background 0.15s;
 }
 .btn-edit-q:hover { color: #673AB7; background: #EDE7F6; }
+.btn-del-q:hover  { color: #D32F2F; background: #FFEBEE; }
 
 .q-edit-wrap {
   margin-bottom: 16px;
@@ -515,6 +522,21 @@ body {
   transition: border-color 0.2s;
 }
 .q-edit-area:focus { border-bottom-color: #673AB7; }
+.q-edit-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: #673AB7;
+  margin: 12px 0 4px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.q-edit-code {
+  font-family: 'Fira Mono', 'Consolas', monospace;
+  font-size: 13px;
+  min-height: 120px;
+  white-space: pre;
+}
 .q-edit-actions {
   display: flex;
   gap: 8px;
@@ -1175,6 +1197,15 @@ body[data-page="manage"] .container {
   font-weight: 700;
   color: #B05A00;
   background: #FEF7E0;
+  padding: 1px 7px;
+  border-radius: 10px;
+}
+
+.badge-deleted {
+  font-size: 10px;
+  font-weight: 700;
+  color: #B71C1C;
+  background: #FFEBEE;
   padding: 1px 7px;
   border-radius: 10px;
 }
