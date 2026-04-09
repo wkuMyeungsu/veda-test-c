@@ -1,7 +1,7 @@
 [
   {
     "id": "sub_001",
-    "chapter": "CH8 배열과 문자열",
+    "chapter": "C언어 CH08 배열과 문자열",
     "type": "subjective",
     "subtype": "code_blank",
     "question": "다음 코드에서 배열의 세 번째 원소(값 3)를 출력하려면 빈칸에 무엇을 넣어야 하는가?",
@@ -11,7 +11,7 @@
   },
   {
     "id": "sub_002",
-    "chapter": "CH9 포인터",
+    "chapter": "C언어 CH10 포인터",
     "type": "subjective",
     "subtype": "code_blank",
     "question": "포인터 p가 변수 x의 주소를 가리키도록 빈칸을 채우시오.",
@@ -21,7 +21,7 @@
   },
   {
     "id": "sub_003",
-    "chapter": "CH8 배열과 문자열",
+    "chapter": "C언어 CH08 배열과 문자열",
     "type": "subjective",
     "subtype": "code_blank",
     "question": "str 배열에 \"hello\"를 복사하는 코드의 빈칸을 채우시오.",
@@ -31,7 +31,7 @@
   },
   {
     "id": "sub_004",
-    "chapter": "CH4 콘솔 입출력과 연산자",
+    "chapter": "C언어 CH04 콘솔 입출력과 연산자",
     "type": "subjective",
     "subtype": "code_blank",
     "question": "두 변수 a, b 중 큰 값을 max에 저장하는 삼항 연산자의 빈칸을 채우시오.",
@@ -41,7 +41,7 @@
   },
   {
     "id": "sub_005",
-    "chapter": "CH11 동적 메모리 할당",
+    "chapter": "C언어 CH10 포인터",
     "type": "subjective",
     "subtype": "code_blank",
     "question": "힙(heap) 메모리에 int 1개를 동적 할당하는 코드의 빈칸을 채우시오.",
@@ -51,7 +51,7 @@
   },
   {
     "id": "sub_006",
-    "chapter": "CH4 콘솔 입출력과 연산자",
+    "chapter": "C언어 CH04 콘솔 입출력과 연산자",
     "type": "subjective",
     "subtype": "code_result",
     "question": "다음 코드의 실행 결과를 쓰시오.",
@@ -61,7 +61,7 @@
   },
   {
     "id": "sub_007",
-    "chapter": "CH4 콘솔 입출력과 연산자",
+    "chapter": "C언어 CH04 콘솔 입출력과 연산자",
     "type": "subjective",
     "subtype": "code_result",
     "question": "다음 코드의 실행 결과를 쓰시오.",
@@ -71,7 +71,7 @@
   },
   {
     "id": "sub_008",
-    "chapter": "CH8 배열과 문자열",
+    "chapter": "C언어 CH08 배열과 문자열",
     "type": "subjective",
     "subtype": "code_result",
     "question": "다음 코드의 실행 결과를 쓰시오.",
@@ -81,7 +81,7 @@
   },
   {
     "id": "sub_009",
-    "chapter": "CH5 제어문",
+    "chapter": "C언어 CH05 제어문",
     "type": "subjective",
     "subtype": "code_result",
     "question": "다음 코드의 출력 결과를 쓰시오.",
@@ -91,7 +91,7 @@
   },
   {
     "id": "sub_010",
-    "chapter": "CH5 제어문",
+    "chapter": "C언어 CH05 제어문",
     "type": "subjective",
     "subtype": "code_result",
     "question": "다음 코드의 출력 결과를 쓰시오. (공백 포함하여 정확히)",
@@ -101,7 +101,7 @@
   },
   {
     "id": "sub_011",
-    "chapter": "CH4 콘솔 입출력과 연산자",
+    "chapter": "C언어 CH04 콘솔 입출력과 연산자",
     "type": "subjective",
     "subtype": "code_result",
     "question": "다음 코드 실행 후 x의 값을 쓰시오.",
@@ -109,9 +109,9 @@
     "answer": "10",
     "explanation": "x = 3 → x *= 4 → x = 12 → x -= 2 → x = 10"
   },
-    {
+  {
     "id": "sub_012",
-    "chapter": "CH1 네임스페이스",
+    "chapter": "CH01 C++ 기초",
     "type": "short",
     "question": "C++에서 이름 충돌을 방지하기 위해 사용되는 논리적인 영역을 무엇이라 하는가?",
     "answer": "네임스페이스(namespace)",
@@ -119,7 +119,7 @@
   },
   {
     "id": "sub_013",
-    "chapter": "CH1 네임스페이스",
+    "chapter": "CH01 C++ 기초",
     "type": "short",
     "question": "std::cout에서 사용된 '::' 연산자의 정식 명칭은?",
     "answer": "범위 지정 연산자",
@@ -127,7 +127,7 @@
   },
   {
     "id": "sub_014",
-    "chapter": "CH2 링킹",
+    "chapter": "CH01 C++ 기초",
     "type": "short",
     "question": "컴파일 후 함수 이름이 매개변수 타입 정보를 포함한 복잡한 이름으로 변하는 현상을 무엇이라 하는가?",
     "answer": "이름 규칙(Naming Mangling)",
@@ -135,7 +135,7 @@
   },
   {
     "id": "sub_015",
-    "chapter": "CH3 클래스",
+    "chapter": "CH03 클래스와 객체",
     "type": "short",
     "question": "클래스라는 틀에서 실제로 메모리에 할당되어 생성된 실체를 무엇이라 하는가?",
     "answer": "객체(Object) 또는 인스턴스(Instance)",
@@ -143,7 +143,7 @@
   },
   {
     "id": "sub_016",
-    "chapter": "CH4 생성자",
+    "chapter": "CH03 클래스와 객체",
     "type": "short",
     "question": "한 생성자에서 다른 생성자를 호출하여 중복 코드를 줄이는 기법을 무엇이라 하는가?",
     "answer": "위임 생성자",
@@ -151,7 +151,7 @@
   },
   {
     "id": "sub_017",
-    "chapter": "CH4 생성자",
+    "chapter": "CH03 클래스와 객체",
     "type": "short",
     "question": "생성자 본문이 실행되기 전 멤버 변수를 효율적으로 초기화하는 문법적 위치는?",
     "answer": "멤버 이니셜라이저(초기화 리스트)",
@@ -159,7 +159,7 @@
   },
   {
     "id": "sub_018",
-    "chapter": "CH5 동적 할당",
+    "chapter": "CH01 C++ 기초",
     "type": "short",
     "question": "동적 메모리가 할당되는 운영체제의 메모리 영역은?",
     "answer": "힙(Heap)",
@@ -167,7 +167,7 @@
   },
   {
     "id": "sub_019",
-    "chapter": "CH6 호출 방식",
+    "chapter": "CH05 참조와 복사생성자",
     "type": "short",
     "question": "함수 호출 시 실제 값이 복사되어 전달되는 방식을 무엇이라 하는가?",
     "answer": "값에 의한 호출(Call by Value)",
@@ -175,7 +175,7 @@
   },
   {
     "id": "sub_020",
-    "chapter": "CH6 참조",
+    "chapter": "CH05 참조와 복사생성자",
     "type": "short",
     "question": "임시 값(rvalue)을 참조할 때 사용하며 이동(move) 문법의 기초가 되는 연산자 기호는?",
     "answer": "&&",
@@ -183,7 +183,7 @@
   },
   {
     "id": "sub_021",
-    "chapter": "CH7 연산자 오버로딩",
+    "chapter": "CH07 연산자 오버로딩과 입출력스트림",
     "type": "short",
     "question": "연산자 함수를 정의할 때 사용하는 키워드는?",
     "answer": "operator",
@@ -191,7 +191,7 @@
   },
   {
     "id": "sub_021",
-    "chapter": "CH1 상속",
+    "chapter": "CH08 상속과 다형성",
     "type": "short",
     "question": "부모 클래스의 함수를 자식 클래스에서 동일한 원형으로 다시 정의하는 것을 무엇이라 하는가?",
     "answer": "함수 오버라이딩(Overriding)",
@@ -199,7 +199,7 @@
   },
   {
     "id": "sub_022",
-    "chapter": "CH1 다형성",
+    "chapter": "CH08 상속과 다형성",
     "type": "short",
     "question": "가상 함수를 선언할 때 사용하는 키워드는?",
     "answer": "virtual",
@@ -207,7 +207,7 @@
   },
   {
     "id": "sub_023",
-    "chapter": "CH1 가상 함수",
+    "chapter": "CH08 상속과 다형성",
     "type": "short",
     "question": "컴파일러가 가상 함수를 관리하기 위해 내부적으로 만드는 주소 테이블의 이름은?",
     "answer": "vtable (Virtual Function Table)",
@@ -215,7 +215,7 @@
   },
   {
     "id": "sub_024",
-    "chapter": "CH1 추상 클래스",
+    "chapter": "CH08 상속과 다형성",
     "type": "short",
     "question": "함수 바디가 없고 '= 0'으로 끝나는 가상 함수를 무엇이라 하는가?",
     "answer": "순수 가상 함수",
@@ -223,7 +223,7 @@
   },
   {
     "id": "sub_025",
-    "chapter": "CH8 파일 I/O",
+    "chapter": "CH09 파일입출력",
     "type": "short",
     "question": "파일 쓰기를 위한 C++ 스트림 클래스명은?",
     "answer": "ofstream",
@@ -231,7 +231,7 @@
   },
   {
     "id": "sub_026",
-    "chapter": "CH9 템플릿",
+    "chapter": "CH10 템플릿",
     "type": "short",
     "question": "템플릿에서 제네릭 타입을 선언할 때 typename과 함께 사용 가능한 키워드는?",
     "answer": "class",
@@ -239,7 +239,7 @@
   },
   {
     "id": "sub_027",
-    "chapter": "CH6 생성자",
+    "chapter": "CH03 클래스와 객체",
     "type": "short",
     "question": "컴파일러가 자동으로 호출하는 묵시적 변환 생성을 막기 위해 사용하는 키워드는?",
     "answer": "explicit",
@@ -247,7 +247,7 @@
   },
   {
     "id": "sub_028",
-    "chapter": "CH2 예외 처리",
+    "chapter": "CH02 예외처리",
     "type": "short",
     "question": "예외 발생 시 해당 함수가 종료되면서 생성된 지역 객체들이 자동으로 소멸되는 과정을 무엇이라 하는가?",
     "answer": "스택 풀기 (Stack Unwinding)",
@@ -255,7 +255,7 @@
   },
   {
     "id": "sub_029",
-    "chapter": "CH3 클래스",
+    "chapter": "CH03 클래스와 객체",
     "type": "short",
     "question": "데이터와 함수를 하나의 단위로 묶는 객체 지향의 특징은?",
     "answer": "캡슐화(Encapsulation)",
@@ -263,7 +263,7 @@
   },
   {
     "id": "sub_030",
-    "chapter": "CH5 동적 할당",
+    "chapter": "CH01 C++ 기초",
     "type": "short",
     "question": "배열 형태로 할당된 메모리를 해제할 때 delete와 함께 사용하는 기호는?",
     "answer": "[]",

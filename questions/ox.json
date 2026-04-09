@@ -1,7 +1,7 @@
 [
   {
     "id": "ox_001",
-    "chapter": "CH8 배열과 문자열",
+    "chapter": "C언어 CH08 배열과 문자열",
     "type": "ox",
     "question": "C언어에서 배열의 인덱스는 0부터 시작한다.",
     "answer": true,
@@ -9,7 +9,7 @@
   },
   {
     "id": "ox_002",
-    "chapter": "CH9 포인터",
+    "chapter": "C언어 CH10 포인터",
     "type": "ox",
     "question": "C언어에서 포인터 변수는 메모리 주소를 저장한다.",
     "answer": true,
@@ -25,7 +25,7 @@
   },
   {
     "id": "ox_004",
-    "chapter": "CH11 동적 메모리 할당",
+    "chapter": "C언어 CH10 포인터",
     "type": "ox",
     "question": "C언어에서 malloc()으로 할당한 메모리는 free()를 호출하지 않아도 자동으로 해제된다.",
     "answer": false,
@@ -33,7 +33,7 @@
   },
   {
     "id": "ox_005",
-    "chapter": "CH8 배열과 문자열",
+    "chapter": "C언어 CH08 배열과 문자열",
     "type": "ox",
     "question": "C언어에서 문자열은 널 문자('\\0')로 끝난다.",
     "answer": true,
@@ -49,7 +49,7 @@
   },
   {
     "id": "ox_007",
-    "chapter": "CH3 변수와 자료형",
+    "chapter": "C언어 CH03 기본 자료형과 변수",
     "type": "ox",
     "question": "C언어에서 지역 변수를 선언만 하고 초기화하지 않으면 자동으로 0으로 초기화된다.",
     "answer": false,
@@ -57,7 +57,7 @@
   },
   {
     "id": "ox_008",
-    "chapter": "CH4 콘솔 입출력과 연산자",
+    "chapter": "C언어 CH04 콘솔 입출력과 연산자",
     "type": "ox",
     "question": "printf()와 scanf()는 <stdio.h> 헤더에 선언되어 있다.",
     "answer": true,
@@ -65,7 +65,7 @@
   },
   {
     "id": "ox_009",
-    "chapter": "CH12 구조체",
+    "chapter": "C언어 CH11 구조체",
     "type": "ox",
     "question": "C언어에서 구조체(struct)는 서로 다른 자료형의 데이터를 하나로 묶을 수 있다.",
     "answer": true,
@@ -81,7 +81,7 @@
   },
   {
     "id": "ox_011",
-    "chapter": "CH1 C++ 서론",
+    "chapter": "CH01 C++ 기초",
     "type": "ox",
     "question": "C++에서 인라인(inline) 함수는 컴파일러에게 함수 호출을 본문 코드로 치환해달라는 강제 명령이다.",
     "answer": false,
@@ -89,7 +89,7 @@
   },
   {
     "id": "ox_012",
-    "chapter": "CH4 링킹과 extern",
+    "chapter": "CH01 C++ 기초",
     "type": "ox",
     "question": "C++ 소스에서 C 언어로 작성된 함수를 호출하려면 이름 규칙(Naming Mangling)의 차이 때문에 extern \"C\" 선언이 필요하다.",
     "answer": true,
@@ -105,7 +105,7 @@
   },
   {
     "id": "ox_014",
-    "chapter": "CH04 생성자와 소멸자",
+    "chapter": "CH03 클래스와 객체",
     "type": "ox",
     "question": "생성자는 반환 타입을 가질 수 없으며, void 타입조차 선언할 수 없다.",
     "answer": true,
@@ -113,7 +113,7 @@
   },
   {
     "id": "ox_015",
-    "chapter": "CH04 생성자와 소멸자",
+    "chapter": "CH03 클래스와 객체",
     "type": "ox",
     "question": "기본 생성자(Default Constructor)는 매개 변수가 하나라도 있는 생성자를 의미한다.",
     "answer": false,
@@ -153,7 +153,7 @@
   },
   {
     "id": "ox_020",
-    "chapter": "CH01 상속",
+    "chapter": "CH08 상속과 다형성",
     "type": "ox",
     "question": "상속 관계에서 파생 클래스의 객체를 생성할 때, 파생 클래스의 생성자가 기본 클래스의 생성자보다 먼저 실행된다.",
     "answer": false,
@@ -161,7 +161,7 @@
   },
   {
     "id": "ox_021",
-    "chapter": "CH01 상속",
+    "chapter": "CH08 상속과 다형성",
     "type": "ox",
     "question": "protected로 선언된 멤버는 파생 클래스에서는 접근이 가능하지만, 외부 함수에서는 접근이 불가능하다.",
     "answer": true,
@@ -169,7 +169,7 @@
   },
   {
     "id": "ox_022",
-    "chapter": "CH01 상속",
+    "chapter": "CH08 상속과 다형성",
     "type": "ox",
     "question": "가상 함수(Virtual Function)는 실행 시간(Runtime)에 호출될 함수가 결정되는 동적 바인딩을 가능하게 한다.",
     "answer": true,
@@ -177,7 +177,7 @@
   },
   {
     "id": "ox_023",
-    "chapter": "CH01 상속",
+    "chapter": "CH08 상속과 다형성",
     "type": "ox",
     "question": "순수 가상 함수(Pure Virtual Function)를 하나 이상 포함한 클래스를 추상 클래스라고 하며, 이 클래스는 객체를 직접 생성할 수 없다.",
     "answer": true,
@@ -185,7 +185,7 @@
   },
   {
     "id": "ox_024",
-    "chapter": "CH01 상속",
+    "chapter": "CH08 상속과 다형성",
     "type": "ox",
     "question": "업캐스팅(Upcasting)된 기본 클래스 포인터로 자식 객체를 가리키고 있을 때, delete를 수행하면 항상 자식 클래스의 소멸자가 호출된다.",
     "answer": false,
@@ -193,7 +193,7 @@
   },
   {
     "id": "ox_025",
-    "chapter": "CH10 예외 처리",
+    "chapter": "CH02 예외처리",
     "type": "ox",
     "question": "C++의 catch 블록에서 처리할 수 있는 예외의 타입은 오직 클래스 타입으로 한정된다.",
     "answer": false,
@@ -201,7 +201,7 @@
   },
   {
     "id": "ox_026",
-    "chapter": "CH09 템플릿과 제네릭",
+    "chapter": "CH10 템플릿",
     "type": "ox",
     "question": "함수 템플릿 특수화(Specialization)는 일반적인 템플릿 로직보다 우선적으로 선택되어 실행된다.",
     "answer": true,
@@ -209,7 +209,7 @@
   },
   {
     "id": "ox_027",
-    "chapter": "CH09 템플릿과 제네릭",
+    "chapter": "CH10 템플릿",
     "type": "ox",
     "question": "클래스 템플릿은 객체를 생성할 때 <int>와 같이 구체적인 자료형을 명시하지 않아도 컴파일러가 자동으로 추론해준다. (C++17 이전 기준)",
     "answer": false,
@@ -217,7 +217,7 @@
   },
   {
     "id": "ox_028",
-    "chapter": "CH08 파일 입출력",
+    "chapter": "CH09 파일입출력",
     "type": "ox",
     "question": "ofstream 객체를 사용할 때 ios::app 모드로 파일을 열면 기존 데이터 뒤에 새로운 내용이 추가된다.",
     "answer": true,
@@ -233,7 +233,7 @@
   },
   {
     "id": "ox_030",
-    "chapter": "CH10 예외 처리",
+    "chapter": "CH02 예외처리",
     "type": "ox",
     "question": "예외가 발생하여 catch 블록으로 이동할 때, 호출 스택에 생성되었던 지역 객체들이 소멸되는 과정을 스택 풀기(Stack Unwinding)라 한다.",
     "answer": true,
