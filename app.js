@@ -48,7 +48,7 @@ function formatDateTime(date) {
 // ============================================================
 
 async function loadBaseQuestions() {
-  const noCache = { cache: 'no-store' };
+  const noCache = { cache: 'no-cache' };
   const mRes = await fetch('./questions/manifest.json', noCache);
   if (!mRes.ok) throw new Error('manifest.json을 찾을 수 없습니다.');
   const files = await mRes.json();
