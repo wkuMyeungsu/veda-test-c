@@ -212,5 +212,433 @@
     "question": "다음 두 선언의 차이를 설명하시오.\n① int *arr[5]\n② int (*arr)[5]",
     "answer": "① int *arr[5]: int형 포인터를 5개 저장하는 포인터 배열(원소가 포인터). ② int (*arr)[5]: int형 원소 5개짜리 배열을 가리키는 배열 포인터(포인터 하나).",
     "explanation": "[] 연산자가 * 연산자보다 우선순위가 높다. 괄호 없이 쓰면 arr이 먼저 배열이 되어 포인터 배열, 괄호로 묶으면 arr이 먼저 포인터가 되어 배열 포인터가 된다."
+  },
+
+  {
+    "id": "ptr_ox_007",
+    "chapter": "C언어 CH10 포인터",
+    "type": "ox",
+    "question": "int형 포인터와 double형 포인터의 변수 크기(sizeof)는 같은 환경에서 동일하다.",
+    "answer": true,
+    "explanation": "포인터 변수는 주소를 저장하므로 크기는 가리키는 타입과 무관하다. 32비트 환경에서는 4바이트, 64비트 환경에서는 8바이트로 모두 동일하다."
+  },
+  {
+    "id": "ptr_ox_008",
+    "chapter": "C언어 CH10 포인터",
+    "type": "ox",
+    "question": "const int *p 에서 p가 가리키는 값(*p)은 변경할 수 없지만, p 자체(저장된 주소)는 다른 주소로 바꿀 수 있다.",
+    "answer": true,
+    "explanation": "const int *p는 '포인터가 가리키는 값이 상수'임을 의미한다. p = &other_var; 처럼 포인터 자체의 주소는 바꿀 수 있다."
+  },
+  {
+    "id": "ptr_ox_009",
+    "chapter": "C언어 CH10 포인터",
+    "type": "ox",
+    "question": "int * const p 에서 p가 가리키는 값(*p)은 변경할 수 있지만, p 자체(저장된 주소)는 변경할 수 없다.",
+    "answer": true,
+    "explanation": "int * const p는 '포인터 변수 자체가 상수'임을 의미한다. *p = 10; 처럼 가리키는 값은 바꿀 수 있으나, p = &other; 는 컴파일 오류가 된다."
+  },
+  {
+    "id": "ptr_ox_010",
+    "chapter": "C언어 CH10 포인터",
+    "type": "ox",
+    "question": "초기화하지 않은 포인터 변수를 역참조하면 항상 0이 출력된다.",
+    "answer": false,
+    "explanation": "초기화되지 않은 포인터(와일드 포인터)는 예측 불가능한 주소를 가리킨다. 역참조하면 정의되지 않은 동작(undefined behavior)으로 쓰레기값 출력, 세그멘테이션 오류 등이 발생할 수 있다."
+  },
+  {
+    "id": "ptr_ox_011",
+    "chapter": "C언어 CH10 포인터",
+    "type": "ox",
+    "question": "int *p에서 p++ 연산을 수행하면 p의 주소값이 sizeof(int)만큼 증가한다.",
+    "answer": true,
+    "explanation": "포인터 산술에서 p++는 p + sizeof(가리키는타입) 만큼 주소를 증가시킨다. int*이면 4바이트, double*이면 8바이트 증가한다."
+  },
+  {
+    "id": "ptr_ox_012",
+    "chapter": "C언어 CH10 포인터",
+    "type": "ox",
+    "question": "같은 배열을 가리키는 두 포인터 p, q에 대해 p - q 연산의 결과는 두 포인터 사이의 원소 개수이다.",
+    "answer": true,
+    "explanation": "같은 배열 내 두 포인터를 빼면 원소 개수(인덱스 차이)가 반환된다. 결과 타입은 ptrdiff_t이다."
+  },
+  {
+    "id": "ptr_ox_013",
+    "chapter": "C언어 CH10 포인터",
+    "type": "ox",
+    "question": "char *s = \"hello\"; 로 선언한 뒤 s[0] = 'H'; 로 값을 수정하는 것은 안전이 보장된다.",
+    "answer": false,
+    "explanation": "문자열 리터럴은 읽기 전용 메모리(텍스트 영역)에 저장되는 경우가 많다. 수정을 시도하면 정의되지 않은 동작 또는 세그멘테이션 오류가 발생할 수 있다. 수정이 필요하면 char s[] = \"hello\"; 처럼 배열로 선언해야 한다."
+  },
+  {
+    "id": "ptr_ox_014",
+    "chapter": "C언어 CH10 포인터",
+    "type": "ox",
+    "question": "free() 호출 후에도 포인터 변수에는 여전히 해제된 메모리 주소가 남아 있다.",
+    "answer": true,
+    "explanation": "free()는 메모리를 해제할 뿐, 포인터 변수의 값(주소)은 자동으로 NULL로 바꾸지 않는다. 따라서 free 후 반드시 p = NULL; 로 초기화해야 댕글링 포인터 문제를 예방할 수 있다."
+  },
+  {
+    "id": "ptr_ox_015",
+    "chapter": "C언어 CH10 포인터",
+    "type": "ox",
+    "question": "NULL 포인터를 역참조하면 항상 0이 반환된다.",
+    "answer": false,
+    "explanation": "NULL 포인터 역참조는 정의되지 않은 동작(undefined behavior)이다. 대부분의 시스템에서 세그멘테이션 오류(segfault)로 프로그램이 비정상 종료된다."
+  },
+  {
+    "id": "ptr_ox_016",
+    "chapter": "C언어 CH10 포인터",
+    "type": "ox",
+    "question": "배열을 함수의 매개변수로 전달하면 배열 전체가 복사되어 전달된다.",
+    "answer": false,
+    "explanation": "C언어에서 배열을 함수에 전달하면 배열의 첫 번째 원소 주소(포인터)만 전달된다. 따라서 함수 내에서 배열 원소를 수정하면 원본이 변경된다."
+  },
+  {
+    "id": "ptr_ox_017",
+    "chapter": "C언어 CH10 포인터",
+    "type": "ox",
+    "question": "int *p = &x; 와 int *p; p = &x; 는 동일한 결과를 만든다.",
+    "answer": true,
+    "explanation": "두 방법 모두 p에 x의 주소를 저장한다. 선언과 동시에 초기화하는 방식과 선언 후 대입하는 방식 모두 같은 결과이다."
+  },
+  {
+    "id": "ptr_ox_018",
+    "chapter": "C언어 CH10 포인터",
+    "type": "ox",
+    "question": "배열 이름(arr)에 증가 연산자(arr++)를 사용할 수 있다.",
+    "answer": false,
+    "explanation": "배열 이름은 포인터 상수(constant pointer)이므로 값을 변경할 수 없다. arr++는 컴파일 오류가 된다. 포인터 변수 int *p = arr; 로 따로 선언해야 p++ 연산이 가능하다."
+  },
+  {
+    "id": "ptr_ox_019",
+    "chapter": "C언어 CH10 포인터",
+    "type": "ox",
+    "question": "포인터 변수끼리 더하기(+) 연산은 허용되지 않는다.",
+    "answer": true,
+    "explanation": "포인터끼리의 덧셈은 의미가 없으므로 C언어에서 허용되지 않는다. 허용되는 포인터 산술: 포인터±정수, 같은 배열 내 포인터끼리의 뺄셈이다."
+  },
+  {
+    "id": "ptr_ox_020",
+    "chapter": "C언어 CH10 포인터",
+    "type": "ox",
+    "question": "동적으로 할당한 메모리를 가리키는 포인터를 잃어버리면 그 메모리를 해제할 방법이 없어진다.",
+    "answer": true,
+    "explanation": "동적 메모리는 free()에 포인터를 전달해야만 해제할 수 있다. 포인터를 덮어쓰거나 범위를 벗어나 잃어버리면 메모리 누수(memory leak)가 발생한다."
+  },
+  {
+    "id": "ptr_ox_021",
+    "chapter": "C언어 CH10 포인터",
+    "type": "ox",
+    "question": "int *p와 int **pp에서 sizeof(p) == sizeof(pp)가 성립한다.",
+    "answer": true,
+    "explanation": "포인터 변수는 주소를 저장하는 공간으로, 1단 포인터든 2단 포인터든 크기는 동일하다(32비트: 4바이트, 64비트: 8바이트)."
+  },
+
+  {
+    "id": "ptr_mc_007",
+    "chapter": "C언어 CH10 포인터",
+    "type": "multiple",
+    "question": "다음 포인터 선언 중 문법적으로 올바르지 않은 것은?",
+    "options": [
+      "int *p = NULL;",
+      "char *str = \"hello\";",
+      "int p* = NULL;",
+      "void *vp = NULL;",
+      "double *d = NULL;"
+    ],
+    "answer": 2,
+    "explanation": "포인터 선언에서 *는 변수명 앞에 붙어야 한다. int p* 처럼 변수명 뒤에 *를 쓰는 것은 문법 오류이다."
+  },
+  {
+    "id": "ptr_mc_008",
+    "chapter": "C언어 CH10 포인터",
+    "type": "multiple",
+    "question": "const int *p와 int * const p의 차이를 올바르게 설명한 것은?",
+    "options": [
+      "둘 다 포인터 주소도, 가리키는 값도 변경할 수 없다.",
+      "const int *p는 주소 변경 불가, int * const p는 값 변경 불가이다.",
+      "const int *p는 값 변경 불가, int * const p는 주소 변경 불가이다.",
+      "둘 다 가리키는 값만 변경할 수 없다.",
+      "둘 다 포인터 주소만 변경할 수 없다."
+    ],
+    "answer": 2,
+    "explanation": "const int *p: *p(값)를 변경할 수 없고, p(주소)는 변경 가능. int * const p: p(주소)를 변경할 수 없고, *p(값)는 변경 가능. const 위치가 * 앞이면 값, * 뒤면 주소가 상수이다."
+  },
+  {
+    "id": "ptr_mc_009",
+    "chapter": "C언어 CH10 포인터",
+    "type": "multiple",
+    "question": "다음 코드의 출력 결과는?\n\nint a = 5, b = 10;\nint *p = &a;\np = &b;\n*p = 20;\nprintf(\"%d %d\", a, b);",
+    "options": [
+      "5 10",
+      "20 10",
+      "5 20",
+      "20 20",
+      "컴파일 오류"
+    ],
+    "answer": 2,
+    "explanation": "p = &a 후 p = &b 로 p가 b를 가리키게 된다. *p = 20은 b = 20으로 a는 그대로 5이다. 출력: 5 20."
+  },
+  {
+    "id": "ptr_mc_010",
+    "chapter": "C언어 CH10 포인터",
+    "type": "multiple",
+    "question": "다음 코드에서 출력되는 값은?\n\nint arr[] = {1, 2, 3, 4, 5};\nint *p = arr + 2;\nprintf(\"%d %d\", p[-1], p[1]);",
+    "options": [
+      "1 3",
+      "2 3",
+      "2 4",
+      "3 4",
+      "3 5"
+    ],
+    "answer": 2,
+    "explanation": "p = arr+2 이므로 p는 arr[2]=3을 가리킨다. p[-1]은 *(p-1) = arr[1] = 2, p[1]은 *(p+1) = arr[3] = 4. 출력: 2 4."
+  },
+  {
+    "id": "ptr_mc_011",
+    "chapter": "C언어 CH10 포인터",
+    "type": "multiple",
+    "question": "다음 코드의 출력 결과는?\n\nchar *s = \"ABCDE\";\nprintf(\"%c\", *(s + 2));",
+    "options": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E"
+    ],
+    "answer": 2,
+    "explanation": "s는 'A'의 주소를 가리킨다. s+2는 세 번째 문자 'C'의 주소이므로 *(s+2) = 'C'이다."
+  },
+  {
+    "id": "ptr_mc_012",
+    "chapter": "C언어 CH10 포인터",
+    "type": "multiple",
+    "question": "다음 코드의 출력 결과는?\n\nint x = 10;\nint *p = &x;\nint *q = p;\n*q = 50;\nprintf(\"%d\", x);",
+    "options": [
+      "10",
+      "50",
+      "0",
+      "주소값 출력",
+      "컴파일 오류"
+    ],
+    "answer": 1,
+    "explanation": "q = p 로 q도 x를 가리킨다. *q = 50은 x = 50과 동일하다. printf(\"%d\", x) → 50."
+  },
+  {
+    "id": "ptr_mc_013",
+    "chapter": "C언어 CH10 포인터",
+    "type": "multiple",
+    "question": "포인터와 배열의 관계에 대한 설명으로 옳지 않은 것은?",
+    "options": [
+      "arr[i]와 *(arr+i)는 동일한 표현이다.",
+      "배열 이름은 배열 첫 번째 원소의 주소이다.",
+      "int *p = arr; 로 선언하면 p와 arr은 동일하게 사용할 수 있다.",
+      "배열 이름에 ++ 연산자를 사용하여 포인터처럼 이동할 수 있다.",
+      "p[i]는 *(p+i)와 동일한 표현이다."
+    ],
+    "answer": 3,
+    "explanation": "배열 이름은 포인터 상수로 값을 변경할 수 없다. arr++ 는 컴파일 오류가 된다. int *p = arr; 처럼 포인터 변수에 대입해야 ++ 연산이 가능하다."
+  },
+  {
+    "id": "ptr_mc_014",
+    "chapter": "C언어 CH10 포인터",
+    "type": "multiple",
+    "question": "free() 후 포인터를 안전하게 처리하는 올바른 방법은?",
+    "options": [
+      "free(p); 만 호출하면 충분하다.",
+      "free(p); p = 0; 으로 처리한다.",
+      "free(p); p = NULL; 로 초기화한다.",
+      "free(*p); 로 역참조 후 해제한다.",
+      "delete p; 를 사용한다."
+    ],
+    "answer": 2,
+    "explanation": "free() 후 포인터가 댕글링 포인터(dangling pointer)가 되는 것을 막기 위해 반드시 p = NULL; 로 초기화해야 한다. 이후 실수로 역참조해도 NULL 체크로 방어할 수 있다."
+  },
+  {
+    "id": "ptr_mc_015",
+    "chapter": "C언어 CH10 포인터",
+    "type": "multiple",
+    "question": "다음 중 '와일드 포인터(wild pointer)'를 올바르게 설명한 것은?",
+    "options": [
+      "NULL로 초기화된 포인터",
+      "free() 후 NULL로 초기화하지 않은 포인터",
+      "초기화하지 않아 예측 불가능한 주소를 가진 포인터",
+      "void 타입의 포인터",
+      "배열의 마지막 원소 다음을 가리키는 포인터"
+    ],
+    "answer": 2,
+    "explanation": "와일드 포인터(wild pointer)는 선언만 하고 초기화하지 않은 포인터로, 임의의 메모리 주소를 가진다. 역참조하면 undefined behavior가 발생한다. free 후 NULL로 안 한 것은 댕글링 포인터이다."
+  },
+  {
+    "id": "ptr_mc_016",
+    "chapter": "C언어 CH10 포인터",
+    "type": "multiple",
+    "question": "다음 중 '댕글링 포인터(dangling pointer)'가 발생하는 상황은?",
+    "options": [
+      "포인터를 NULL로 초기화한 경우",
+      "malloc() 으로 메모리를 할당한 직후",
+      "free() 후 포인터 변수를 NULL로 초기화하지 않은 경우",
+      "포인터로 배열을 가리키는 경우",
+      "이중 포인터를 선언한 경우"
+    ],
+    "answer": 2,
+    "explanation": "댕글링 포인터(dangling pointer)는 이미 해제된 메모리를 가리키는 포인터이다. free(p) 후 p = NULL; 하지 않으면 p는 해제된 주소를 여전히 가리켜 역참조 시 undefined behavior가 발생한다."
+  },
+  {
+    "id": "ptr_mc_017",
+    "chapter": "C언어 CH10 포인터",
+    "type": "multiple",
+    "question": "다음 코드에서 출력 결과는?\n\nint arr[3] = {10, 20, 30};\nint *p = arr;\nprintf(\"%d \", *p++);\nprintf(\"%d\", *p);",
+    "options": [
+      "10 10",
+      "10 20",
+      "11 20",
+      "20 20",
+      "20 30"
+    ],
+    "answer": 1,
+    "explanation": "*p++는 후위 증가로, 먼저 *p(=10)를 읽고 출력한 뒤 p를 증가시킨다. 이후 p는 arr[1]=20을 가리키므로 두 번째 printf는 20 출력. 결과: 10 20."
+  },
+  {
+    "id": "ptr_mc_018",
+    "chapter": "C언어 CH10 포인터",
+    "type": "multiple",
+    "question": "malloc()이 반환하는 포인터의 타입은?",
+    "options": [
+      "int *",
+      "char *",
+      "void *",
+      "unsigned char *",
+      "NULL *"
+    ],
+    "answer": 2,
+    "explanation": "malloc()은 void * 를 반환한다. void 포인터이므로 어떤 타입의 포인터 변수에도 묵시적으로 대입할 수 있어 범용 메모리 할당 함수로 사용된다."
+  },
+  {
+    "id": "ptr_mc_019",
+    "chapter": "C언어 CH10 포인터",
+    "type": "multiple",
+    "question": "다음 코드에서 출력 결과는?\n\nint a = 1, b = 2, c = 3;\nint *arr[3] = {&a, &b, &c};\nprintf(\"%d\", *arr[1]);",
+    "options": [
+      "1",
+      "2",
+      "3",
+      "주소값",
+      "컴파일 오류"
+    ],
+    "answer": 1,
+    "explanation": "arr은 포인터 배열로 arr[0]=&a, arr[1]=&b, arr[2]=&c를 저장한다. *arr[1]은 arr[1]이 가리키는 값, 즉 b=2이다."
+  },
+  {
+    "id": "ptr_mc_020",
+    "chapter": "C언어 CH10 포인터",
+    "type": "multiple",
+    "question": "다음 중 포인터 산술 연산으로 허용되지 않는 것은?",
+    "options": [
+      "포인터 + 정수",
+      "포인터 - 정수",
+      "같은 배열의 포인터끼리 빼기",
+      "포인터 + 포인터",
+      "포인터 증가(++)"
+    ],
+    "answer": 3,
+    "explanation": "포인터끼리의 덧셈(포인터 + 포인터)은 의미가 없어 C언어에서 허용되지 않는다. 허용되는 연산: 포인터±정수, 같은 배열 내 포인터끼리의 뺄셈, ++/-- 연산이다."
+  },
+  {
+    "id": "ptr_mc_021",
+    "chapter": "C언어 CH10 포인터",
+    "type": "multiple",
+    "question": "다음 코드의 출력 결과는?\n\nvoid addTen(int *p) { *p += 10; }\nint main() {\n    int x = 5;\n    addTen(&x);\n    printf(\"%d\", x);\n}",
+    "options": [
+      "5",
+      "10",
+      "15",
+      "0",
+      "컴파일 오류"
+    ],
+    "answer": 2,
+    "explanation": "addTen에 &x(주소)를 전달하므로 *p += 10은 x += 10과 동일하다. x = 5 + 10 = 15 출력."
+  },
+
+  {
+    "id": "ptr_sh_001",
+    "chapter": "C언어 CH10 포인터",
+    "type": "short",
+    "question": "선언은 했지만 초기화하지 않아 임의의 메모리 주소를 가리키는 포인터를 무엇이라 하는가?",
+    "answer": "와일드 포인터(Wild Pointer)",
+    "explanation": "int *p; 처럼 선언만 하면 p에는 쓰레기 주소가 들어간다. 이를 와일드 포인터라 하며, 역참조하면 undefined behavior가 발생한다. 반드시 선언 시 NULL이나 유효한 주소로 초기화해야 한다."
+  },
+  {
+    "id": "ptr_sh_002",
+    "chapter": "C언어 CH10 포인터",
+    "type": "short",
+    "question": "free() 호출 후 NULL로 초기화하지 않아 이미 해제된 메모리를 가리키는 포인터를 무엇이라 하는가?",
+    "answer": "댕글링 포인터(Dangling Pointer)",
+    "explanation": "free(p) 후 p가 해제된 주소를 계속 가리키는 상태를 댕글링 포인터라 한다. 역참조 시 undefined behavior가 발생하므로 free 후 반드시 p = NULL; 로 초기화해야 한다."
+  },
+  {
+    "id": "ptr_sh_003",
+    "chapter": "C언어 CH10 포인터",
+    "type": "short",
+    "question": "동적 메모리 할당 함수 malloc()이 메모리 할당에 실패했을 때 반환하는 값은?",
+    "answer": "NULL",
+    "explanation": "malloc()은 할당 성공 시 void* 주소를, 실패 시 NULL(0)을 반환한다. malloc 사용 후 항상 if (p == NULL) 로 실패 여부를 검사하는 것이 안전하다."
+  },
+  {
+    "id": "ptr_sh_004",
+    "chapter": "C언어 CH10 포인터",
+    "type": "short",
+    "question": "const int *p 에서 변경이 금지된 것은 무엇인가?",
+    "answer": "p가 가리키는 값(*p)",
+    "explanation": "const가 * 앞에 오면 가리키는 값이 상수이다. *p = 10; 은 컴파일 오류. 포인터 자체(p = &other;)는 변경 가능하다."
+  },
+  {
+    "id": "ptr_sh_005",
+    "chapter": "C언어 CH10 포인터",
+    "type": "short",
+    "question": "int * const p 에서 변경이 금지된 것은 무엇인가?",
+    "answer": "p 자체(포인터가 저장하는 주소값)",
+    "explanation": "const가 * 뒤에 오면 포인터 자체가 상수이다. p = &other; 는 컴파일 오류. 가리키는 값(*p = 10;)은 변경 가능하다."
+  },
+  {
+    "id": "ptr_sh_006",
+    "chapter": "C언어 CH10 포인터",
+    "type": "short",
+    "question": "같은 배열을 가리키는 두 포인터 p, q에 대해 p - q 연산의 결과가 나타내는 것은?",
+    "answer": "두 포인터 사이의 원소 개수(인덱스 차이)",
+    "explanation": "포인터 뺄셈 결과는 바이트 수가 아닌 원소 개수이다. 예: p가 arr[4], q가 arr[1]을 가리키면 p - q = 3이다. 결과 타입은 ptrdiff_t이다."
+  },
+  {
+    "id": "ptr_sh_007",
+    "chapter": "C언어 CH10 포인터",
+    "type": "short",
+    "question": "배열을 함수에 전달할 때 실제로 전달되는 것은 무엇인가?",
+    "answer": "배열 첫 번째 원소의 주소(포인터)",
+    "explanation": "C언어에서 배열은 항상 포인터로 전달된다(decay). void func(int arr[]) 는 void func(int *arr) 와 동일하다. 따라서 함수 내에서 원소를 수정하면 원본 배열이 변경된다."
+  },
+  {
+    "id": "ptr_sh_008",
+    "chapter": "C언어 CH10 포인터",
+    "type": "short",
+    "question": "포인터 p에 대해 p++ 연산 후 증가하는 바이트 수는 무엇에 의해 결정되는가?",
+    "answer": "포인터가 가리키는 데이터 타입의 크기(sizeof(타입))",
+    "explanation": "int *p이면 4바이트, double *p이면 8바이트, char *p이면 1바이트 증가한다. 포인터 산술은 타입 크기 단위로 동작하므로 항상 다음 원소를 가리키게 된다."
+  },
+  {
+    "id": "ptr_sh_009",
+    "chapter": "C언어 CH10 포인터",
+    "type": "short",
+    "question": "char s[] = \"hello\"와 char *s = \"hello\"의 핵심적인 차이를 설명하시오.",
+    "answer": "char s[] = \"hello\"는 스택에 문자열이 복사되어 s[i] 수정이 가능하다. char *s = \"hello\"는 읽기 전용 문자열 리터럴의 주소를 가리키며, 수정하면 undefined behavior이다.",
+    "explanation": "배열 선언은 문자열 내용을 배열(스택)으로 복사하므로 수정 가능하다. 포인터 선언은 문자열 리터럴의 주소만 저장하며, 리터럴은 읽기 전용 메모리에 존재하므로 수정이 위험하다."
+  },
+  {
+    "id": "ptr_sh_010",
+    "chapter": "C언어 CH10 포인터",
+    "type": "short",
+    "question": "동적 메모리 관리 함수 malloc, calloc, realloc, free 각각의 역할을 간단히 서술하시오.",
+    "answer": "malloc: 지정 크기(바이트)의 메모리 할당(초기화 없음). calloc: 지정 개수×크기 메모리 할당 후 0으로 초기화. realloc: 기존 할당 메모리 크기 변경. free: 동적 할당 메모리 해제.",
+    "explanation": "malloc(n)은 n바이트, calloc(n, size)는 n×size 바이트를 할당한다. realloc(p, new_size)는 p가 가리키는 메모리를 new_size로 재조정한다. 모두 실패 시 NULL 반환, 사용 후 반드시 free()로 해제해야 한다."
   }
 ]
