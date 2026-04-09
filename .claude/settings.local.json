@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(\" \"C:\\\\Users\\\\5-08\\\\OneDrive\\\\vscode-workspace\\\\veda테스트준비/app.js\" | head -60)",
-      "Bash(grep -n \"qEdit\\\\|수정\\\\|edit\\\\|Edit\\\\|modal\\\\|코드\\\\|code\\\\|pre\\\\|```\" \"C:\\\\Users\\\\5-08\\\\OneDrive\\\\vscode-workspace\\\\veda테스트준비/app.js\" | head -60)"
+      "Bash(grep -n \"qEdit\\\\|수정\\\\|edit\\\\|Edit\\\\|modal\\\\|코드\\\\|code\\\\|pre\\\\|```\" \"C:\\\\Users\\\\5-08\\\\OneDrive\\\\vscode-workspace\\\\veda테스트준비/app.js\" | head -60)",
+      "Bash(node -e ':*)",
+      "Bash(node -e \" const fs = require\\('fs'\\); const files = JSON.parse\\(fs.readFileSync\\('./questions/manifest.json'\\)\\); files.forEach\\(f => { const qs = JSON.parse\\(fs.readFileSync\\('./questions/' + f\\)\\); qs.filter\\(q => q.subtype === 'code_blank' || q.subtype === 'code_result' || q.type === 'short'\\) .slice\\(0,8\\).forEach\\(q => console.log\\(q.subtype||q.type, '|', JSON.stringify\\(q.answer\\)\\)\\); }\\); \")",
+      "Bash(node -e:*)"
     ]
   }
 }

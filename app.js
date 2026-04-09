@@ -108,6 +108,28 @@ function clearExamData() {
 // 채점
 // ============================================================
 
+// 자동 채점 가능 여부 (정답 문자열 비교)
+function isAutoGradable(q) {
+  if (q.type === 'subjective' && (q.subtype === 'code_blank' || q.subtype === 'code_result')) return true;
+  return false;
+}
+
+// 공백 정규화: 줄바꿈은 유지, 각 줄 앞뒤 공백만 제거
+function normalizeAns(s) {
+  return String(s ?? '')
+    .split('\n')
+    .map(line => line.trim())
+    .join('\n')
+    .trim();
+}
+
+// 복수 정답 비교 (answer 필드에서 '|' 구분자로 분리)
+function matchesAnswer(userRaw, correctRaw) {
+  const user = normalizeAns(userRaw);
+  if (!user) return false;
+  return String(correctRaw ?? '').split('|').some(a => normalizeAns(a) === user);
+}
+
 function scoreExam(examData) {
   const { questions, answers, overrides } = examData;
   let oxCorrect = 0, mcCorrect = 0, subCorrect = 0;
@@ -118,8 +140,10 @@ function scoreExam(examData) {
       autoCorrect = answers[i] !== undefined ? answers[i] === q.answer : false;
     } else if (q.type === 'multiple') {
       autoCorrect = answers[i] !== undefined ? answers[i] === q.answer : false;
+    } else if (isAutoGradable(q)) {
+      autoCorrect = matchesAnswer(answers[i], q.answer);
     }
-    // subjective: autoCorrect = null (반드시 override로 판정)
+    // subjective/concept: autoCorrect = null (반드시 override로 판정)
 
     const hasOverride = overrides[i] !== undefined;
     const finalCorrect = hasOverride ? overrides[i] : (autoCorrect ?? false);
@@ -550,10 +574,16 @@ function initExamPage() {
     return q.type === 'subjective' || q.type === 'short';
   }
 
+  // 자가채점이 필요한 문제 (concept만)
+  function needsOverride(q) {
+    return isSubjective(q) && !isAutoGradable(q);
+  }
+
   function canGoNext(idx) {
-    return isSubjective(examData.questions[idx])
-      ? examData.overrides[idx] !== undefined
-      : true;
+    const q = examData.questions[idx];
+    if (!isSubjective(q)) return true;
+    if (isAutoGradable(q)) return String(examData.answers[idx] ?? '').trim().length > 0;
+    return examData.overrides[idx] !== undefined;
   }
 
   function answerDisplay(q) {
@@ -608,10 +638,11 @@ function initExamPage() {
 
     const displayCode = loadCodeEdit(q.id) ?? q.code ?? null;
     const codeHtml   = displayCode ? `<pre class="code-block">${escapeHtml(displayCode)}</pre>` : '';
+    const autoGradable = isAutoGradable(q);
     const corrActive = ov === true  ? 'active' : '';
     const wronActive = ov === false ? 'active' : '';
     const nextDis    = canGoNext(idx) ? '' : 'disabled';
-    const reqNote    = isSubj ? '<span class="required-note">* 정오답 선택 필수</span>' : '';
+    const reqNote    = needsOverride(q) ? '<span class="required-note">* 정오답 선택 필수</span>' : '';
 
     const favActive = isFavorite(q.id) ? 'active' : '';
     container.innerHTML = `
@@ -664,11 +695,12 @@ function initExamPage() {
           </div>
         </div>
 
+        ${needsOverride(q) ? `
         <div class="override-row">
           <span class="override-label">자가 채점</span>
           <button class="btn-override btn-correct ${corrActive}" id="btn-corr">✔ 맞음</button>
           <button class="btn-override btn-wrong ${wronActive}" id="btn-wron">✘ 틀림</button>
-        </div>
+        </div>` : ''}
 
         <div class="nav-row">
           <button class="btn-secondary" id="btn-prev" ${idx === 0 ? 'disabled' : ''}>이전</button>
@@ -692,6 +724,10 @@ function initExamPage() {
       document.getElementById('subj-input').addEventListener('input', e => {
         examData.answers[idx] = e.target.value;
         save();
+        // 자동 채점 문제: 입력 있으면 다음 버튼 활성화
+        if (autoGradable) {
+          document.getElementById('btn-next').disabled = e.target.value.trim().length === 0;
+        }
       });
     }
 
@@ -861,8 +897,10 @@ function initExamPage() {
         renderQ(currentIndex);
       }
     }
-    document.getElementById('btn-corr').addEventListener('click', () => setOverrideAndAdvance(true));
-    document.getElementById('btn-wron').addEventListener('click', () => setOverrideAndAdvance(false));
+    if (needsOverride(q)) {
+      document.getElementById('btn-corr').addEventListener('click', () => setOverrideAndAdvance(true));
+      document.getElementById('btn-wron').addEventListener('click', () => setOverrideAndAdvance(false));
+    }
 
     // 이벤트: 내비게이션
     document.getElementById('btn-prev').addEventListener('click', () => {
@@ -870,21 +908,8 @@ function initExamPage() {
       save();
       renderQ(currentIndex);
     });
-    document.getElementById('btn-next').addEventListener('click', () => {
-      if (isLast) {
-        clearInterval(timerInterval);
-        sessionStorage.removeItem('examCurrentIndex');
-        window.location.href = 'result.html';
-      } else {
-        currentIndex++;
-        save();
-        renderQ(currentIndex);
-      }
-    });
 
-    // 이벤트: 패스 (틀림 처리 + 다음)
-    document.getElementById('btn-pass').addEventListener('click', () => {
-      setOverride(false);
+    function advanceOrFinish() {
       if (isLast) {
         clearInterval(timerInterval);
         sessionStorage.removeItem('examCurrentIndex');
@@ -894,6 +919,14 @@ function initExamPage() {
         save();
         renderQ(currentIndex);
       }
+    }
+
+    document.getElementById('btn-next').addEventListener('click', advanceOrFinish);
+
+    // 이벤트: 패스
+    document.getElementById('btn-pass').addEventListener('click', () => {
+      if (needsOverride(q)) setOverride(false); // 자가채점 문제는 틀림 처리
+      advanceOrFinish();
     });
   }
 
@@ -1031,6 +1064,7 @@ function renderHistoryDetail(text) {
           <span class="hd-q-badge type-badge type-${typeM?.[1] === 'O/X' ? 'ox' : typeM?.[1] === '객관식' ? 'multiple' : 'subjective'}">${typeM?.[1] ?? ''}</span>
           ${isOverride ? '<span class="hd-override-badge">수동</span>' : ''}
           <span class="hd-q-preview">${escapeHtml(preview)}</span>
+          <button class="btn-hd-fav" data-qtext="${escapeHtml(qText)}" title="즐겨찾기 추가">★</button>
         </div>
         ${!isCorrect ? `
           <div class="hd-q-ans">
@@ -1206,6 +1240,49 @@ function renderResult(examData, scores, round) {
     clearExamData();
     window.location.href = 'index.html';
   });
+
+  // 문항별 상세
+  const detailListEl = document.getElementById('question-detail-list');
+  if (detailListEl) {
+    detailListEl.innerHTML = results.map((r, i) => {
+      const q = r.question;
+      const qText = loadQEdit(q.id) || q.question || '';
+      const preview = qText.length > 80 ? qText.slice(0, 80) + '…' : qText;
+      const correct = r.finalCorrect;
+
+      let myAnsHtml = '';
+      let correctAnsHtml = '';
+
+      if (q.type === 'ox') {
+        myAnsHtml     = r.userAnswer === true ? 'O' : r.userAnswer === false ? 'X' : '<span class="no-ans">미응답</span>';
+        correctAnsHtml = q.answer ? 'O (참)' : 'X (거짓)';
+      } else if (q.type === 'multiple') {
+        myAnsHtml     = r.userAnswer !== undefined
+          ? escapeHtml(`${CIRCLES[r.userAnswer]} ${q.options[r.userAnswer]}`)
+          : '<span class="no-ans">미응답</span>';
+        correctAnsHtml = escapeHtml(`${CIRCLES[q.answer]} ${q.options[q.answer]}`);
+      } else {
+        const typed = r.userAnswer || '';
+        myAnsHtml     = typed ? escapeHtml(typed) : '<span class="no-ans">미응답</span>';
+        const accepted = String(q.answer ?? '').split('|').map(a => a.trim()).join(' 또는 ');
+        correctAnsHtml = escapeHtml(accepted);
+      }
+
+      return `
+        <div class="result-q-row ${correct ? 'rq-correct' : 'rq-wrong'}">
+          <div class="rq-head">
+            <span class="rq-num">${i + 1}</span>
+            <span class="type-badge type-${q.type}">${TYPE_LABELS[q.type]}</span>
+            <span class="rq-verdict">${correct ? '✔ 정답' : '✘ 오답'}</span>
+          </div>
+          <p class="rq-question">${escapeHtml(preview)}</p>
+          <div class="rq-answers">
+            <span class="rq-lbl">내 답</span><span class="rq-val rq-my">${myAnsHtml}</span>
+            ${!correct ? `<span class="rq-lbl">정답</span><span class="rq-val rq-correct-val">${correctAnsHtml}</span>` : ''}
+          </div>
+        </div>`;
+    }).join('');
+  }
 }
 
 // ============================================================
