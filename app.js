@@ -1133,7 +1133,14 @@ async function setupHistory() {
 
   container.innerHTML = '<p class="file-hint" style="color:#9AA0A6">기록을 불러오는 중...</p>';
 
-  const results = await readResultFiles();
+  const [results, pools] = await Promise.all([
+    readResultFiles(),
+    loadAllQuestions().catch(() => ({ ox: [], multiple: [], subjective: [] }))
+  ]);
+
+  // 문제 텍스트 → 질문 객체 맵 (즐겨찾기 매칭용)
+  const allQs = [...pools.ox, ...pools.multiple, ...pools.subjective];
+  const qTextMap = new Map(allQs.map(q => [q.question?.trim(), q]));
 
   if (results.length === 0) {
     const dir = await getResultsDir(false);
@@ -1150,10 +1157,28 @@ async function setupHistory() {
   const tabs = document.querySelectorAll('.history-tab');
   let activeTab = 'regular';
 
+  function wireFavButtons() {
+    container.querySelectorAll('.btn-hd-fav').forEach(btn => {
+      const qText = btn.dataset.qtext?.trim();
+      const q = qTextMap.get(qText);
+      if (q) {
+        btn.classList.toggle('active', isFavorite(q.id));
+        btn.addEventListener('click', () => {
+          const now = toggleFavorite(q.id, q);
+          btn.classList.toggle('active', now);
+          btn.title = now ? '즐겨찾기 해제' : '즐겨찾기 추가';
+        });
+      } else {
+        btn.style.display = 'none'; // 매칭 안 되면 숨김
+      }
+    });
+  }
+
   function switchTab(tab) {
     activeTab = tab;
     tabs.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tab));
     renderHistoryItems(container, tab === 'regular' ? regularItems : chapterItems);
+    wireFavButtons();
   }
 
   tabs.forEach(btn => {

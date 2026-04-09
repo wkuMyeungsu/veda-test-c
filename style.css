@@ -1010,6 +1010,33 @@ body {
   gap: 6px;
   flex-wrap: wrap;
 }
+.btn-hd-fav {
+  margin-left: auto;
+  flex-shrink: 0;
+  background: transparent;
+  border: 1.5px solid #E0E0E0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #BDBDBD;
+  padding: 3px 8px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  transition: color 0.15s, background 0.15s, border-color 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+.btn-hd-fav::after { content: ' 즐겨찾기'; font-size: 11px; font-weight: 500; }
+.btn-hd-fav:hover {
+  color: #F9A825;
+  background: #FFFDE7;
+  border-color: #FFD54F;
+  transform: scale(1.04);
+}
+.btn-hd-fav.active {
+  color: #F9A825;
+  background: #FFFDE7;
+  border-color: #FFD54F;
+}
 .hd-q-num {
   font-size: 11px;
   font-weight: 700;
