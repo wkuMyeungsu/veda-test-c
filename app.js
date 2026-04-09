@@ -295,6 +295,28 @@ function addDeletedId(id) {
   if (!ids.includes(id)) { ids.push(id); localStorage.setItem('deletedQIds', JSON.stringify(ids)); }
 }
 
+// 즐겨찾기
+// favoriteQuestions: { [id]: questionObject }
+function loadFavoriteMap() {
+  try { return JSON.parse(localStorage.getItem('favoriteQuestions')) || {}; }
+  catch { return {}; }
+}
+function isFavorite(id) { return id in loadFavoriteMap(); }
+// q: 현재 문제 객체 (시험 중에만 호출됨)
+function toggleFavorite(id, q) {
+  const map = loadFavoriteMap();
+  if (id in map) {
+    delete map[id];
+  } else if (q) {
+    map[id] = q;
+  }
+  localStorage.setItem('favoriteQuestions', JSON.stringify(map));
+  return id in map;
+}
+function loadFavoriteQuestions() {
+  return Object.values(loadFavoriteMap());
+}
+
 // 기본 문제 전체 필드 오버라이드
 function loadQFull(id) {
   try { return JSON.parse(localStorage.getItem(`qFull_${id}`)) || null; }
@@ -435,7 +457,7 @@ function initIndexPage() {
         questions,
         answers:   {},
         overrides: {},
-        startTime: new Date().toISOString()
+        startTime: Date.now()
       });
       window.location.href = 'exam.html';
     } catch {
@@ -470,6 +492,24 @@ function initExamPage() {
 
   let currentIndex = parseInt(sessionStorage.getItem('examCurrentIndex') || '0', 10);
   const total      = examData.questions.length;
+
+  // 타이머
+  const timerEl = document.getElementById('exam-timer');
+  const startMs = (typeof examData.startTime === 'number')
+    ? examData.startTime
+    : (examData.startTime ? new Date(examData.startTime).getTime() : Date.now());
+
+  let timerInterval = null;
+  function updateTimer() {
+    const elapsed = Math.floor((Date.now() - startMs) / 1000);
+    const h = Math.floor(elapsed / 3600);
+    const m = Math.floor((elapsed % 3600) / 60);
+    const s = elapsed % 60;
+    const pad = n => String(n).padStart(2, '0');
+    if (timerEl) timerEl.textContent = h > 0 ? `${pad(h)}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`;
+  }
+  updateTimer();
+  timerInterval = setInterval(updateTimer, 1000);
 
   function save() {
     saveExamData(examData);
@@ -542,8 +582,10 @@ function initExamPage() {
     const nextDis    = canGoNext(idx) ? '' : 'disabled';
     const reqNote    = isSubj ? '<span class="required-note">* 정오답 선택 필수</span>' : '';
 
+    const favActive = isFavorite(q.id) ? 'active' : '';
     container.innerHTML = `
       <div class="card question-card">
+        <button class="btn-fav ${favActive}" id="btn-fav" title="즐겨찾기">★</button>
         <div class="q-meta">
           <span class="q-num">문제 ${idx + 1}</span>
           <span class="type-badge type-${q.type}">${TYPE_LABELS[q.type]}</span>
@@ -705,6 +747,12 @@ function initExamPage() {
       qTextDisplay.parentElement.style.display = '';
     });
 
+    // 이벤트: 즐겨찾기
+    document.getElementById('btn-fav').addEventListener('click', function () {
+      const now = toggleFavorite(q.id, q);
+      this.classList.toggle('active', now);
+    });
+
     // 이벤트: 오버라이드
     function setOverride(val) {
       examData.overrides[idx] = val;
@@ -724,6 +772,7 @@ function initExamPage() {
     });
     document.getElementById('btn-next').addEventListener('click', () => {
       if (isLast) {
+        clearInterval(timerInterval);
         sessionStorage.removeItem('examCurrentIndex');
         window.location.href = 'result.html';
       } else {
@@ -737,6 +786,7 @@ function initExamPage() {
     document.getElementById('btn-pass').addEventListener('click', () => {
       setOverride(false);
       if (isLast) {
+        clearInterval(timerInterval);
         sessionStorage.removeItem('examCurrentIndex');
         window.location.href = 'result.html';
       } else {
@@ -752,6 +802,7 @@ function initExamPage() {
   // 이벤트: 시험 그만보기
   document.getElementById('btn-quit').addEventListener('click', () => {
     if (window.confirm('시험을 종료하시겠습니까?\n지금까지의 답안과 결과가 저장되지 않습니다.')) {
+      clearInterval(timerInterval);
       clearExamData();
       window.location.href = 'index.html';
     }
@@ -1389,6 +1440,58 @@ async function initManagePage() {
 // 라우터
 // ============================================================
 
+// ============================================================
+// FAVORITES 페이지
+// ============================================================
+
+async function initFavoritesPage() {
+  const listEl  = document.getElementById('fav-list');
+  const emptyEl = document.getElementById('fav-empty');
+
+  const favs = loadFavoriteQuestions();
+  if (favs.length === 0) {
+    emptyEl.style.display = 'block';
+    return;
+  }
+
+  function answerDisplay(q) {
+    if (q.type === 'ox')       return q.answer ? 'O &nbsp;(참)' : 'X &nbsp;(거짓)';
+    if (q.type === 'multiple') return `${CIRCLES[q.answer]} ${escapeHtml(q.options[q.answer])}`;
+    return escapeHtml(q.answer);
+  }
+
+  listEl.innerHTML = favs.map(q => {
+    const displayQ = loadQEdit(q.id) || q.question;
+    const codeHtml = q.code ? `<pre class="code-block">${escapeHtml(q.code)}</pre>` : '';
+    return `
+      <div class="card fav-card" data-id="${escapeHtml(q.id)}">
+        <button class="btn-fav active fav-remove-btn" data-id="${escapeHtml(q.id)}" title="즐겨찾기 해제">★</button>
+        <div class="q-meta">
+          <span class="type-badge type-${q.type}">${TYPE_LABELS[q.type]}</span>
+          <span class="fav-chapter">${escapeHtml(q.chapter || '')}</span>
+        </div>
+        <p class="q-text">${escapeHtml(displayQ)}</p>
+        ${codeHtml}
+        <div class="fav-answer-row">
+          <span class="fav-ans-label">정답</span>
+          <span class="fav-ans-value">${answerDisplay(q)}</span>
+        </div>
+        ${q.explanation ? `<p class="explanation">${escapeHtml(q.explanation)}</p>` : ''}
+      </div>`;
+  }).join('');
+
+  listEl.querySelectorAll('.fav-remove-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.id;
+      toggleFavorite(id);
+      btn.closest('.fav-card').remove();
+      if (listEl.querySelectorAll('.fav-card').length === 0) {
+        emptyEl.style.display = 'block';
+      }
+    });
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   // 이전 버전 localStorage 결과 데이터 정리
   Object.keys(localStorage)
@@ -1396,8 +1499,9 @@ document.addEventListener('DOMContentLoaded', () => {
     .forEach(k => localStorage.removeItem(k));
 
   const page = document.body.dataset.page;
-  if (page === 'index')  initIndexPage();
-  else if (page === 'exam')    initExamPage();
-  else if (page === 'result')  initResultPage();
-  else if (page === 'manage')  initManagePage();
+  if (page === 'index')     initIndexPage();
+  else if (page === 'exam')      initExamPage();
+  else if (page === 'result')    initResultPage();
+  else if (page === 'manage')    initManagePage();
+  else if (page === 'favorites') initFavoritesPage();
 });
